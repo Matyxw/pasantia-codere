@@ -1,0 +1,210 @@
+📁 ESTRUCTURA DEL PROYECTO - SISTEMA DE MONITOREO DE PCs EN RED
+═══════════════════════════════════════════════════════════════════════════
+
+📂 Nueva carpeta/
+│
+├─ 🟢 ARCHIVO DE INICIO
+│  └─ INICIO.py                    👈 EMPIEZA POR AQUÍ (menú interactivo)
+│
+├─ ⚙️  INSTALACIÓN
+│  └─ instalar.py                  (Instala dependencias y configura accesos)
+│
+├─ 🖥️  SERVIDOR (instalar en cada PC)
+│  └─ agent_servidor.py            (Expone datos del sistema por HTTP)
+│                                    Uso: python agent_servidor.py
+│                                    Puertos: 5000
+│
+├─ 🎮 CLIENTE (Panel de Control - en PC central)
+│  └─ cliente_central.py           (Monitorea todas las PCs)
+│                                    Uso: python cliente_central.py
+│
+├─ 🔍 HERRAMIENTAS AUXILIARES
+│  └─ scanner_red.py               (Busca computadoras en la red)
+│                                    Uso: python scanner_red.py
+│
+├─ 📚 DOCUMENTACIÓN
+│  ├─ README.md                    (Guía completa - Lee esto!)
+│  ├─ ESTRUCTURA.txt              (Este archivo)
+│  └─ config_ejemplo.json          (Ejemplo de configuración)
+│
+├─ 📊 DATOS GENERADOS AUTOMÁTICAMENTE
+│  ├─ ips_registradas.json         (Se crea al registrar PCs)
+│  └─ inventario_YYYYMMDD_HHMMSS.xlsx (Se crea al exportar)
+│
+└─ 🚀 LANZADORES (creados después de instalar)
+   ├─ Abrir_Monitor.bat            (Abre Panel Central)
+   └─ Iniciar_Servidor.bat         (Inicia Servidor)
+   └─ Acceso en Escritorio         (Monitor Central.lnk)
+
+═══════════════════════════════════════════════════════════════════════════
+
+📋 FLUJO DE TRABAJO:
+
+1. INSTALACIÓN INICIAL
+   ┌──────────────────────────────────────┐
+   │ Ejecuta: python INICIO.py            │
+   │ O: python instalar.py                │
+   │ → Instala librerías necesarias       │
+   │ → Crea accesos directos              │
+   └──────────────────────────────────────┘
+
+2. CONFIGURACIÓN EN CADA PC
+   ┌──────────────────────────────────────┐
+   │ En cada PC a monitorear:             │
+   │ → Ejecuta: Iniciar_Servidor.bat      │
+   │ O: python agent_servidor.py          │
+   │ → Déjalo corriendo                   │
+   └──────────────────────────────────────┘
+
+3. PANEL DE CONTROL
+   ┌──────────────────────────────────────┐
+   │ En PC de control:                    │
+   │ → Ejecuta: Abrir_Monitor.bat         │
+   │ O: python cliente_central.py         │
+   │ → Registra IPs de las otras PCs      │
+   │ → Monitorea en tiempo real           │
+   └──────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════
+
+🎯 FUNCIONALIDADES POR ARCHIVO:
+
+🟢 INICIO.py
+   • Menú principal interactivo
+   • Acceso fácil a todas las herramientas
+   • Ideal para principiantes
+
+⚙️  instalar.py
+   • Instala: flask, psutil, requests, openpyxl, pandas
+   • Crea lanzadores (.bat)
+   • Crea accesos directos en escritorio
+   • Muestra instrucciones
+
+🖥️  agent_servidor.py (SERVIDOR)
+   • Corre en cada PC a monitorear
+   • Puerto: 5000
+   • Endpoints:
+     - GET /salud              → Verifica si está activo
+     - GET /datos              → Retorna datos del sistema
+     - POST /ejecutar          → Ejecuta comandos permitidos
+   
+   Datos que expone:
+   • Hostname, IP, SO
+   • CPU (%, núcleos)
+   • Memoria (%, GB usada/total)
+   • Disco (%, GB por partición)
+   • Procesos (top 10 por CPU)
+   • Conexiones de red
+
+🎮 cliente_central.py (CLIENTE)
+   • Panel de control principal
+   • Menú interactivo con opciones:
+     1. Registrar nueva PC
+     2. Ver todas las PCs
+     3. Ver datos de PC específica
+     4. Ejecutar comando remoto
+     5. Exportar a Excel
+     6. Verificar estado de todas
+     7. Salir
+   
+   Almacenamiento:
+   • Guarda IPs en: ips_registradas.json
+   • Exporta a: inventario_YYYYMMDD_HHMMSS.xlsx
+
+🔍 scanner_red.py
+   • Escanea toda la red local
+   • Encuentra PCs activas
+   • Identifica servidores de monitoreo
+   • Genera reporte
+   • Copia IPs al portapapeles
+
+═══════════════════════════════════════════════════════════════════════════
+
+🔧 REQUISITOS:
+
+✅ Software:
+   • Python 3.7 o superior
+   • Windows, Linux o Mac
+
+✅ Librerías (se instalan automáticamente):
+   • flask - Servidor web
+   • psutil - Datos del sistema
+   • requests - Cliente HTTP
+   • openpyxl - Exportar a Excel
+   • pandas - Procesamiento de datos (opcional)
+
+✅ Hardware:
+   • Todas las PCs en la misma red
+   • Conectividad a puerto 5000 (sin firewall bloqueando)
+
+═══════════════════════════════════════════════════════════════════════════
+
+🚀 COMANDOS RÁPIDOS:
+
+Instalar todo:
+  python instalar.py
+
+Abrir Panel Central:
+  python cliente_central.py
+  O: Abrir_Monitor.bat
+
+Iniciar Servidor:
+  python agent_servidor.py
+  O: Iniciar_Servidor.bat
+
+Buscar computadoras:
+  python scanner_red.py
+
+Menú principal:
+  python INICIO.py
+
+═══════════════════════════════════════════════════════════════════════════
+
+💾 DATOS GENERADOS:
+
+ips_registradas.json
+├─ IP de cada PC
+├─ Nombre asignado
+├─ Fecha de registro
+├─ Estado (en línea/desconectada)
+└─ Notas
+
+inventario_YYYYMMDD_HHMMSS.xlsx
+├─ Hoja: Inventario
+├─ Columnas:
+│  ├─ IP
+│  ├─ Nombre PC
+│  ├─ Estado
+│  ├─ CPU %
+│  ├─ Memoria %
+│  ├─ Sistema Operativo
+│  └─ Timestamp
+└─ Exportado al opción 5 del Panel Central
+
+═══════════════════════════════════════════════════════════════════════════
+
+⚠️  IMPORTANTE:
+
+• El SERVIDOR debe estar activo en cada PC para poder monitorearlo
+• Todas las PCs deben estar en la MISMA RED
+• El PUERTO 5000 no debe estar bloqueado por firewall
+• Para seguridad, solo usar en redes de confianza
+• Los IPs deben ser accesibles entre sí
+
+═══════════════════════════════════════════════════════════════════════════
+
+📞 SOPORTE:
+
+1. Lee el README.md para guía completa
+2. Ejecuta: python INICIO.py para menú interactivo
+3. Usa: python scanner_red.py para encontrar PCs
+4. Verifica conectividad: ipconfig (en cada PC)
+
+═══════════════════════════════════════════════════════════════════════════
+
+✅ ¡Listo para empezar!
+
+Ejecuta: python INICIO.py
+O: python instalar.py
+
+═══════════════════════════════════════════════════════════════════════════
