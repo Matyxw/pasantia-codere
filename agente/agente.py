@@ -155,6 +155,33 @@ async def metrics():
     except Exception:
         pass
 
+    # Usuarios logueados
+    users = []
+    try:
+        for u in psutil.users():
+            users.append({
+                "name": u.name,
+                "terminal": u.terminal or "",
+                "host": u.host or "",
+                "started": u.started
+            })
+    except Exception:
+        pass
+
+    # Bateria
+    battery = None
+    try:
+        if hasattr(psutil, 'sensors_battery'):
+            bat = psutil.sensors_battery()
+            if bat:
+                battery = {
+                    "percent": round(bat.percent, 1),
+                    "secsleft": bat.secsleft,
+                    "power_plugged": bat.power_plugged
+                }
+    except Exception:
+        pass
+
     uptime_secs = (datetime.now() - BOOT_TIME).total_seconds()
 
     return {
@@ -185,6 +212,8 @@ async def metrics():
             "top_cpu": processes[:10],
         },
         "temperatures": temperatures,
+        "users": users,
+        "battery": battery,
     }
 
 

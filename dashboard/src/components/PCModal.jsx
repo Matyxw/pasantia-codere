@@ -127,6 +127,7 @@ export default function PCModal({ pc, onClose, onDelete, apiUrl }) {
         <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid var(--border)', padding: '0 24px' }}>
           {[
             { id: 'overview',   label: '📊 Overview' },
+            { id: 'hardware',   label: '🖥️ Hardware & Red' },
             { id: 'charts',     label: '📈 Gráficos' },
             { id: 'processes',  label: '⚙️ Procesos' },
             { id: 'terminal',   label: '🖥 Terminal' },
@@ -204,6 +205,65 @@ export default function PCModal({ pc, onClose, onDelete, apiUrl }) {
                   <StatCard label="IP" value={pc.ip} />
                   <StatCard label="Registrado" value={fmtTime(pc.registered_at).split(',')[0]} />
                 </div>
+              </div>
+            </>
+          )}
+
+          {/* ── HARDWARE & RED ── */}
+          {tab === 'hardware' && (
+            <>
+              <div>
+                <div className="section-title">Información Extendida</div>
+                <div className="info-grid">
+                  <StatCard label="Arquitectura" value={pc.architecture || '—'} sub={pc.processor?.split(' @')[0] || ''} />
+                  {m?.battery ? (
+                    <StatCard label="Batería" 
+                      value={`${m.battery.percent}%`} 
+                      sub={m.battery.power_plugged ? 'Enchufada ⚡' : 'Desconectada 🔋'} 
+                      colorClass={m.battery.percent < 20 && !m.battery.power_plugged ? 'offline' : 'accent'} 
+                    />
+                  ) : (
+                    <StatCard label="Batería" value="No detectada" sub="¿PC de Escritorio?" />
+                  )}
+                  {m?.swap ? (
+                    <StatCard label="Memoria Swap" 
+                      value={`${fmt(m.swap.percent)}%`} 
+                      sub={`${fmt(m.swap.used_gb)} / ${fmt(m.swap.total_gb)} GB`} 
+                      colorClass={m.swap.percent > 80 ? 'offline' : 'accent'} 
+                    />
+                  ) : (
+                    <StatCard label="Memoria Swap" value="—" />
+                  )}
+                  {m?.network ? (
+                    <StatCard label="Tráfico Total" 
+                      value={`↓ ${fmt((m.network.bytes_recv || 0) / 1073741824, 2)} GB`} 
+                      sub={`↑ ${fmt((m.network.bytes_sent || 0) / 1073741824, 2)} GB`} 
+                    />
+                  ) : (
+                    <StatCard label="Tráfico" value="—" />
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <div className="section-title">Usuarios Logueados</div>
+                {m?.users && m.users.length > 0 ? (
+                  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: 12 }}>
+                    {m.users.map((u, i) => (
+                      <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'center', padding: '8px 0', borderBottom: i === m.users.length - 1 ? 'none' : '1px solid var(--border)' }}>
+                        <div style={{ background: 'var(--bg-hover)', width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          👤
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{u.name}</div>
+                          <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Terminal: {u.terminal || 'Consola'} {u.host ? `· Desde: ${u.host}` : ''}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>No se detectaron usuarios activos.</div>
+                )}
               </div>
             </>
           )}
