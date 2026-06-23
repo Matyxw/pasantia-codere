@@ -22,6 +22,11 @@ from sqlalchemy.orm import Session
 
 import scheduler as sched
 from database import PC, Event, Metric, SessionLocal, get_db
+import uuid
+import threading
+
+pending_commands = {}
+command_results = {}
 
 # ──────────────────────────────────────────
 # App
@@ -73,11 +78,26 @@ manager = ConnectionManager()
 # ──────────────────────────────────────────
 # Lifecycle
 # ──────────────────────────────────────────
+def udp_discovery_server():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.bind(('', 8002))
+        while True:
+            data, addr = s.recvfrom(1024)
+            if b"CODERE_DISCOVERY_REQUEST" in data:
+                s.sendto(b"CODERE_SERVER", addr)
+    except Exception as e:
+        print(f"[UDP] Error en discovery: {e}")
+
 @app.on_event("startup")
 async def on_startup():
     loop = asyncio.get_event_loop()
     sched.init(loop, manager.broadcast)
     sched.start()
+    
+    t = threading.Thread(target=udp_discovery_server, daemon=True)
+    t.start()
+    
     print("[Server] Servidor Central iniciado en http://0.0.0.0:8000")
 
 
@@ -177,34 +197,23 @@ async def get_pcs(db: Session = Depends(get_db)):
 
 @app.post("/api/pcs", status_code=201)
 async def register_pc(body: dict, db: Session = Depends(get_db)):
+    # Mantener retrocompatibilidad o registro manual
     ip = body.get("ip", "").strip()
     name = body.get("name", "").strip()
 
     if not ip or not name:
         raise HTTPException(400, "IP y nombre son requeridos")
 
-    if db.query(PC).filter(PC.ip == ip).first():
+    pc = db.query(PC).filter(PC.ip == ip).first()
+    if pc:
         raise HTTPException(409, f"La IP {ip} ya está registrada")
 
-    # Intentar obtener info del agente
-    hostname, os_info = None, None
-    try:
-        resp = requests.get(f"http://{ip}:8001/info", timeout=5)
-        if resp.status_code == 200:
-            info = resp.json()
-            hostname = info.get("hostname")
-            os_info = f"{info.get('os', '')} {info.get('os_version', '')}".strip()
-    except Exception:
-        pass
-
-    pc = PC(ip=ip, name=name, hostname=hostname, os=os_info)
+    pc = PC(ip=ip, name=name, status="unknown")
     db.add(pc)
     db.commit()
     db.refresh(pc)
 
-    # Broadcast a los dashboards
     await manager.broadcast({"type": "pc_registered", "data": _pc_to_dict(pc)})
-
     return _pc_to_dict(pc)
 
 
@@ -287,64 +296,129 @@ async def execute_command(
     if not command:
         raise HTTPException(400, "Comando vacío")
 
-    try:
-        resp = requests.post(
-            f"http://{pc.ip}:8001/execute",
-            json={"command": command},
-            timeout=35,
-        )
-        return resp.json()
-    except requests.Timeout:
-        raise HTTPException(504, "Timeout: el agente no respondió en 35 segundos")
-    except Exception as e:
-        raise HTTPException(500, str(e))
+    cmd_id = str(uuid.uuid4())
+    if pc.ip not in pending_commands:
+        pending_commands[pc.ip] = []
+    
+    pending_commands[pc.ip].append({
+        "id": cmd_id,
+        "command": command
+    })
+    
+    # Simular polling bloqueante (para la UI actual)
+    for _ in range(60): # 30 seg (0.5 * 60)
+        if cmd_id in command_results:
+            res = command_results.pop(cmd_id)
+            return res
+        import time
+        time.sleep(0.5)
+        
+    raise HTTPException(504, "Timeout: el agente no recogió ni respondió el comando")
 
 
 # ──────────────────────────────────────────
 # REST API — Escaneo de red
 # ──────────────────────────────────────────
-@app.get("/api/scan")
-async def scan_network():
-    """Escanea la red local en busca de agentes activos en el puerto 8001"""
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        local_ip = s.getsockname()[0]
-        s.close()
-    except Exception:
-        raise HTTPException(500, "No se pudo obtener la IP local")
+@app.post("/api/agent/push")
+async def agent_push(body: dict, db: Session = Depends(get_db)):
+    ip = body.get("ip")
+    name = body.get("name")
+    hostname = body.get("hostname")
+    os_info = body.get("os")
+    metrics_data = body.get("metrics")
+    
+    if not ip or not metrics_data:
+        raise HTTPException(400, "Faltan datos")
+        
+    pc = db.query(PC).filter(PC.ip == ip).first()
+    now = datetime.now().isoformat()
+    
+    went_online = False
+    downtime_secs = None
+    
+    if not pc:
+        # Auto-registro
+        pc = PC(ip=ip, name=name, hostname=hostname, os=os_info, status="online", registered_at=now, last_seen=now)
+        db.add(pc)
+        db.commit()
+        db.refresh(pc)
+        await manager.broadcast({"type": "pc_registered", "data": _pc_to_dict(pc)})
+        went_online = True
+    else:
+        if pc.status != "online":
+            went_online = True
+            if pc.last_offline:
+                try:
+                    last_off = datetime.fromisoformat(pc.last_offline)
+                    downtime_secs = (datetime.now() - last_off).total_seconds()
+                except Exception:
+                    pass
+                    
+        pc.status = "online"
+        pc.last_seen = now
+        pc.hostname = hostname or pc.hostname
+        pc.os = os_info or pc.os
 
-    parts = local_ip.split(".")
-    prefix = f"{parts[0]}.{parts[1]}.{parts[2]}"
+    disk_percent = 0.0
+    disk_data = metrics_data.get("disk", {})
+    if disk_data:
+        first_disk = next(iter(disk_data.values()), {})
+        disk_percent = first_disk.get("percent", 0.0)
 
-    def _check(ip: str):
-        try:
-            r = requests.get(f"http://{ip}:8001/health", timeout=1.0)
-            if r.status_code == 200:
-                data = r.json()
-                return {
-                    "ip": ip,
-                    "hostname": data.get("hostname", ""),
-                    "agent_version": data.get("agent_version", ""),
-                    "status": "agent_active",
-                }
-        except Exception:
-            pass
-        return None
+    pc.last_metrics = json.dumps(metrics_data)
 
-    ips = [f"{prefix}.{i}" for i in range(1, 255)]
-    found = []
+    metric = Metric(
+        pc_id=pc.id,
+        timestamp=now,
+        cpu_percent=metrics_data.get("cpu", {}).get("percent", 0),
+        ram_percent=metrics_data.get("memory", {}).get("percent", 0),
+        ram_used_gb=metrics_data.get("memory", {}).get("used_gb", 0),
+        ram_total_gb=metrics_data.get("memory", {}).get("total_gb", 0),
+        disk_percent=disk_percent,
+        processes_count=metrics_data.get("processes", {}).get("total", 0),
+        network_connections=metrics_data.get("network", {}).get("connections", 0),
+        uptime_seconds=metrics_data.get("uptime_seconds", 0),
+    )
+    db.add(metric)
+    
+    if went_online:
+        event = Event(pc_id=pc.id, pc_name=pc.name, pc_ip=pc.ip, type="online", timestamp=now, downtime_seconds=downtime_secs)
+        db.add(event)
+        from notificaciones import notify_online
+        notify_online(pc.name, pc.ip, downtime_secs)
+        await manager.broadcast({
+            "type": "event",
+            "data": {"pc_id": pc.id, "pc_name": pc.name, "ip": pc.ip, "event_type": "online", "timestamp": now}
+        })
+        await manager.broadcast({"type": "status_change", "data": {"pc_id": pc.id, "ip": pc.ip, "status": "online", "timestamp": now}})
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=60) as executor:
-        results = executor.map(_check, ips)
-        found = [r for r in results if r is not None]
+    db.commit()
 
-    return {
-        "local_ip": local_ip,
-        "network": f"{prefix}.0/24",
-        "found": sorted(found, key=lambda x: x["ip"]),
-        "total": len(found),
-    }
+    await manager.broadcast({
+        "type": "metrics_update",
+        "data": {
+            "pc_id": pc.id,
+            "ip": pc.ip,
+            "name": pc.name,
+            "status": "online",
+            "last_seen": now,
+            "metrics": metrics_data,
+        },
+    })
+    
+    # Entregar comandos pendientes
+    cmds = pending_commands.pop(pc.ip, [])
+    
+    return {"status": "ok", "pending_commands": cmds}
+
+
+@app.post("/api/agent/command_result")
+async def agent_command_result(body: dict):
+    cmd_id = body.get("command_id")
+    result = body.get("result")
+    if cmd_id:
+        command_results[cmd_id] = result
+    return {"status": "ok"}
 
 
 # ──────────────────────────────────────────

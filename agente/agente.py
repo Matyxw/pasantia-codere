@@ -1,46 +1,34 @@
 #!/usr/bin/env python3
 """
-AGENTE v2.0 — FastAPI
+AGENTE v3.0 — Arquitectura Push + UDP Discovery
 Corre en cada PC que quieras monitorear.
-Puerto: 8001
 """
 
 import os
 import sys
+import time
+import socket
+import platform
+import subprocess
+import json
+import threading
+from datetime import datetime
+import psutil
+import requests
 
-# Fix for --noconsole mode (sys.stdout is None)
+# Fix for --noconsole mode
 if sys.stdout is None:
     sys.stdout = open(os.devnull, 'w')
 if sys.stderr is None:
     sys.stderr = open(os.devnull, 'w')
 
-import platform
-import socket
-import subprocess
-from datetime import datetime
-
-import psutil
-import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI(title="PC Monitor Agent", version="2.0.0", docs_url="/docs")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 BOOT_TIME = datetime.fromtimestamp(psutil.boot_time())
+AGENT_VERSION = "3.0.0-Push"
 
 ALLOWED_COMMANDS = [
     'dir', 'tasklist', 'ipconfig', 'systeminfo',
     'whoami', 'hostname', 'netstat', 'ping', 'echo', 'type'
 ]
-
 
 def _get_local_ip() -> str:
     try:
@@ -52,59 +40,19 @@ def _get_local_ip() -> str:
     except Exception:
         return socket.gethostbyname(socket.gethostname())
 
-
-@app.get("/health")
-async def health():
-    """Health check — usado por el heartbeat del servidor central"""
-    return {
-        "status": "online",
-        "hostname": socket.gethostname(),
-        "timestamp": datetime.now().isoformat(),
-        "agent_version": "2.0.0",
-    }
-
-
-@app.get("/info")
-async def info():
-    """Información estática del sistema (SO, procesador, arquitectura)"""
-    uptime_secs = (datetime.now() - BOOT_TIME).total_seconds()
-    return {
-        "hostname": socket.gethostname(),
-        "ip": _get_local_ip(),
-        "os": platform.system(),
-        "os_version": platform.release(),
-        "os_edition": platform.version(),
-        "architecture": platform.architecture()[0],
-        "processor": platform.processor(),
-        "machine": platform.machine(),
-        "boot_time": BOOT_TIME.isoformat(),
-        "uptime_seconds": uptime_secs,
-        "python_version": platform.python_version(),
-        "agent_version": "2.0.0",
-    }
-
-
-@app.get("/metrics")
-async def metrics():
-    """
-    Métricas en tiempo real:
-    CPU, RAM, Swap, Discos, Red, Procesos, Temperatura (si disponible)
-    """
-    # CPU
+def get_metrics():
     cpu_percent = psutil.cpu_percent(interval=0.5)
     try:
         cpu_per_core = psutil.cpu_percent(percpu=True, interval=0)
-    except Exception:
+    except:
         cpu_per_core = []
 
     freq = psutil.cpu_freq()
     freq_mhz = round(freq.current, 1) if freq else None
 
-    # Memoria
     mem = psutil.virtual_memory()
     swap = psutil.swap_memory()
 
-    # Discos
     disks = {}
     for part in psutil.disk_partitions(all=False):
         try:
@@ -117,10 +65,9 @@ async def metrics():
                 "free_gb": round(usage.free / (1024 ** 3), 2),
                 "percent": usage.percent,
             }
-        except Exception:
+        except:
             pass
 
-    # Red
     try:
         net_io = psutil.net_io_counters()
         net_connections = len(psutil.net_connections())
@@ -131,10 +78,9 @@ async def metrics():
             "packets_recv": net_io.packets_recv,
             "connections": net_connections,
         }
-    except Exception:
+    except:
         network = {"connections": 0}
 
-    # Procesos top CPU
     processes = []
     for p in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_info', 'status']):
         try:
@@ -146,12 +92,10 @@ async def metrics():
                 "memory_mb": round(mem_info.rss / (1024 ** 2), 1) if mem_info else 0,
                 "status": p.info.get('status', ''),
             })
-        except Exception:
+        except:
             pass
-
     processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
 
-    # Temperatura (solo disponible en algunos sistemas)
     temperatures = {}
     try:
         if hasattr(psutil, 'sensors_temperatures'):
@@ -162,10 +106,9 @@ async def metrics():
                         {"label": e.label, "current": e.current, "high": e.high}
                         for e in entries
                     ]
-    except Exception:
+    except:
         pass
 
-    # Usuarios logueados
     users = []
     try:
         for u in psutil.users():
@@ -175,10 +118,9 @@ async def metrics():
                 "host": u.host or "",
                 "started": u.started
             })
-    except Exception:
+    except:
         pass
 
-    # Bateria
     battery = None
     try:
         if hasattr(psutil, 'sensors_battery'):
@@ -189,7 +131,7 @@ async def metrics():
                     "secsleft": bat.secsleft,
                     "power_plugged": bat.power_plugged
                 }
-    except Exception:
+    except:
         pass
 
     uptime_secs = (datetime.now() - BOOT_TIME).total_seconds()
@@ -226,33 +168,34 @@ async def metrics():
         "battery": battery,
     }
 
+def discover_server():
+    print("[UDP] Buscando servidor Codere en la red...")
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    s.settimeout(2.0)
+    
+    while True:
+        try:
+            # Enviamos broadcast al puerto 8002
+            s.sendto(b"CODERE_DISCOVERY_REQUEST", ('<broadcast>', 8002))
+            data, addr = s.recvfrom(1024)
+            if b"CODERE_SERVER" in data:
+                print(f"[UDP] ¡Servidor encontrado en {addr[0]}!")
+                s.close()
+                return addr[0]
+        except Exception:
+            pass
+        time.sleep(2)
 
-@app.post("/execute")
-async def execute(body: dict):
-    """
-    Ejecuta comandos remotos con lista blanca de seguridad.
-    Body: {"command": "ipconfig"}
-    """
-    comando = body.get("command", "").strip()
-
-    if not comando:
-        return {"error": "Comando vacío"}
-
+def execute_command(comando: str):
     allowed = any(comando.lower().startswith(cmd) for cmd in ALLOWED_COMMANDS)
     if not allowed:
-        return {
-            "error": "Comando no permitido",
-            "allowed_commands": ALLOWED_COMMANDS,
-        }
+        return {"error": "Comando no permitido", "command": comando}
 
     try:
         result = subprocess.run(
-            comando,
-            shell=True,
-            capture_output=True,
-            timeout=30,
-            encoding="utf-8",
-            errors="replace",
+            comando, shell=True, capture_output=True, timeout=30,
+            encoding="utf-8", errors="replace"
         )
         return {
             "command": comando,
@@ -261,20 +204,52 @@ async def execute(body: dict):
             "stderr": result.stderr,
             "timestamp": datetime.now().isoformat(),
         }
-    except subprocess.TimeoutExpired:
-        return {"error": "Timeout: el comando tardó más de 30 segundos"}
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": str(e), "command": comando}
 
+def main():
+    local_ip = _get_local_ip()
+    hostname = socket.gethostname()
+    os_info = f"{platform.system()} {platform.release()}"
+    
+    print("=" * 50)
+    print("  AGENTE PUSH CODERE v3.0")
+    print("=" * 50)
+    
+    server_ip = discover_server()
+    server_url = f"http://{server_ip}:8000"
+    
+    # Loop principal
+    while True:
+        try:
+            payload = {
+                "ip": local_ip,
+                "name": hostname,
+                "hostname": hostname,
+                "os": os_info,
+                "metrics": get_metrics()
+            }
+            resp = requests.post(f"{server_url}/api/agent/push", json=payload, timeout=5)
+            
+            if resp.status_code == 200:
+                data = resp.json()
+                cmds = data.get("pending_commands", [])
+                for cmd in cmds:
+                    cmd_id = cmd["id"]
+                    comando_txt = cmd["command"]
+                    res = execute_command(comando_txt)
+                    
+                    # Enviar resultado de vuelta
+                    requests.post(f"{server_url}/api/agent/command_result", json={
+                        "pc_ip": local_ip,
+                        "command_id": cmd_id,
+                        "result": res
+                    }, timeout=5)
+                    
+        except Exception as e:
+            print(f"[ERROR] No se pudo enviar metrics: {e}")
+            
+        time.sleep(5)
 
 if __name__ == "__main__":
-    local_ip = _get_local_ip()
-    print("=" * 50)
-    print("  AGENTE PC MONITOR v2.0")
-    print("=" * 50)
-    print(f"  Hostname : {socket.gethostname()}")
-    print(f"  IP Local : {local_ip}")
-    print(f"  URL      : http://{local_ip}:8001")
-    print(f"  Docs     : http://{local_ip}:8001/docs")
-    print("=" * 50)
-    uvicorn.run(app, host="0.0.0.0", port=8001, log_config=None)
+    main()

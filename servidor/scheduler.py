@@ -55,151 +55,55 @@ def _heartbeat():
 _failed_pings = {}
 
 def _check_pc(db, pc: PC):
-    """Verifica una PC individual y actualiza su estado en la DB"""
-    global _failed_pings
+    """Verifica el timeout de una PC usando last_seen"""
+    now = datetime.now()
     try:
-        resp = requests.get(
-            f"http://{pc.ip}:8001/metrics",
-            timeout=REQUEST_TIMEOUT
-        )
-        if resp.status_code != 200:
-            raise ConnectionError("Status != 200")
+        last_seen = datetime.fromisoformat(pc.last_seen) if pc.last_seen else None
+    except:
+        last_seen = None
 
-        # Reset failed count on success
-        _failed_pings[pc.id] = 0
+    is_timeout = False
+    if not last_seen or (now - last_seen).total_seconds() > 20:
+        is_timeout = True
 
-        metrics_data = resp.json()
-        now = datetime.now().isoformat()
+    if is_timeout and pc.status != "offline":
+        pc.status = "offline"
+        pc.last_offline = now.isoformat()
 
-        was_offline = (pc.status == "offline")
-        went_online_now = was_offline or (pc.status == "unknown")
-
-        # Calcular downtime si volvio online
-        downtime_secs = None
-        if was_offline and pc.last_offline:
-            try:
-                last_off = datetime.fromisoformat(pc.last_offline)
-                downtime_secs = (datetime.now() - last_off).total_seconds()
-            except Exception:
-                pass
-
-        # Actualizar PC en DB
-        pc.status = "online"
-        pc.last_seen = now
-
-        # Snapshot de ultima metrica
-        disk_percent = 0.0
-        disk_data = metrics_data.get("disk", {})
-        if disk_data:
-            first_disk = next(iter(disk_data.values()), {})
-            disk_percent = first_disk.get("percent", 0.0)
-
-        pc.last_metrics = json.dumps(metrics_data)
-
-        # Guardar snapshot en tabla metrics
-        metric = Metric(
+        event = Event(
             pc_id=pc.id,
-            timestamp=now,
-            cpu_percent=metrics_data["cpu"]["percent"],
-            ram_percent=metrics_data["memory"]["percent"],
-            ram_used_gb=metrics_data["memory"]["used_gb"],
-            ram_total_gb=metrics_data["memory"]["total_gb"],
-            disk_percent=disk_percent,
-            processes_count=metrics_data["processes"]["total"],
-            network_connections=metrics_data["network"].get("connections", 0),
-            uptime_seconds=metrics_data.get("uptime_seconds", 0),
+            pc_name=pc.name,
+            pc_ip=pc.ip,
+            type="offline",
+            timestamp=now.isoformat(),
         )
-        db.add(metric)
-
-        # Si volvio online, registrar evento
-        if went_online_now:
-            event = Event(
-                pc_id=pc.id,
-                pc_name=pc.name,
-                pc_ip=pc.ip,
-                type="online",
-                timestamp=now,
-                downtime_seconds=downtime_secs,
-            )
-            db.add(event)
-            notify_online(pc.name, pc.ip, downtime_secs)
-
-            _broadcast({
-                "type": "event",
-                "data": {
-                    "pc_id": pc.id,
-                    "pc_name": pc.name,
-                    "ip": pc.ip,
-                    "event_type": "online",
-                    "downtime_seconds": downtime_secs,
-                    "timestamp": now,
-                },
-            })
-
+        db.add(event)
         db.commit()
 
-        # Broadcast actualizacion de metricas
+        notify_offline(pc.name, pc.ip)
+
         _broadcast({
-            "type": "metrics_update",
+            "type": "event",
             "data": {
                 "pc_id": pc.id,
+                "pc_name": pc.name,
                 "ip": pc.ip,
-                "name": pc.name,
-                "status": "online",
-                "last_seen": now,
-                "metrics": metrics_data,
+                "event_type": "offline",
+                "timestamp": now.isoformat(),
+                "downtime_seconds": None,
             },
         })
 
-    except Exception:
-        # La PC no respondio
-        count = _failed_pings.get(pc.id, 0) + 1
-        _failed_pings[pc.id] = count
-
-        # Solo marcamos como offline si falla 3 veces seguidas
-        if count >= 3:
-            now = datetime.now().isoformat()
-
-            if pc.status != "offline":
-                # Acaba de caerse
-                pc.status = "offline"
-                pc.last_offline = now
-
-                event = Event(
-                    pc_id=pc.id,
-                    pc_name=pc.name,
-                    pc_ip=pc.ip,
-                    type="offline",
-                    timestamp=now,
-                )
-                db.add(event)
-                db.commit()
-
-                notify_offline(pc.name, pc.ip)
-
-                _broadcast({
-                    "type": "event",
-                    "data": {
-                        "pc_id": pc.id,
-                        "pc_name": pc.name,
-                        "ip": pc.ip,
-                        "event_type": "offline",
-                        "timestamp": now,
-                        "downtime_seconds": None,
-                    },
-                })
-
-                # Broadcast status change
-                _broadcast({
-                    "type": "status_change",
-                    "data": {
-                        "pc_id": pc.id,
-                        "name": pc.name,
-                        "ip": pc.ip,
-                        "status": "offline",
-                        "timestamp": now,
-                    },
-                })
+        _broadcast({
+            "type": "status_change",
+            "data": {
+                "pc_id": pc.id,
+                "name": pc.name,
+                "ip": pc.ip,
+                "status": "offline",
+                "timestamp": now.isoformat(),
+            },
+        })
 
 
 def start():

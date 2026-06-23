@@ -63,180 +63,12 @@
   ('_pyrepl.windows_eventqueue',
    'C:\\Python314\\Lib\\_pyrepl\\windows_eventqueue.py',
    'PYMODULE'),
-  ('_pytest',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\_pytest\\__init__.py',
-   'PYMODULE'),
-  ('_pytest._version',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\_pytest\\_version.py',
-   'PYMODULE'),
-  ('_pytest.outcomes',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\_pytest\\outcomes.py',
-   'PYMODULE'),
   ('_sitebuiltins', 'C:\\Python314\\Lib\\_sitebuiltins.py', 'PYMODULE'),
   ('_strptime', 'C:\\Python314\\Lib\\_strptime.py', 'PYMODULE'),
   ('_threading_local', 'C:\\Python314\\Lib\\_threading_local.py', 'PYMODULE'),
-  ('annotated_doc',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\annotated_doc\\__init__.py',
-   'PYMODULE'),
-  ('annotated_doc.main',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\annotated_doc\\main.py',
-   'PYMODULE'),
-  ('annotated_types',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\annotated_types\\__init__.py',
-   'PYMODULE'),
   ('annotationlib', 'C:\\Python314\\Lib\\annotationlib.py', 'PYMODULE'),
-  ('anyio',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\__init__.py',
-   'PYMODULE'),
-  ('anyio._backends',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_backends\\__init__.py',
-   'PYMODULE'),
-  ('anyio._backends._asyncio',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_backends\\_asyncio.py',
-   'PYMODULE'),
-  ('anyio._backends._trio',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_backends\\_trio.py',
-   'PYMODULE'),
-  ('anyio._core',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\__init__.py',
-   'PYMODULE'),
-  ('anyio._core._asyncio_selector_thread',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_asyncio_selector_thread.py',
-   'PYMODULE'),
-  ('anyio._core._contextmanagers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_contextmanagers.py',
-   'PYMODULE'),
-  ('anyio._core._eventloop',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_eventloop.py',
-   'PYMODULE'),
-  ('anyio._core._exceptions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_exceptions.py',
-   'PYMODULE'),
-  ('anyio._core._fileio',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_fileio.py',
-   'PYMODULE'),
-  ('anyio._core._resources',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_resources.py',
-   'PYMODULE'),
-  ('anyio._core._signals',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_signals.py',
-   'PYMODULE'),
-  ('anyio._core._sockets',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_sockets.py',
-   'PYMODULE'),
-  ('anyio._core._streams',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_streams.py',
-   'PYMODULE'),
-  ('anyio._core._subprocesses',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_subprocesses.py',
-   'PYMODULE'),
-  ('anyio._core._synchronization',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_synchronization.py',
-   'PYMODULE'),
-  ('anyio._core._tasks',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_tasks.py',
-   'PYMODULE'),
-  ('anyio._core._tempfile',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_tempfile.py',
-   'PYMODULE'),
-  ('anyio._core._testing',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_testing.py',
-   'PYMODULE'),
-  ('anyio._core._typedattr',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\_core\\_typedattr.py',
-   'PYMODULE'),
-  ('anyio.abc',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\abc\\__init__.py',
-   'PYMODULE'),
-  ('anyio.abc._eventloop',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\abc\\_eventloop.py',
-   'PYMODULE'),
-  ('anyio.abc._resources',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\abc\\_resources.py',
-   'PYMODULE'),
-  ('anyio.abc._sockets',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\abc\\_sockets.py',
-   'PYMODULE'),
-  ('anyio.abc._streams',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\abc\\_streams.py',
-   'PYMODULE'),
-  ('anyio.abc._subprocesses',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\abc\\_subprocesses.py',
-   'PYMODULE'),
-  ('anyio.abc._tasks',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\abc\\_tasks.py',
-   'PYMODULE'),
-  ('anyio.abc._testing',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\abc\\_testing.py',
-   'PYMODULE'),
-  ('anyio.from_thread',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\from_thread.py',
-   'PYMODULE'),
-  ('anyio.lowlevel',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\lowlevel.py',
-   'PYMODULE'),
-  ('anyio.streams',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\streams\\__init__.py',
-   'PYMODULE'),
-  ('anyio.streams.memory',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\streams\\memory.py',
-   'PYMODULE'),
-  ('anyio.streams.stapled',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\streams\\stapled.py',
-   'PYMODULE'),
-  ('anyio.streams.tls',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\streams\\tls.py',
-   'PYMODULE'),
-  ('anyio.to_thread',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\anyio\\to_thread.py',
-   'PYMODULE'),
   ('argparse', 'C:\\Python314\\Lib\\argparse.py', 'PYMODULE'),
   ('ast', 'C:\\Python314\\Lib\\ast.py', 'PYMODULE'),
-  ('ast_serialize',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\ast_serialize\\__init__.py',
-   'PYMODULE'),
   ('asyncio', 'C:\\Python314\\Lib\\asyncio\\__init__.py', 'PYMODULE'),
   ('asyncio.base_events',
    'C:\\Python314\\Lib\\asyncio\\base_events.py',
@@ -307,102 +139,51 @@
    'C:\\Python314\\Lib\\asyncio\\windows_utils.py',
    'PYMODULE'),
   ('base64', 'C:\\Python314\\Lib\\base64.py', 'PYMODULE'),
-  ('bdb', 'C:\\Python314\\Lib\\bdb.py', 'PYMODULE'),
   ('bisect', 'C:\\Python314\\Lib\\bisect.py', 'PYMODULE'),
+  ('brotli',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\brotli.py',
+   'PYMODULE'),
   ('bz2', 'C:\\Python314\\Lib\\bz2.py', 'PYMODULE'),
   ('calendar', 'C:\\Python314\\Lib\\calendar.py', 'PYMODULE'),
-  ('click',
+  ('certifi',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\__init__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\certifi\\__init__.py',
    'PYMODULE'),
-  ('click._compat',
+  ('certifi.core',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\_compat.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\certifi\\core.py',
    'PYMODULE'),
-  ('click._termui_impl',
+  ('charset_normalizer',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\_termui_impl.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\charset_normalizer\\__init__.py',
    'PYMODULE'),
-  ('click._textwrap',
+  ('charset_normalizer.api',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\_textwrap.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\charset_normalizer\\api.py',
    'PYMODULE'),
-  ('click._utils',
+  ('charset_normalizer.constant',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\_utils.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\charset_normalizer\\constant.py',
    'PYMODULE'),
-  ('click._winconsole',
+  ('charset_normalizer.legacy',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\_winconsole.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\charset_normalizer\\legacy.py',
    'PYMODULE'),
-  ('click.core',
+  ('charset_normalizer.models',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\core.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\charset_normalizer\\models.py',
    'PYMODULE'),
-  ('click.decorators',
+  ('charset_normalizer.utils',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\decorators.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\charset_normalizer\\utils.py',
    'PYMODULE'),
-  ('click.exceptions',
+  ('charset_normalizer.version',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\exceptions.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\charset_normalizer\\version.py',
    'PYMODULE'),
-  ('click.formatting',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\formatting.py',
-   'PYMODULE'),
-  ('click.globals',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\globals.py',
-   'PYMODULE'),
-  ('click.parser',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\parser.py',
-   'PYMODULE'),
-  ('click.shell_completion',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\shell_completion.py',
-   'PYMODULE'),
-  ('click.termui',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\termui.py',
-   'PYMODULE'),
-  ('click.types',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\types.py',
-   'PYMODULE'),
-  ('click.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\utils.py',
-   'PYMODULE'),
-  ('cmd', 'C:\\Python314\\Lib\\cmd.py', 'PYMODULE'),
   ('code', 'C:\\Python314\\Lib\\code.py', 'PYMODULE'),
   ('codeop', 'C:\\Python314\\Lib\\codeop.py', 'PYMODULE'),
-  ('colorama',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\colorama\\__init__.py',
-   'PYMODULE'),
-  ('colorama.ansi',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\colorama\\ansi.py',
-   'PYMODULE'),
-  ('colorama.ansitowin32',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\colorama\\ansitowin32.py',
-   'PYMODULE'),
-  ('colorama.initialise',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\colorama\\initialise.py',
-   'PYMODULE'),
-  ('colorama.win32',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\colorama\\win32.py',
-   'PYMODULE'),
-  ('colorama.winterm',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\colorama\\winterm.py',
-   'PYMODULE'),
-  ('colorsys', 'C:\\Python314\\Lib\\colorsys.py', 'PYMODULE'),
   ('compression', 'C:\\Python314\\Lib\\compression\\__init__.py', 'PYMODULE'),
   ('compression._common',
    'C:\\Python314\\Lib\\compression\\_common\\__init__.py',
@@ -662,33 +443,11 @@
   ('ctypes._endian', 'C:\\Python314\\Lib\\ctypes\\_endian.py', 'PYMODULE'),
   ('ctypes._layout', 'C:\\Python314\\Lib\\ctypes\\_layout.py', 'PYMODULE'),
   ('ctypes.wintypes', 'C:\\Python314\\Lib\\ctypes\\wintypes.py', 'PYMODULE'),
-  ('curses', 'C:\\Python314\\Lib\\curses\\__init__.py', 'PYMODULE'),
-  ('curses.has_key', 'C:\\Python314\\Lib\\curses\\has_key.py', 'PYMODULE'),
   ('dataclasses', 'C:\\Python314\\Lib\\dataclasses.py', 'PYMODULE'),
   ('datetime', 'C:\\Python314\\Lib\\datetime.py', 'PYMODULE'),
   ('decimal', 'C:\\Python314\\Lib\\decimal.py', 'PYMODULE'),
   ('difflib', 'C:\\Python314\\Lib\\difflib.py', 'PYMODULE'),
   ('dis', 'C:\\Python314\\Lib\\dis.py', 'PYMODULE'),
-  ('dotenv',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\dotenv\\__init__.py',
-   'PYMODULE'),
-  ('dotenv.ipython',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\dotenv\\ipython.py',
-   'PYMODULE'),
-  ('dotenv.main',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\dotenv\\main.py',
-   'PYMODULE'),
-  ('dotenv.parser',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\dotenv\\parser.py',
-   'PYMODULE'),
-  ('dotenv.variables',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\dotenv\\variables.py',
-   'PYMODULE'),
   ('email', 'C:\\Python314\\Lib\\email\\__init__.py', 'PYMODULE'),
   ('email._encoded_words',
    'C:\\Python314\\Lib\\email\\_encoded_words.py',
@@ -719,214 +478,13 @@
   ('email.policy', 'C:\\Python314\\Lib\\email\\policy.py', 'PYMODULE'),
   ('email.quoprimime', 'C:\\Python314\\Lib\\email\\quoprimime.py', 'PYMODULE'),
   ('email.utils', 'C:\\Python314\\Lib\\email\\utils.py', 'PYMODULE'),
-  ('fastapi',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\__init__.py',
-   'PYMODULE'),
-  ('fastapi._compat',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\_compat\\__init__.py',
-   'PYMODULE'),
-  ('fastapi._compat.shared',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\_compat\\shared.py',
-   'PYMODULE'),
-  ('fastapi._compat.v2',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\_compat\\v2.py',
-   'PYMODULE'),
-  ('fastapi.applications',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\applications.py',
-   'PYMODULE'),
-  ('fastapi.background',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\background.py',
-   'PYMODULE'),
-  ('fastapi.concurrency',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\concurrency.py',
-   'PYMODULE'),
-  ('fastapi.datastructures',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\datastructures.py',
-   'PYMODULE'),
-  ('fastapi.dependencies',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\dependencies\\__init__.py',
-   'PYMODULE'),
-  ('fastapi.dependencies.models',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\dependencies\\models.py',
-   'PYMODULE'),
-  ('fastapi.dependencies.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\dependencies\\utils.py',
-   'PYMODULE'),
-  ('fastapi.encoders',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\encoders.py',
-   'PYMODULE'),
-  ('fastapi.exception_handlers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\exception_handlers.py',
-   'PYMODULE'),
-  ('fastapi.exceptions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\exceptions.py',
-   'PYMODULE'),
-  ('fastapi.logger',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\logger.py',
-   'PYMODULE'),
-  ('fastapi.middleware',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\middleware\\__init__.py',
-   'PYMODULE'),
-  ('fastapi.middleware.asyncexitstack',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\middleware\\asyncexitstack.py',
-   'PYMODULE'),
-  ('fastapi.middleware.cors',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\middleware\\cors.py',
-   'PYMODULE'),
-  ('fastapi.openapi',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\openapi\\__init__.py',
-   'PYMODULE'),
-  ('fastapi.openapi.constants',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\openapi\\constants.py',
-   'PYMODULE'),
-  ('fastapi.openapi.docs',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\openapi\\docs.py',
-   'PYMODULE'),
-  ('fastapi.openapi.models',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\openapi\\models.py',
-   'PYMODULE'),
-  ('fastapi.openapi.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\openapi\\utils.py',
-   'PYMODULE'),
-  ('fastapi.param_functions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\param_functions.py',
-   'PYMODULE'),
-  ('fastapi.params',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\params.py',
-   'PYMODULE'),
-  ('fastapi.requests',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\requests.py',
-   'PYMODULE'),
-  ('fastapi.responses',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\responses.py',
-   'PYMODULE'),
-  ('fastapi.routing',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py',
-   'PYMODULE'),
-  ('fastapi.security',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\security\\__init__.py',
-   'PYMODULE'),
-  ('fastapi.security.api_key',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\security\\api_key.py',
-   'PYMODULE'),
-  ('fastapi.security.base',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\security\\base.py',
-   'PYMODULE'),
-  ('fastapi.security.http',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\security\\http.py',
-   'PYMODULE'),
-  ('fastapi.security.oauth2',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\security\\oauth2.py',
-   'PYMODULE'),
-  ('fastapi.security.open_id_connect_url',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\security\\open_id_connect_url.py',
-   'PYMODULE'),
-  ('fastapi.security.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\security\\utils.py',
-   'PYMODULE'),
-  ('fastapi.sse',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\sse.py',
-   'PYMODULE'),
-  ('fastapi.types',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\types.py',
-   'PYMODULE'),
-  ('fastapi.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\utils.py',
-   'PYMODULE'),
-  ('fastapi.websockets',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\websockets.py',
-   'PYMODULE'),
   ('fnmatch', 'C:\\Python314\\Lib\\fnmatch.py', 'PYMODULE'),
   ('fractions', 'C:\\Python314\\Lib\\fractions.py', 'PYMODULE'),
   ('ftplib', 'C:\\Python314\\Lib\\ftplib.py', 'PYMODULE'),
   ('getopt', 'C:\\Python314\\Lib\\getopt.py', 'PYMODULE'),
-  ('getpass', 'C:\\Python314\\Lib\\getpass.py', 'PYMODULE'),
   ('gettext', 'C:\\Python314\\Lib\\gettext.py', 'PYMODULE'),
   ('glob', 'C:\\Python314\\Lib\\glob.py', 'PYMODULE'),
   ('gzip', 'C:\\Python314\\Lib\\gzip.py', 'PYMODULE'),
-  ('h11',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\__init__.py',
-   'PYMODULE'),
-  ('h11._abnf',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_abnf.py',
-   'PYMODULE'),
-  ('h11._connection',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_connection.py',
-   'PYMODULE'),
-  ('h11._events',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_events.py',
-   'PYMODULE'),
-  ('h11._headers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_headers.py',
-   'PYMODULE'),
-  ('h11._readers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_readers.py',
-   'PYMODULE'),
-  ('h11._receivebuffer',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_receivebuffer.py',
-   'PYMODULE'),
-  ('h11._state',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_state.py',
-   'PYMODULE'),
-  ('h11._util',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_util.py',
-   'PYMODULE'),
-  ('h11._version',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_version.py',
-   'PYMODULE'),
-  ('h11._writers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\h11\\_writers.py',
-   'PYMODULE'),
   ('hashlib', 'C:\\Python314\\Lib\\hashlib.py', 'PYMODULE'),
   ('hmac', 'C:\\Python314\\Lib\\hmac.py', 'PYMODULE'),
   ('html', 'C:\\Python314\\Lib\\html\\__init__.py', 'PYMODULE'),
@@ -1020,55 +578,12 @@
   ('importlib.util', 'C:\\Python314\\Lib\\importlib\\util.py', 'PYMODULE'),
   ('inspect', 'C:\\Python314\\Lib\\inspect.py', 'PYMODULE'),
   ('ipaddress', 'C:\\Python314\\Lib\\ipaddress.py', 'PYMODULE'),
-  ('itsdangerous',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\itsdangerous\\__init__.py',
-   'PYMODULE'),
-  ('itsdangerous._json',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\itsdangerous\\_json.py',
-   'PYMODULE'),
-  ('itsdangerous.encoding',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\itsdangerous\\encoding.py',
-   'PYMODULE'),
-  ('itsdangerous.exc',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\itsdangerous\\exc.py',
-   'PYMODULE'),
-  ('itsdangerous.serializer',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\itsdangerous\\serializer.py',
-   'PYMODULE'),
-  ('itsdangerous.signer',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\itsdangerous\\signer.py',
-   'PYMODULE'),
-  ('itsdangerous.timed',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\itsdangerous\\timed.py',
-   'PYMODULE'),
-  ('itsdangerous.url_safe',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\itsdangerous\\url_safe.py',
-   'PYMODULE'),
   ('json', 'C:\\Python314\\Lib\\json\\__init__.py', 'PYMODULE'),
   ('json.decoder', 'C:\\Python314\\Lib\\json\\decoder.py', 'PYMODULE'),
   ('json.encoder', 'C:\\Python314\\Lib\\json\\encoder.py', 'PYMODULE'),
   ('json.scanner', 'C:\\Python314\\Lib\\json\\scanner.py', 'PYMODULE'),
-  ('librt', '-', 'PYMODULE'),
   ('logging', 'C:\\Python314\\Lib\\logging\\__init__.py', 'PYMODULE'),
-  ('logging.config', 'C:\\Python314\\Lib\\logging\\config.py', 'PYMODULE'),
-  ('logging.handlers', 'C:\\Python314\\Lib\\logging\\handlers.py', 'PYMODULE'),
   ('lzma', 'C:\\Python314\\Lib\\lzma.py', 'PYMODULE'),
-  ('markupsafe',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\markupsafe\\__init__.py',
-   'PYMODULE'),
-  ('markupsafe._native',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\markupsafe\\_native.py',
-   'PYMODULE'),
   ('mimetypes', 'C:\\Python314\\Lib\\mimetypes.py', 'PYMODULE'),
   ('multiprocessing',
    'C:\\Python314\\Lib\\multiprocessing\\__init__.py',
@@ -1139,26 +654,6 @@
   ('multiprocessing.util',
    'C:\\Python314\\Lib\\multiprocessing\\util.py',
    'PYMODULE'),
-  ('mypy.bogus_type',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\mypy\\bogus_type.py',
-   'PYMODULE'),
-  ('mypy.plugins',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\mypy\\plugins\\__init__.py',
-   'PYMODULE'),
-  ('mypy.server',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\mypy\\server\\__init__.py',
-   'PYMODULE'),
-  ('mypy.version',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\mypy\\version.py',
-   'PYMODULE'),
-  ('mypy_extensions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\mypy_extensions.py',
-   'PYMODULE'),
   ('netrc', 'C:\\Python314\\Lib\\netrc.py', 'PYMODULE'),
   ('numbers', 'C:\\Python314\\Lib\\numbers.py', 'PYMODULE'),
   ('opcode', 'C:\\Python314\\Lib\\opcode.py', 'PYMODULE'),
@@ -1220,7 +715,6 @@
    'PYMODULE'),
   ('pathlib', 'C:\\Python314\\Lib\\pathlib\\__init__.py', 'PYMODULE'),
   ('pathlib._os', 'C:\\Python314\\Lib\\pathlib\\_os.py', 'PYMODULE'),
-  ('pdb', 'C:\\Python314\\Lib\\pdb.py', 'PYMODULE'),
   ('pickle', 'C:\\Python314\\Lib\\pickle.py', 'PYMODULE'),
   ('pkgutil', 'C:\\Python314\\Lib\\pkgutil.py', 'PYMODULE'),
   ('platform', 'C:\\Python314\\Lib\\platform.py', 'PYMODULE'),
@@ -1242,434 +736,6 @@
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\psutil\\_pswindows.py',
    'PYMODULE'),
   ('py_compile', 'C:\\Python314\\Lib\\py_compile.py', 'PYMODULE'),
-  ('pydantic',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\__init__.py',
-   'PYMODULE'),
-  ('pydantic._internal',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\__init__.py',
-   'PYMODULE'),
-  ('pydantic._internal._config',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_config.py',
-   'PYMODULE'),
-  ('pydantic._internal._core_metadata',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_core_metadata.py',
-   'PYMODULE'),
-  ('pydantic._internal._core_utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_core_utils.py',
-   'PYMODULE'),
-  ('pydantic._internal._dataclasses',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_dataclasses.py',
-   'PYMODULE'),
-  ('pydantic._internal._decorators',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_decorators.py',
-   'PYMODULE'),
-  ('pydantic._internal._decorators_v1',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_decorators_v1.py',
-   'PYMODULE'),
-  ('pydantic._internal._discriminated_union',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_discriminated_union.py',
-   'PYMODULE'),
-  ('pydantic._internal._docs_extraction',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_docs_extraction.py',
-   'PYMODULE'),
-  ('pydantic._internal._fields',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_fields.py',
-   'PYMODULE'),
-  ('pydantic._internal._forward_ref',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_forward_ref.py',
-   'PYMODULE'),
-  ('pydantic._internal._generate_schema',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_generate_schema.py',
-   'PYMODULE'),
-  ('pydantic._internal._generics',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_generics.py',
-   'PYMODULE'),
-  ('pydantic._internal._git',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_git.py',
-   'PYMODULE'),
-  ('pydantic._internal._import_utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_import_utils.py',
-   'PYMODULE'),
-  ('pydantic._internal._internal_dataclass',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_internal_dataclass.py',
-   'PYMODULE'),
-  ('pydantic._internal._known_annotated_metadata',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_known_annotated_metadata.py',
-   'PYMODULE'),
-  ('pydantic._internal._mock_val_ser',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_mock_val_ser.py',
-   'PYMODULE'),
-  ('pydantic._internal._model_construction',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_model_construction.py',
-   'PYMODULE'),
-  ('pydantic._internal._namespace_utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_namespace_utils.py',
-   'PYMODULE'),
-  ('pydantic._internal._repr',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_repr.py',
-   'PYMODULE'),
-  ('pydantic._internal._schema_gather',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_schema_gather.py',
-   'PYMODULE'),
-  ('pydantic._internal._schema_generation_shared',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_schema_generation_shared.py',
-   'PYMODULE'),
-  ('pydantic._internal._serializers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_serializers.py',
-   'PYMODULE'),
-  ('pydantic._internal._signature',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_signature.py',
-   'PYMODULE'),
-  ('pydantic._internal._typing_extra',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_typing_extra.py',
-   'PYMODULE'),
-  ('pydantic._internal._utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_utils.py',
-   'PYMODULE'),
-  ('pydantic._internal._validate_call',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_validate_call.py',
-   'PYMODULE'),
-  ('pydantic._internal._validators',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_internal\\_validators.py',
-   'PYMODULE'),
-  ('pydantic._migration',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\_migration.py',
-   'PYMODULE'),
-  ('pydantic.alias_generators',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\alias_generators.py',
-   'PYMODULE'),
-  ('pydantic.aliases',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\aliases.py',
-   'PYMODULE'),
-  ('pydantic.annotated_handlers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\annotated_handlers.py',
-   'PYMODULE'),
-  ('pydantic.class_validators',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\class_validators.py',
-   'PYMODULE'),
-  ('pydantic.color',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\color.py',
-   'PYMODULE'),
-  ('pydantic.config',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\config.py',
-   'PYMODULE'),
-  ('pydantic.dataclasses',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\dataclasses.py',
-   'PYMODULE'),
-  ('pydantic.datetime_parse',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\datetime_parse.py',
-   'PYMODULE'),
-  ('pydantic.decorator',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\decorator.py',
-   'PYMODULE'),
-  ('pydantic.deprecated',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\deprecated\\__init__.py',
-   'PYMODULE'),
-  ('pydantic.deprecated.class_validators',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\deprecated\\class_validators.py',
-   'PYMODULE'),
-  ('pydantic.deprecated.config',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\deprecated\\config.py',
-   'PYMODULE'),
-  ('pydantic.deprecated.copy_internals',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\deprecated\\copy_internals.py',
-   'PYMODULE'),
-  ('pydantic.deprecated.decorator',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\deprecated\\decorator.py',
-   'PYMODULE'),
-  ('pydantic.deprecated.json',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\deprecated\\json.py',
-   'PYMODULE'),
-  ('pydantic.deprecated.parse',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\deprecated\\parse.py',
-   'PYMODULE'),
-  ('pydantic.deprecated.tools',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\deprecated\\tools.py',
-   'PYMODULE'),
-  ('pydantic.env_settings',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\env_settings.py',
-   'PYMODULE'),
-  ('pydantic.error_wrappers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\error_wrappers.py',
-   'PYMODULE'),
-  ('pydantic.errors',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\errors.py',
-   'PYMODULE'),
-  ('pydantic.experimental',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\experimental\\__init__.py',
-   'PYMODULE'),
-  ('pydantic.experimental.arguments_schema',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\experimental\\arguments_schema.py',
-   'PYMODULE'),
-  ('pydantic.experimental.missing_sentinel',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\experimental\\missing_sentinel.py',
-   'PYMODULE'),
-  ('pydantic.experimental.pipeline',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\experimental\\pipeline.py',
-   'PYMODULE'),
-  ('pydantic.fields',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\fields.py',
-   'PYMODULE'),
-  ('pydantic.functional_serializers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\functional_serializers.py',
-   'PYMODULE'),
-  ('pydantic.functional_validators',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\functional_validators.py',
-   'PYMODULE'),
-  ('pydantic.generics',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\generics.py',
-   'PYMODULE'),
-  ('pydantic.json',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\json.py',
-   'PYMODULE'),
-  ('pydantic.json_schema',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\json_schema.py',
-   'PYMODULE'),
-  ('pydantic.main',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\main.py',
-   'PYMODULE'),
-  ('pydantic.mypy',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\mypy.py',
-   'PYMODULE'),
-  ('pydantic.networks',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\networks.py',
-   'PYMODULE'),
-  ('pydantic.parse',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\parse.py',
-   'PYMODULE'),
-  ('pydantic.plugin',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\plugin\\__init__.py',
-   'PYMODULE'),
-  ('pydantic.plugin._loader',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\plugin\\_loader.py',
-   'PYMODULE'),
-  ('pydantic.plugin._schema_validator',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\plugin\\_schema_validator.py',
-   'PYMODULE'),
-  ('pydantic.root_model',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\root_model.py',
-   'PYMODULE'),
-  ('pydantic.schema',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\schema.py',
-   'PYMODULE'),
-  ('pydantic.tools',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\tools.py',
-   'PYMODULE'),
-  ('pydantic.type_adapter',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\type_adapter.py',
-   'PYMODULE'),
-  ('pydantic.types',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\types.py',
-   'PYMODULE'),
-  ('pydantic.typing',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\typing.py',
-   'PYMODULE'),
-  ('pydantic.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\utils.py',
-   'PYMODULE'),
-  ('pydantic.v1',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\__init__.py',
-   'PYMODULE'),
-  ('pydantic.v1._hypothesis_plugin',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\_hypothesis_plugin.py',
-   'PYMODULE'),
-  ('pydantic.v1.annotated_types',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\annotated_types.py',
-   'PYMODULE'),
-  ('pydantic.v1.class_validators',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\class_validators.py',
-   'PYMODULE'),
-  ('pydantic.v1.color',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\color.py',
-   'PYMODULE'),
-  ('pydantic.v1.config',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\config.py',
-   'PYMODULE'),
-  ('pydantic.v1.dataclasses',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\dataclasses.py',
-   'PYMODULE'),
-  ('pydantic.v1.datetime_parse',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\datetime_parse.py',
-   'PYMODULE'),
-  ('pydantic.v1.decorator',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\decorator.py',
-   'PYMODULE'),
-  ('pydantic.v1.env_settings',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\env_settings.py',
-   'PYMODULE'),
-  ('pydantic.v1.error_wrappers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\error_wrappers.py',
-   'PYMODULE'),
-  ('pydantic.v1.errors',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\errors.py',
-   'PYMODULE'),
-  ('pydantic.v1.fields',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\fields.py',
-   'PYMODULE'),
-  ('pydantic.v1.generics',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\generics.py',
-   'PYMODULE'),
-  ('pydantic.v1.json',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\json.py',
-   'PYMODULE'),
-  ('pydantic.v1.main',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\main.py',
-   'PYMODULE'),
-  ('pydantic.v1.mypy',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\mypy.py',
-   'PYMODULE'),
-  ('pydantic.v1.networks',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\networks.py',
-   'PYMODULE'),
-  ('pydantic.v1.parse',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\parse.py',
-   'PYMODULE'),
-  ('pydantic.v1.schema',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\schema.py',
-   'PYMODULE'),
-  ('pydantic.v1.tools',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\tools.py',
-   'PYMODULE'),
-  ('pydantic.v1.types',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\types.py',
-   'PYMODULE'),
-  ('pydantic.v1.typing',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\typing.py',
-   'PYMODULE'),
-  ('pydantic.v1.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\utils.py',
-   'PYMODULE'),
-  ('pydantic.v1.validators',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\validators.py',
-   'PYMODULE'),
-  ('pydantic.v1.version',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\v1\\version.py',
-   'PYMODULE'),
-  ('pydantic.validate_call_decorator',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\validate_call_decorator.py',
-   'PYMODULE'),
-  ('pydantic.validators',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\validators.py',
-   'PYMODULE'),
-  ('pydantic.version',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\version.py',
-   'PYMODULE'),
-  ('pydantic.warnings',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\warnings.py',
-   'PYMODULE'),
-  ('pydantic_core',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic_core\\__init__.py',
-   'PYMODULE'),
-  ('pydantic_core.core_schema',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic_core\\core_schema.py',
-   'PYMODULE'),
   ('pydoc', 'C:\\Python314\\Lib\\pydoc.py', 'PYMODULE'),
   ('pydoc_data', 'C:\\Python314\\Lib\\pydoc_data\\__init__.py', 'PYMODULE'),
   ('pydoc_data.module_docs',
@@ -1681,6 +747,78 @@
   ('queue', 'C:\\Python314\\Lib\\queue.py', 'PYMODULE'),
   ('quopri', 'C:\\Python314\\Lib\\quopri.py', 'PYMODULE'),
   ('random', 'C:\\Python314\\Lib\\random.py', 'PYMODULE'),
+  ('requests',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\__init__.py',
+   'PYMODULE'),
+  ('requests.__version__',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\__version__.py',
+   'PYMODULE'),
+  ('requests._internal_utils',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\_internal_utils.py',
+   'PYMODULE'),
+  ('requests._types',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\_types.py',
+   'PYMODULE'),
+  ('requests.adapters',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\adapters.py',
+   'PYMODULE'),
+  ('requests.api',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\api.py',
+   'PYMODULE'),
+  ('requests.auth',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\auth.py',
+   'PYMODULE'),
+  ('requests.certs',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\certs.py',
+   'PYMODULE'),
+  ('requests.compat',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\compat.py',
+   'PYMODULE'),
+  ('requests.cookies',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\cookies.py',
+   'PYMODULE'),
+  ('requests.exceptions',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\exceptions.py',
+   'PYMODULE'),
+  ('requests.hooks',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\hooks.py',
+   'PYMODULE'),
+  ('requests.models',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\models.py',
+   'PYMODULE'),
+  ('requests.packages',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\packages.py',
+   'PYMODULE'),
+  ('requests.sessions',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\sessions.py',
+   'PYMODULE'),
+  ('requests.status_codes',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\status_codes.py',
+   'PYMODULE'),
+  ('requests.structures',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\structures.py',
+   'PYMODULE'),
+  ('requests.utils',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\requests\\utils.py',
+   'PYMODULE'),
   ('rlcompleter', 'C:\\Python314\\Lib\\rlcompleter.py', 'PYMODULE'),
   ('runpy', 'C:\\Python314\\Lib\\runpy.py', 'PYMODULE'),
   ('secrets', 'C:\\Python314\\Lib\\secrets.py', 'PYMODULE'),
@@ -2229,110 +1367,9 @@
   ('shutil', 'C:\\Python314\\Lib\\shutil.py', 'PYMODULE'),
   ('signal', 'C:\\Python314\\Lib\\signal.py', 'PYMODULE'),
   ('site', 'C:\\Python314\\Lib\\site.py', 'PYMODULE'),
-  ('smtplib', 'C:\\Python314\\Lib\\smtplib.py', 'PYMODULE'),
-  ('sniffio',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\sniffio\\__init__.py',
-   'PYMODULE'),
-  ('sniffio._impl',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\sniffio\\_impl.py',
-   'PYMODULE'),
-  ('sniffio._version',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\sniffio\\_version.py',
-   'PYMODULE'),
   ('socket', 'C:\\Python314\\Lib\\socket.py', 'PYMODULE'),
   ('socketserver', 'C:\\Python314\\Lib\\socketserver.py', 'PYMODULE'),
   ('ssl', 'C:\\Python314\\Lib\\ssl.py', 'PYMODULE'),
-  ('starlette',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\__init__.py',
-   'PYMODULE'),
-  ('starlette._exception_handler',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\_exception_handler.py',
-   'PYMODULE'),
-  ('starlette._utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\_utils.py',
-   'PYMODULE'),
-  ('starlette.applications',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\applications.py',
-   'PYMODULE'),
-  ('starlette.background',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\background.py',
-   'PYMODULE'),
-  ('starlette.concurrency',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\concurrency.py',
-   'PYMODULE'),
-  ('starlette.convertors',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\convertors.py',
-   'PYMODULE'),
-  ('starlette.datastructures',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\datastructures.py',
-   'PYMODULE'),
-  ('starlette.exceptions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\exceptions.py',
-   'PYMODULE'),
-  ('starlette.formparsers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\formparsers.py',
-   'PYMODULE'),
-  ('starlette.middleware',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\middleware\\__init__.py',
-   'PYMODULE'),
-  ('starlette.middleware.base',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\middleware\\base.py',
-   'PYMODULE'),
-  ('starlette.middleware.cors',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\middleware\\cors.py',
-   'PYMODULE'),
-  ('starlette.middleware.errors',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\middleware\\errors.py',
-   'PYMODULE'),
-  ('starlette.middleware.exceptions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\middleware\\exceptions.py',
-   'PYMODULE'),
-  ('starlette.middleware.sessions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\middleware\\sessions.py',
-   'PYMODULE'),
-  ('starlette.requests',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\requests.py',
-   'PYMODULE'),
-  ('starlette.responses',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\responses.py',
-   'PYMODULE'),
-  ('starlette.routing',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py',
-   'PYMODULE'),
-  ('starlette.status',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\status.py',
-   'PYMODULE'),
-  ('starlette.types',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\types.py',
-   'PYMODULE'),
-  ('starlette.websockets',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\websockets.py',
-   'PYMODULE'),
   ('statistics', 'C:\\Python314\\Lib\\statistics.py', 'PYMODULE'),
   ('string', 'C:\\Python314\\Lib\\string\\__init__.py', 'PYMODULE'),
   ('stringprep', 'C:\\Python314\\Lib\\stringprep.py', 'PYMODULE'),
@@ -2355,106 +1392,6 @@
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\typing_extensions.py',
    'PYMODULE'),
-  ('typing_inspection',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\typing_inspection\\__init__.py',
-   'PYMODULE'),
-  ('typing_inspection.introspection',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\typing_inspection\\introspection.py',
-   'PYMODULE'),
-  ('typing_inspection.typing_objects',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\typing_inspection\\typing_objects.py',
-   'PYMODULE'),
-  ('tzdata',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Africa',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Africa\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.America',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\America\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.America.Argentina',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\America\\Argentina\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.America.Indiana',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\America\\Indiana\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.America.Kentucky',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\America\\Kentucky\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.America.North_Dakota',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\America\\North_Dakota\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Antarctica',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Antarctica\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Arctic',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Arctic\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Asia',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Asia\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Atlantic',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Atlantic\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Australia',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Australia\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Brazil',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Brazil\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Canada',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Canada\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Chile',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Chile\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Etc',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Etc\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Europe',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Europe\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Indian',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Indian\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Mexico',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Mexico\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.Pacific',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\Pacific\\__init__.py',
-   'PYMODULE'),
-  ('tzdata.zoneinfo.US',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\tzdata\\zoneinfo\\US\\__init__.py',
-   'PYMODULE'),
   ('unittest', 'C:\\Python314\\Lib\\unittest\\__init__.py', 'PYMODULE'),
   ('unittest._log', 'C:\\Python314\\Lib\\unittest\\_log.py', 'PYMODULE'),
   ('unittest.async_case',
@@ -2474,540 +1411,151 @@
   ('urllib.parse', 'C:\\Python314\\Lib\\urllib\\parse.py', 'PYMODULE'),
   ('urllib.request', 'C:\\Python314\\Lib\\urllib\\request.py', 'PYMODULE'),
   ('urllib.response', 'C:\\Python314\\Lib\\urllib\\response.py', 'PYMODULE'),
-  ('uuid', 'C:\\Python314\\Lib\\uuid.py', 'PYMODULE'),
-  ('uvicorn',
+  ('urllib3',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\__init__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\__init__.py',
    'PYMODULE'),
-  ('uvicorn.__main__',
+  ('urllib3._base_connection',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\__main__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\_base_connection.py',
    'PYMODULE'),
-  ('uvicorn._compat',
+  ('urllib3._collections',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\_compat.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\_collections.py',
    'PYMODULE'),
-  ('uvicorn._subprocess',
+  ('urllib3._request_methods',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\_subprocess.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\_request_methods.py',
    'PYMODULE'),
-  ('uvicorn._types',
+  ('urllib3._version',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\_types.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\_version.py',
    'PYMODULE'),
-  ('uvicorn.config',
+  ('urllib3.connection',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\config.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\connection.py',
    'PYMODULE'),
-  ('uvicorn.importer',
+  ('urllib3.connectionpool',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\importer.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\connectionpool.py',
    'PYMODULE'),
-  ('uvicorn.lifespan',
+  ('urllib3.contrib',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\lifespan\\__init__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\contrib\\__init__.py',
    'PYMODULE'),
-  ('uvicorn.lifespan.off',
+  ('urllib3.contrib.emscripten',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\lifespan\\off.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\contrib\\emscripten\\__init__.py',
    'PYMODULE'),
-  ('uvicorn.lifespan.on',
+  ('urllib3.contrib.emscripten.connection',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\lifespan\\on.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\contrib\\emscripten\\connection.py',
    'PYMODULE'),
-  ('uvicorn.logging',
+  ('urllib3.contrib.emscripten.fetch',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\logging.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\contrib\\emscripten\\fetch.py',
    'PYMODULE'),
-  ('uvicorn.loops',
+  ('urllib3.contrib.emscripten.request',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\loops\\__init__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\contrib\\emscripten\\request.py',
    'PYMODULE'),
-  ('uvicorn.loops.asyncio',
+  ('urllib3.contrib.emscripten.response',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\loops\\asyncio.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\contrib\\emscripten\\response.py',
    'PYMODULE'),
-  ('uvicorn.loops.auto',
+  ('urllib3.contrib.pyopenssl',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\loops\\auto.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\contrib\\pyopenssl.py',
    'PYMODULE'),
-  ('uvicorn.loops.uvloop',
+  ('urllib3.contrib.socks',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\loops\\uvloop.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\contrib\\socks.py',
    'PYMODULE'),
-  ('uvicorn.main',
+  ('urllib3.exceptions',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\main.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\exceptions.py',
    'PYMODULE'),
-  ('uvicorn.middleware',
+  ('urllib3.fields',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\middleware\\__init__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\fields.py',
    'PYMODULE'),
-  ('uvicorn.middleware.asgi2',
+  ('urllib3.filepost',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\middleware\\asgi2.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\filepost.py',
    'PYMODULE'),
-  ('uvicorn.middleware.message_logger',
+  ('urllib3.http2',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\middleware\\message_logger.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\http2\\__init__.py',
    'PYMODULE'),
-  ('uvicorn.middleware.proxy_headers',
+  ('urllib3.http2.connection',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\middleware\\proxy_headers.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\http2\\connection.py',
    'PYMODULE'),
-  ('uvicorn.middleware.wsgi',
+  ('urllib3.http2.probe',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\middleware\\wsgi.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\http2\\probe.py',
    'PYMODULE'),
-  ('uvicorn.protocols',
+  ('urllib3.poolmanager',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\__init__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\poolmanager.py',
    'PYMODULE'),
-  ('uvicorn.protocols.http',
+  ('urllib3.response',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\http\\__init__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\response.py',
    'PYMODULE'),
-  ('uvicorn.protocols.http.auto',
+  ('urllib3.util',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\http\\auto.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\__init__.py',
    'PYMODULE'),
-  ('uvicorn.protocols.http.flow_control',
+  ('urllib3.util.connection',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\http\\flow_control.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\connection.py',
    'PYMODULE'),
-  ('uvicorn.protocols.http.h11_impl',
+  ('urllib3.util.proxy',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\http\\h11_impl.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\proxy.py',
    'PYMODULE'),
-  ('uvicorn.protocols.http.httptools_impl',
+  ('urllib3.util.request',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\http\\httptools_impl.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\request.py',
    'PYMODULE'),
-  ('uvicorn.protocols.utils',
+  ('urllib3.util.response',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\utils.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\response.py',
    'PYMODULE'),
-  ('uvicorn.protocols.websockets',
+  ('urllib3.util.retry',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\websockets\\__init__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\retry.py',
    'PYMODULE'),
-  ('uvicorn.protocols.websockets.auto',
+  ('urllib3.util.ssl_',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\websockets\\auto.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\ssl_.py',
    'PYMODULE'),
-  ('uvicorn.protocols.websockets.websockets_impl',
+  ('urllib3.util.ssl_match_hostname',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\websockets\\websockets_impl.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\ssl_match_hostname.py',
    'PYMODULE'),
-  ('uvicorn.protocols.websockets.websockets_sansio_impl',
+  ('urllib3.util.ssltransport',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\websockets\\websockets_sansio_impl.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\ssltransport.py',
    'PYMODULE'),
-  ('uvicorn.protocols.websockets.wsproto_impl',
+  ('urllib3.util.timeout',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\protocols\\websockets\\wsproto_impl.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\timeout.py',
    'PYMODULE'),
-  ('uvicorn.server',
+  ('urllib3.util.url',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\server.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\url.py',
    'PYMODULE'),
-  ('uvicorn.supervisors',
+  ('urllib3.util.util',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\supervisors\\__init__.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\util.py',
    'PYMODULE'),
-  ('uvicorn.supervisors.basereload',
+  ('urllib3.util.wait',
    'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\supervisors\\basereload.py',
-   'PYMODULE'),
-  ('uvicorn.supervisors.multiprocess',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\supervisors\\multiprocess.py',
-   'PYMODULE'),
-  ('uvicorn.supervisors.statreload',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\supervisors\\statreload.py',
-   'PYMODULE'),
-  ('uvicorn.supervisors.watchfilesreload',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\supervisors\\watchfilesreload.py',
-   'PYMODULE'),
-  ('uvicorn.workers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\uvicorn\\workers.py',
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\urllib3\\util\\wait.py',
    'PYMODULE'),
   ('webbrowser', 'C:\\Python314\\Lib\\webbrowser.py', 'PYMODULE'),
-  ('websockets',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\__init__.py',
-   'PYMODULE'),
-  ('websockets.__main__',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\__main__.py',
-   'PYMODULE'),
-  ('websockets.asyncio',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\asyncio\\__init__.py',
-   'PYMODULE'),
-  ('websockets.asyncio.async_timeout',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\asyncio\\async_timeout.py',
-   'PYMODULE'),
-  ('websockets.asyncio.client',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\asyncio\\client.py',
-   'PYMODULE'),
-  ('websockets.asyncio.compatibility',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\asyncio\\compatibility.py',
-   'PYMODULE'),
-  ('websockets.asyncio.connection',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\asyncio\\connection.py',
-   'PYMODULE'),
-  ('websockets.asyncio.messages',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\asyncio\\messages.py',
-   'PYMODULE'),
-  ('websockets.asyncio.router',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\asyncio\\router.py',
-   'PYMODULE'),
-  ('websockets.asyncio.server',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\asyncio\\server.py',
-   'PYMODULE'),
-  ('websockets.auth',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\auth.py',
-   'PYMODULE'),
-  ('websockets.cli',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\cli.py',
-   'PYMODULE'),
-  ('websockets.client',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\client.py',
-   'PYMODULE'),
-  ('websockets.connection',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\connection.py',
-   'PYMODULE'),
-  ('websockets.datastructures',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\datastructures.py',
-   'PYMODULE'),
-  ('websockets.exceptions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\exceptions.py',
-   'PYMODULE'),
-  ('websockets.extensions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\extensions\\__init__.py',
-   'PYMODULE'),
-  ('websockets.extensions.base',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\extensions\\base.py',
-   'PYMODULE'),
-  ('websockets.extensions.permessage_deflate',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\extensions\\permessage_deflate.py',
-   'PYMODULE'),
-  ('websockets.frames',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\frames.py',
-   'PYMODULE'),
-  ('websockets.headers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\headers.py',
-   'PYMODULE'),
-  ('websockets.http',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\http.py',
-   'PYMODULE'),
-  ('websockets.http11',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\http11.py',
-   'PYMODULE'),
-  ('websockets.imports',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\imports.py',
-   'PYMODULE'),
-  ('websockets.legacy',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\legacy\\__init__.py',
-   'PYMODULE'),
-  ('websockets.legacy.auth',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\legacy\\auth.py',
-   'PYMODULE'),
-  ('websockets.legacy.client',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\legacy\\client.py',
-   'PYMODULE'),
-  ('websockets.legacy.exceptions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\legacy\\exceptions.py',
-   'PYMODULE'),
-  ('websockets.legacy.framing',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\legacy\\framing.py',
-   'PYMODULE'),
-  ('websockets.legacy.handshake',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\legacy\\handshake.py',
-   'PYMODULE'),
-  ('websockets.legacy.http',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\legacy\\http.py',
-   'PYMODULE'),
-  ('websockets.legacy.protocol',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\legacy\\protocol.py',
-   'PYMODULE'),
-  ('websockets.legacy.server',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\legacy\\server.py',
-   'PYMODULE'),
-  ('websockets.protocol',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\protocol.py',
-   'PYMODULE'),
-  ('websockets.proxy',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\proxy.py',
-   'PYMODULE'),
-  ('websockets.server',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\server.py',
-   'PYMODULE'),
-  ('websockets.streams',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\streams.py',
-   'PYMODULE'),
-  ('websockets.sync',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\sync\\__init__.py',
-   'PYMODULE'),
-  ('websockets.sync.client',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\sync\\client.py',
-   'PYMODULE'),
-  ('websockets.sync.connection',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\sync\\connection.py',
-   'PYMODULE'),
-  ('websockets.sync.messages',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\sync\\messages.py',
-   'PYMODULE'),
-  ('websockets.sync.router',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\sync\\router.py',
-   'PYMODULE'),
-  ('websockets.sync.server',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\sync\\server.py',
-   'PYMODULE'),
-  ('websockets.sync.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\sync\\utils.py',
-   'PYMODULE'),
-  ('websockets.typing',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\typing.py',
-   'PYMODULE'),
-  ('websockets.uri',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\uri.py',
-   'PYMODULE'),
-  ('websockets.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\utils.py',
-   'PYMODULE'),
-  ('websockets.version',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\version.py',
-   'PYMODULE'),
-  ('werkzeug',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\__init__.py',
-   'PYMODULE'),
-  ('werkzeug._internal',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\_internal.py',
-   'PYMODULE'),
-  ('werkzeug._reloader',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\_reloader.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\__init__.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.accept',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\accept.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.auth',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\auth.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.cache_control',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\cache_control.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.csp',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\csp.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.etag',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\etag.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.file_storage',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\file_storage.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.headers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\headers.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.mixins',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\mixins.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.range',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\range.py',
-   'PYMODULE'),
-  ('werkzeug.datastructures.structures',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\datastructures\\structures.py',
-   'PYMODULE'),
-  ('werkzeug.debug',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\debug\\__init__.py',
-   'PYMODULE'),
-  ('werkzeug.debug.console',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\debug\\console.py',
-   'PYMODULE'),
-  ('werkzeug.debug.repr',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\debug\\repr.py',
-   'PYMODULE'),
-  ('werkzeug.debug.tbtools',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\debug\\tbtools.py',
-   'PYMODULE'),
-  ('werkzeug.exceptions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\exceptions.py',
-   'PYMODULE'),
-  ('werkzeug.formparser',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\formparser.py',
-   'PYMODULE'),
-  ('werkzeug.http',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\http.py',
-   'PYMODULE'),
-  ('werkzeug.middleware',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\middleware\\__init__.py',
-   'PYMODULE'),
-  ('werkzeug.middleware.shared_data',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\middleware\\shared_data.py',
-   'PYMODULE'),
-  ('werkzeug.routing',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\routing\\__init__.py',
-   'PYMODULE'),
-  ('werkzeug.routing.converters',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\routing\\converters.py',
-   'PYMODULE'),
-  ('werkzeug.routing.exceptions',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\routing\\exceptions.py',
-   'PYMODULE'),
-  ('werkzeug.routing.map',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\routing\\map.py',
-   'PYMODULE'),
-  ('werkzeug.routing.matcher',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\routing\\matcher.py',
-   'PYMODULE'),
-  ('werkzeug.routing.rules',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\routing\\rules.py',
-   'PYMODULE'),
-  ('werkzeug.sansio',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\sansio\\__init__.py',
-   'PYMODULE'),
-  ('werkzeug.sansio.http',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\sansio\\http.py',
-   'PYMODULE'),
-  ('werkzeug.sansio.multipart',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\sansio\\multipart.py',
-   'PYMODULE'),
-  ('werkzeug.sansio.request',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\sansio\\request.py',
-   'PYMODULE'),
-  ('werkzeug.sansio.response',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\sansio\\response.py',
-   'PYMODULE'),
-  ('werkzeug.sansio.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\sansio\\utils.py',
-   'PYMODULE'),
-  ('werkzeug.security',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\security.py',
-   'PYMODULE'),
-  ('werkzeug.serving',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\serving.py',
-   'PYMODULE'),
-  ('werkzeug.test',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\test.py',
-   'PYMODULE'),
-  ('werkzeug.urls',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\urls.py',
-   'PYMODULE'),
-  ('werkzeug.user_agent',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\user_agent.py',
-   'PYMODULE'),
-  ('werkzeug.utils',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\utils.py',
-   'PYMODULE'),
-  ('werkzeug.wrappers',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\wrappers\\__init__.py',
-   'PYMODULE'),
-  ('werkzeug.wrappers.request',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\wrappers\\request.py',
-   'PYMODULE'),
-  ('werkzeug.wrappers.response',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\wrappers\\response.py',
-   'PYMODULE'),
-  ('werkzeug.wsgi',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\wsgi.py',
-   'PYMODULE'),
   ('xml', 'C:\\Python314\\Lib\\xml\\__init__.py', 'PYMODULE'),
   ('xml.parsers', 'C:\\Python314\\Lib\\xml\\parsers\\__init__.py', 'PYMODULE'),
   ('xml.parsers.expat',
@@ -3027,74 +1575,6 @@
    'PYMODULE'),
   ('xmlrpc', 'C:\\Python314\\Lib\\xmlrpc\\__init__.py', 'PYMODULE'),
   ('xmlrpc.client', 'C:\\Python314\\Lib\\xmlrpc\\client.py', 'PYMODULE'),
-  ('yaml',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\__init__.py',
-   'PYMODULE'),
-  ('yaml.composer',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\composer.py',
-   'PYMODULE'),
-  ('yaml.constructor',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\constructor.py',
-   'PYMODULE'),
-  ('yaml.cyaml',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\cyaml.py',
-   'PYMODULE'),
-  ('yaml.dumper',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\dumper.py',
-   'PYMODULE'),
-  ('yaml.emitter',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\emitter.py',
-   'PYMODULE'),
-  ('yaml.error',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\error.py',
-   'PYMODULE'),
-  ('yaml.events',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\events.py',
-   'PYMODULE'),
-  ('yaml.loader',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\loader.py',
-   'PYMODULE'),
-  ('yaml.nodes',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\nodes.py',
-   'PYMODULE'),
-  ('yaml.parser',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\parser.py',
-   'PYMODULE'),
-  ('yaml.reader',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\reader.py',
-   'PYMODULE'),
-  ('yaml.representer',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\representer.py',
-   'PYMODULE'),
-  ('yaml.resolver',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\resolver.py',
-   'PYMODULE'),
-  ('yaml.scanner',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\scanner.py',
-   'PYMODULE'),
-  ('yaml.serializer',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\serializer.py',
-   'PYMODULE'),
-  ('yaml.tokens',
-   'C:\\Users\\Lucas '
-   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\yaml\\tokens.py',
-   'PYMODULE'),
   ('zipfile', 'C:\\Python314\\Lib\\zipfile\\__init__.py', 'PYMODULE'),
   ('zipfile._path',
    'C:\\Python314\\Lib\\zipfile\\_path\\__init__.py',
@@ -3102,10 +1582,4 @@
   ('zipfile._path.glob',
    'C:\\Python314\\Lib\\zipfile\\_path\\glob.py',
    'PYMODULE'),
-  ('zipimport', 'C:\\Python314\\Lib\\zipimport.py', 'PYMODULE'),
-  ('zoneinfo', 'C:\\Python314\\Lib\\zoneinfo\\__init__.py', 'PYMODULE'),
-  ('zoneinfo._common', 'C:\\Python314\\Lib\\zoneinfo\\_common.py', 'PYMODULE'),
-  ('zoneinfo._tzpath', 'C:\\Python314\\Lib\\zoneinfo\\_tzpath.py', 'PYMODULE'),
-  ('zoneinfo._zoneinfo',
-   'C:\\Python314\\Lib\\zoneinfo\\_zoneinfo.py',
-   'PYMODULE')])
+  ('zipimport', 'C:\\Python314\\Lib\\zipimport.py', 'PYMODULE')])
