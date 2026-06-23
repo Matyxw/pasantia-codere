@@ -8,6 +8,7 @@ import asyncio
 import concurrent.futures
 import json
 import os
+import sys
 import socket
 from datetime import datetime
 from typing import List
@@ -17,6 +18,7 @@ import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 import scheduler as sched
@@ -429,6 +431,17 @@ async def get_stats(db: Session = Depends(get_db)):
         "ws_clients": len(manager.active),
     }
 
+
+# ──────────────────────────────────────────
+# Frontend estático (PyInstaller o Dev)
+# ──────────────────────────────────────────
+if getattr(sys, 'frozen', False):
+    dist_path = os.path.join(sys._MEIPASS, "dashboard_dist")
+else:
+    dist_path = os.path.join(os.path.dirname(__file__), "..", "dashboard", "dist")
+
+if os.path.exists(dist_path):
+    app.mount("/", StaticFiles(directory=dist_path, html=True), name="dashboard")
 
 # ──────────────────────────────────────────
 # Run

@@ -107,6 +107,7 @@ server.log
 agent.log
 
 # ─────────────────────────────────────
-#  REPORTES
+#  REPORTES Y COMPILADOS
 # ─────────────────────────────────────
 Reportes/
+Release_v2/
