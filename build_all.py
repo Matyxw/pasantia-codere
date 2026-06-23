@@ -20,21 +20,22 @@ def build():
 
     # 1. Servidor
     print("\n[1/3] Compilando Servidor Central (con Dashboard incrustado)...")
-    cmd_servidor = f'python -m PyInstaller --noconfirm --clean --onefile --noconsole --name "PC_Monitor_Servidor" --icon="{ROOT_DIR}/codere_icon.ico" --hidden-import webview --exclude-module PyQt5 --exclude-module tkinter --add-data "{ROOT_DIR}/dashboard/dist;dashboard_dist" {ROOT_DIR}/servidor/main.py'
+    icon_path = os.path.join(ROOT_DIR, "codere_icon.ico")
+    cmd_servidor = f'python -m PyInstaller --noconfirm --clean --onefile --noconsole --name "Codere_Monitor_Servidor" --icon="{icon_path}" --hidden-import webview --exclude-module PyQt5 --exclude-module tkinter --add-data "{ROOT_DIR}/dashboard/dist;dashboard_dist" {ROOT_DIR}/servidor/main.py'
     run_cmd(cmd_servidor)
-    shutil.copy(os.path.join(ROOT_DIR, "dist", "PC_Monitor_Servidor.exe"), RELEASE_DIR)
+    shutil.copy(os.path.join(ROOT_DIR, "dist", "Codere_Monitor_Servidor.exe"), RELEASE_DIR)
 
     # 2. Agente
     print("\n[2/3] Compilando Agente Invisible...")
-    cmd_agente = f'python -m PyInstaller --noconfirm --clean --onefile --name "Agente_PC" --noconsole --icon="{ROOT_DIR}/codere_icon.ico" --exclude-module PyQt5 --exclude-module tkinter {ROOT_DIR}/agente/agente.py'
+    cmd_agente = f'python -m PyInstaller --noconfirm --clean --onefile --name "Codere_Agente" --noconsole --icon="{icon_path}" --exclude-module PyQt5 --exclude-module tkinter {ROOT_DIR}/agente/agente.py'
     run_cmd(cmd_agente)
-    shutil.copy(os.path.join(ROOT_DIR, "dist", "Agente_PC.exe"), RELEASE_DIR)
+    shutil.copy(os.path.join(ROOT_DIR, "dist", "Codere_Agente.exe"), RELEASE_DIR)
 
     # 3. Exportador Excel
     print("\n[3/3] Compilando Exportador Excel...")
-    cmd_excel = f'python -m PyInstaller --noconfirm --clean --onefile --name "Exportar_Excel" --icon="{ROOT_DIR}/codere_icon.ico" --exclude-module PyQt5 --exclude-module tkinter {ROOT_DIR}/scripts/generar_excel.py'
+    cmd_excel = f'python -m PyInstaller --noconfirm --clean --onefile --name "Codere_Exportar_Excel" --icon="{icon_path}" --exclude-module PyQt5 --exclude-module tkinter {ROOT_DIR}/scripts/generar_excel.py'
     run_cmd(cmd_excel)
-    shutil.copy(os.path.join(ROOT_DIR, "dist", "Exportar_Excel.exe"), RELEASE_DIR)
+    shutil.copy(os.path.join(ROOT_DIR, "dist", "Codere_Exportar_Excel.exe"), RELEASE_DIR)
 
     print("\n" + "=" * 50)
     print(" COMPILACION COMPLETADA CON EXITO")

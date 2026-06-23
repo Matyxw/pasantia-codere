@@ -6,8 +6,11 @@ export default function Header({ stats, wsStatus, onRegister, onScan, apiUrl }) 
   return (
     <header className="header">
       <div className="header-logo">
-        <div className="header-logo-icon">🖥</div>
-        <span>PC Monitor <span style={{ color: 'var(--color-accent)', fontSize: 12, fontWeight: 400 }}>v2.0</span></span>
+        <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="50" fill="var(--color-accent)"/>
+          <text x="50" y="70" fontFamily="Arial, sans-serif" fontSize="60" fill="white" fontWeight="bold" textAnchor="middle">C</text>
+        </svg>
+        <span>Codere <span style={{ color: 'var(--text-secondary)', fontSize: 13, fontWeight: 500 }}>Control Center</span></span>
       </div>
 
       <div className="header-stats">
