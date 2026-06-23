@@ -23,12 +23,17 @@ OUTPUT = ROOT / "docs" / "ai_context_dump.md"
 def get_tree() -> str:
     # Usar git ls-tree para ignorar archivos basura si está en un repo
     try:
-        res = subprocess.run(["git", "ls-tree", "-r", "--name-only", "HEAD"], capture_output=True, text=True)
+        res = subprocess.run(
+            ["git", "ls-tree", "-r", "--name-only", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=False
+        )
         if res.returncode == 0:
             files = [f for f in res.stdout.splitlines() if not f.startswith(".")]
             return "\n".join(files[:200]) + ("\n... (truncado)" if len(files) > 200 else "")
-    except Exception:
-        pass
+    except Exception as e:
+        return f"Error al generar árbol: {e}"
     return "Error al generar árbol."
 
 
@@ -52,7 +57,7 @@ def get_dependencies() -> str:
     return output
 
 
-def update_knowledge():
+def update_knowledge() -> None:
     ROOT.joinpath("docs").mkdir(exist_ok=True)
     content = f"""# AI Context Dump — PC Monitor v2.0
 *Auto-generado el: {datetime.now().isoformat()}*

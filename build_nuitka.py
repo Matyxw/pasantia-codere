@@ -30,7 +30,7 @@ def build_with_nuitka():
 
     os.makedirs(RELEASE_DIR, exist_ok=True)
     icon_path = os.path.join(ROOT_DIR, "codere_icon.ico")
-    
+
     # Notas sobre flags de Nuitka:
     # --standalone: Empaqueta todo para que funcione sin Python instalado en la PC destino.
     # --onefile: Genera un único .exe. (Requiere zstandard, que instalamos arriba)

@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { IconX } from './Icons';
 
-// Iconos inline para no depender de otros archivos
-const ExcelIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+// Icono inline para no depender de otros archivos
+const ExcelIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
   </svg>
 );
@@ -20,7 +21,18 @@ export default function ExportModal({ isOpen, onClose }) {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
       if (window.pywebview) {
         // En desktop app
-        await window.pywebview.api.export_excel_dialog(exportMode === 'single' ? targetIp : null);
+        try {
+            const result = await window.pywebview.api.export_excel_dialog(exportMode === 'single' ? targetIp : null);
+            if (result && result.error) {
+               alert("Error de Python: " + result.error);
+            } else if (result && result.cancelled) {
+               console.log("Cancelado por el usuario");
+            } else {
+               alert("¡Excel generado exitosamente en: " + (result?.filepath || "") + "!");
+            }
+        } catch (e) {
+            alert("Excepción llamando a pywebview: " + e.toString());
+        }
       } else {
         // En navegador (dev mode)
         const url = exportMode === 'single' ? `${apiUrl}/export/excel?ip=${targetIp}` : `${apiUrl}/export/excel`;
@@ -34,10 +46,12 @@ export default function ExportModal({ isOpen, onClose }) {
           document.body.appendChild(a);
           a.click();
           a.remove();
+        } else {
+            alert("Error del servidor: " + res.statusText);
         }
       }
     } catch (err) {
-      console.error("Error exportando excel:", err);
+      alert("Error exportando excel: " + err.message);
     } finally {
       setIsExporting(false);
       onClose();
@@ -45,59 +59,54 @@ export default function ExportModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-codere-dark border border-gray-700 rounded-xl p-6 w-full max-w-md shadow-2xl relative">
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        <div className="flex items-center gap-3 mb-6 border-b border-gray-700 pb-4">
-          <div className="bg-codere-green/20 p-2 rounded-lg text-codere-green">
-            <ExcelIcon />
+    <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="modal modal-sm" style={{ maxWidth: 450 }}>
+        <div className="modal-head">
+          <div className="modal-head-title">
+            <ExcelIcon size={15} />
+            Exportar Reporte Excel
           </div>
-          <h2 className="text-xl font-bold text-white">Exportar Reporte</h2>
+          <button className="btn btn-ghost" onClick={onClose} disabled={isExporting}>
+            <IconX size={14} />
+          </button>
         </div>
 
-        <div className="space-y-4 mb-6">
-          <label className="flex items-start gap-3 p-3 rounded-lg border border-gray-700 hover:border-codere-green cursor-pointer bg-gray-800/50 transition-colors">
+        <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <label className="scan-row" style={{ cursor: 'pointer', alignItems: 'flex-start', padding: '12px' }}>
             <input 
               type="radio" 
               name="exportMode" 
               value="all" 
               checked={exportMode === 'all'} 
               onChange={() => setExportMode('all')}
-              className="mt-1 accent-codere-green"
+              style={{ marginTop: 4, cursor: 'pointer' }}
             />
-            <div>
-              <p className="font-bold text-white">Toda la Flota</p>
-              <p className="text-sm text-gray-400">Exporta las métricas de todas las computadoras registradas.</p>
+            <div style={{ marginLeft: 10, flex: 1 }}>
+              <div style={{ fontWeight: 600, color: 'var(--tx-1)' }}>Toda la Flota</div>
+              <div style={{ fontSize: 12, color: 'var(--tx-4)', marginTop: 4 }}>Exporta las métricas y estado de todas las computadoras registradas en el sistema.</div>
             </div>
           </label>
 
-          <label className="flex items-start gap-3 p-3 rounded-lg border border-gray-700 hover:border-codere-green cursor-pointer bg-gray-800/50 transition-colors">
+          <label className="scan-row" style={{ cursor: 'pointer', alignItems: 'flex-start', padding: '12px', flexWrap: 'wrap' }}>
             <input 
               type="radio" 
               name="exportMode" 
               value="single" 
               checked={exportMode === 'single'} 
               onChange={() => setExportMode('single')}
-              className="mt-1 accent-codere-green"
+              style={{ marginTop: 4, cursor: 'pointer' }}
             />
-            <div className="w-full">
-              <p className="font-bold text-white">Una PC Específica</p>
-              <p className="text-sm text-gray-400 mb-2">Exporta los datos de una sola máquina por su IP.</p>
+            <div style={{ marginLeft: 10, flex: 1 }}>
+              <div style={{ fontWeight: 600, color: 'var(--tx-1)' }}>Una PC Específica</div>
+              <div style={{ fontSize: 12, color: 'var(--tx-4)', marginTop: 4, marginBottom: 12 }}>Exporta los datos detallados de una sola máquina indicando su IP.</div>
               {exportMode === 'single' && (
                 <input 
                   type="text" 
+                  className="form-input"
                   value={targetIp}
                   onChange={(e) => setTargetIp(e.target.value)}
                   placeholder="Ej: 192.168.0.10"
-                  className="w-full bg-codere-dark border border-gray-600 rounded p-2 text-white focus:border-codere-green focus:outline-none"
+                  style={{ width: '100%' }}
                   autoFocus
                 />
               )}
@@ -105,19 +114,17 @@ export default function ExportModal({ isOpen, onClose }) {
           </label>
         </div>
 
-        <div className="flex justify-end gap-3">
-          <button 
-            onClick={onClose}
-            className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
-          >
+        <div className="modal-foot">
+          <button className="btn" onClick={onClose} disabled={isExporting}>
             Cancelar
           </button>
           <button 
+            className="btn btn-primary" 
             onClick={handleExport}
-            disabled={exportMode === 'single' && !targetIp.trim()}
-            className="flex items-center gap-2 bg-codere-green text-codere-dark px-6 py-2 rounded font-bold hover:bg-[#6CA022] transition-colors shadow-[0_0_15px_rgba(126,187,40,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isExporting || (exportMode === 'single' && !targetIp.trim())}
+            style={{ marginLeft: 'auto' }}
           >
-            {isExporting ? "Exportando..." : "Generar Excel"}
+            {isExporting ? <><div className="spinner" style={{ width: 13, height: 13, borderWidth: 2 }} /> Exportando</> : 'Generar Excel'}
           </button>
         </div>
       </div>

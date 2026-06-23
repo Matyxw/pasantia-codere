@@ -5,16 +5,14 @@ Detecta cambios de estado (online/offline) y los broadcastea por WebSocket.
 """
 
 import asyncio
-import json
 import logging
 from collections.abc import Callable
 from datetime import datetime
 
-import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from database import PC, Event, Metric, SessionLocal
-from notificaciones import notify_offline, notify_online
+from database import PC, Event, SessionLocal
+from notificaciones import notify_offline
 
 logger = logging.getLogger("scheduler")
 

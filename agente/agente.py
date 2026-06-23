@@ -4,15 +4,15 @@ AGENTE v3.0 — Arquitectura Push + UDP Discovery
 Corre en cada PC que quieras monitorear.
 """
 
+import json
 import os
+import platform
+import socket
+import subprocess
 import sys
 import time
-import socket
-import platform
-import subprocess
-import json
-import threading
 from datetime import datetime
+
 import psutil
 import requests
 
@@ -175,11 +175,11 @@ def discover_server():
         base_dir = os.path.dirname(sys.executable)
     else:
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        
+
     config_path = os.path.join(base_dir, "agent_config.json")
     if os.path.exists(config_path):
         try:
-            with open(config_path, "r") as f:
+            with open(config_path) as f:
                 cfg = json.load(f)
                 if "server_ip" in cfg:
                     return cfg["server_ip"]
@@ -190,7 +190,7 @@ def discover_server():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     s.settimeout(2.0)
-    
+
     while True:
         try:
             # Enviamos broadcast al puerto 8002
@@ -228,14 +228,14 @@ def main():
     local_ip = _get_local_ip()
     hostname = socket.gethostname()
     os_info = f"{platform.system()} {platform.release()} ({platform.architecture()[0]})"
-    
+
     print("=" * 50)
     print("  AGENTE PUSH CODERE v3.0")
     print("=" * 50)
-    
+
     server_ip = discover_server()
     server_url = f"http://{server_ip}:8000"
-    
+
     # Loop principal
     while True:
         try:
@@ -247,7 +247,7 @@ def main():
                 "metrics": get_metrics()
             }
             resp = requests.post(f"{server_url}/api/agent/push", json=payload, timeout=5)
-            
+
             if resp.status_code == 200:
                 data = resp.json()
                 cmds = data.get("pending_commands", [])
@@ -255,17 +255,17 @@ def main():
                     cmd_id = cmd["id"]
                     comando_txt = cmd["command"]
                     res = execute_command(comando_txt)
-                    
+
                     # Enviar resultado de vuelta
                     requests.post(f"{server_url}/api/agent/command_result", json={
                         "pc_ip": local_ip,
                         "command_id": cmd_id,
                         "result": res
                     }, timeout=5)
-                    
+
         except Exception as e:
             print(f"[ERROR] No se pudo enviar metrics: {e}")
-            
+
         time.sleep(5)
 
 if __name__ == "__main__":

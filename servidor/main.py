@@ -5,14 +5,14 @@ Puerto: 8000
 """
 
 import asyncio
-import concurrent.futures
 import json
 import os
 import socket
 import sys
+import threading
+import uuid
 from datetime import datetime
 
-import requests
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,8 +22,12 @@ from sqlalchemy.orm import Session
 
 import scheduler as sched
 from database import PC, Event, Metric, SessionLocal, get_db
-import uuid
-import threading
+
+try:
+    from openpyxl import Workbook
+    from openpyxl.styles import Alignment, Font, PatternFill
+except ImportError:
+    pass
 
 pending_commands = {}
 command_results = {}
@@ -94,10 +98,10 @@ async def on_startup():
     loop = asyncio.get_event_loop()
     sched.init(loop, manager.broadcast)
     sched.start()
-    
+
     t = threading.Thread(target=udp_discovery_server, daemon=True)
     t.start()
-    
+
     print("[Server] Servidor Central iniciado en http://0.0.0.0:8000")
 
 
@@ -299,12 +303,12 @@ async def execute_command(
     cmd_id = str(uuid.uuid4())
     if pc.ip not in pending_commands:
         pending_commands[pc.ip] = []
-    
+
     pending_commands[pc.ip].append({
         "id": cmd_id,
         "command": command
     })
-    
+
     # Simular polling bloqueante (para la UI actual)
     for _ in range(60): # 30 seg (0.5 * 60)
         if cmd_id in command_results:
@@ -312,7 +316,7 @@ async def execute_command(
             return res
         import time
         time.sleep(0.5)
-        
+
     raise HTTPException(504, "Timeout: el agente no recogió ni respondió el comando")
 
 
@@ -326,16 +330,16 @@ async def agent_push(body: dict, db: Session = Depends(get_db)):
     hostname = body.get("hostname")
     os_info = body.get("os")
     metrics_data = body.get("metrics")
-    
+
     if not ip or not metrics_data:
         raise HTTPException(400, "Faltan datos")
-        
+
     pc = db.query(PC).filter(PC.ip == ip).first()
     now = datetime.now().isoformat()
-    
+
     went_online = False
     downtime_secs = None
-    
+
     if not pc:
         # Auto-registro
         pc = PC(ip=ip, name=name, hostname=hostname, os=os_info, status="online", registered_at=now, last_seen=now)
@@ -353,7 +357,7 @@ async def agent_push(body: dict, db: Session = Depends(get_db)):
                     downtime_secs = (datetime.now() - last_off).total_seconds()
                 except Exception:
                     pass
-                    
+
         pc.status = "online"
         pc.last_seen = now
         pc.hostname = hostname or pc.hostname
@@ -380,7 +384,7 @@ async def agent_push(body: dict, db: Session = Depends(get_db)):
         uptime_seconds=metrics_data.get("uptime_seconds", 0),
     )
     db.add(metric)
-    
+
     if went_online:
         event = Event(pc_id=pc.id, pc_name=pc.name, pc_ip=pc.ip, type="online", timestamp=now, downtime_seconds=downtime_secs)
         db.add(event)
@@ -405,10 +409,10 @@ async def agent_push(body: dict, db: Session = Depends(get_db)):
             "metrics": metrics_data,
         },
     })
-    
+
     # Entregar comandos pendientes
     cmds = pending_commands.pop(pc.ip, [])
-    
+
     return {"status": "ok", "pending_commands": cmds}
 
 
@@ -549,29 +553,31 @@ if __name__ == "__main__":
             self.window = None
 
         def export_excel_dialog(self, target_ip=None):
-            import webview
             from datetime import datetime
-            from database import SessionLocal, PC, Event, Metric
+
+            import webview
             from openpyxl import Workbook
             from openpyxl.styles import Alignment, Font, PatternFill
+
+            from database import PC, Event, Metric, SessionLocal
 
             if not self.window:
                 return {"error": "Ventana no cargada"}
 
             default_filename = f"monitor_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
-            
+
             result = self.window.create_file_dialog(
-                webview.SAVE_DIALOG, 
-                directory='', 
+                webview.SAVE_DIALOG,
+                directory='',
                 save_filename=default_filename,
                 file_types=('Excel Files (*.xlsx)', 'All files (*.*)')
             )
-            
+
             if not result:
                 return {"cancelled": True}
-                
+
             filepath = result[0] if isinstance(result, tuple) else result
-            
+
             try:
                 import json
                 db = SessionLocal()
@@ -580,15 +586,15 @@ if __name__ == "__main__":
                 # ── Hoja 1: Resumen de Flota (PCs) ──
                 ws = wb.active
                 ws.title = "Resumen de Flota"
-                
+
                 headers = [
-                    "ID", "IP", "Nombre", "Hostname", "SO", "Estado", 
+                    "ID", "IP", "Nombre", "Hostname", "SO", "Estado",
                     "CPU %", "RAM Total (GB)", "RAM Uso (GB)", "RAM %",
-                    "Disco %", "Temp ºC", "Conexiones", "Procesos", 
+                    "Disco %", "Temp ºC", "Conexiones", "Procesos",
                     "Último visto", "Registrado"
                 ]
                 ws.append(headers)
-                
+
                 # Codere Branding Headers
                 h_fill = PatternFill(start_color="7EBB28", end_color="7EBB28", fill_type="solid")
                 h_font = Font(bold=True, color="FFFFFF", size=11)
@@ -611,12 +617,12 @@ if __name__ == "__main__":
                             ram_tot = m.get('memory', {}).get('total_gb', '')
                             ram_use = m.get('memory', {}).get('used_gb', '')
                             ram_pct = f"{m.get('memory', {}).get('percent', '')}%"
-                            
+
                             disks = m.get('disk', {})
                             if disks:
                                 first_disk = list(disks.values())[0]
                                 disk_pct = f"{first_disk.get('percent', '')}%"
-                                
+
                             max_temp = 0.0
                             temps_dict = m.get('temperatures', {})
                             for sensor_list in temps_dict.values():
@@ -625,16 +631,16 @@ if __name__ == "__main__":
                                         max_temp = sensor.get('current', 0)
                             if max_temp > 0:
                                 temp = f"{round(max_temp, 1)} °C"
-                                
+
                             conns = m.get('network', {}).get('connections', '')
                             procs = m.get('processes', {}).get('total', '')
                         except Exception as e:
                             print("Error parsing metrics for Excel:", e)
                             pass
-                            
+
                     ws.append([
                         pc.id, pc.ip, pc.name, pc.hostname or "",
-                        pc.os or "", pc.status, 
+                        pc.os or "", pc.status,
                         cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, conns, procs,
                         pc.last_seen or "", pc.registered_at
                     ])
