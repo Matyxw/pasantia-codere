@@ -1,0 +1,8 @@
+node_modules/
+dashboard/dist/
+dashboard/.vite/
+build/dist/
+build/work/
+htmlcov/
+*.db
+*.log

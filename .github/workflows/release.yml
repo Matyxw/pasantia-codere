@@ -1,0 +1,169 @@
+name: Release — Build & Publish
+
+on:
+  push:
+    tags:
+      - "v*.*.*"   # Se activa cuando pusheás un tag tipo v2.1.0
+
+permissions:
+  contents: write   # Necesario para crear GitHub Releases
+
+jobs:
+  # ════════════════════════════════════════════════════════
+  #  JOB 1: Empaquetar Agente como .exe (Windows)
+  # ════════════════════════════════════════════════════════
+  build-agent:
+    name: "📦 Build Agent (.exe)"
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller
+          pip install -r agente/requirements.txt
+
+      - name: Build agent .exe
+        run: |
+          pyinstaller --onefile --name "PCMonitor-Agente-${{ github.ref_name }}" `
+            --add-data "agente;agente" `
+            --hidden-import psutil `
+            --hidden-import fastapi `
+            --hidden-import uvicorn `
+            agente/agente.py
+
+      - name: Upload agent artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-exe
+          path: dist/PCMonitor-Agente-*.exe
+
+  # ════════════════════════════════════════════════════════
+  #  JOB 2: Empaquetar Servidor como .exe (Windows)
+  # ════════════════════════════════════════════════════════
+  build-server:
+    name: "📦 Build Server (.exe)"
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller
+          pip install -r servidor/requirements.txt
+
+      - name: Build server .exe
+        run: |
+          pyinstaller --onefile --name "PCMonitor-Servidor-${{ github.ref_name }}" `
+            --hidden-import fastapi `
+            --hidden-import uvicorn `
+            --hidden-import apscheduler `
+            --hidden-import sqlalchemy `
+            servidor/main.py
+
+      - name: Upload server artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-exe
+          path: dist/PCMonitor-Servidor-*.exe
+
+  # ════════════════════════════════════════════════════════
+  #  JOB 3: Build Dashboard
+  # ════════════════════════════════════════════════════════
+  build-dashboard:
+    name: "⚛️ Build Dashboard"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: dashboard/package-lock.json
+
+      - name: Install and build
+        working-directory: dashboard
+        run: |
+          npm ci
+          npm run build
+
+      - name: Zip dashboard dist
+        run: |
+          cd dashboard
+          Compress-Archive -Path dist -DestinationPath ../PCMonitor-Dashboard-${{ github.ref_name }}.zip
+        shell: pwsh
+
+      - name: Upload dashboard artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-zip
+          path: PCMonitor-Dashboard-*.zip
+
+  # ════════════════════════════════════════════════════════
+  #  JOB 4: Crear GitHub Release con todos los archivos
+  # ════════════════════════════════════════════════════════
+  create-release:
+    name: "🚀 Create GitHub Release"
+    runs-on: ubuntu-latest
+    needs: [build-agent, build-server, build-dashboard]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Para el changelog
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-files
+          merge-multiple: true
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -n "$PREV_TAG" ]; then
+            echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+            git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "CHANGELOG=Primera release" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "PC Monitor ${{ github.ref_name }}"
+          body: |
+            ## 🖥 PC Monitor ${{ github.ref_name }}
+
+            ### ¿Qué hay en esta release?
+            ${{ steps.changelog.outputs.CHANGELOG }}
+
+            ### 📥 Archivos
+
+            | Archivo | Para qué |
+            |---|---|
+            | `PCMonitor-Agente-*.exe` | Instalar en cada PC a monitorear |
+            | `PCMonitor-Servidor-*.exe` | Servidor central (PC de control) |
+            | `PCMonitor-Dashboard-*.zip` | Panel web (extraer y abrir con servidor web) |
+
+            ### 🚀 Instalación rápida
+            1. Descargar los 3 archivos
+            2. En el servidor central: ejecutar `PCMonitor-Servidor.exe`
+            3. En cada PC a monitorear: ejecutar `PCMonitor-Agente.exe`
+            4. Abrir `http://[IP-SERVIDOR]:5173` en el navegador
+          files: release-files/**/*
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}

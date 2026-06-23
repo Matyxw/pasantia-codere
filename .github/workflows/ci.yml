@@ -1,0 +1,140 @@
+name: CI — Tests & Quality
+
+on:
+  push:
+    branches: [main, develop, "feature/**", "fix/**"]
+  pull_request:
+    branches: [main, develop]
+
+# Cancela runs anteriores del mismo branch para ahorrar créditos
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ════════════════════════════════════════════════════════
+  #  JOB 1: Lint y format Python
+  # ════════════════════════════════════════════════════════
+  lint-python:
+    name: "🐍 Lint Python (Ruff)"
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Run Ruff linter
+        run: ruff check agente/ servidor/ tests/ --output-format=github
+
+      - name: Run Ruff formatter check
+        run: ruff format --check agente/ servidor/ tests/
+
+  # ════════════════════════════════════════════════════════
+  #  JOB 2: Type checking
+  # ════════════════════════════════════════════════════════
+  typecheck:
+    name: "🔍 Type Check (mypy)"
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run mypy
+        run: mypy servidor/ agente/ --ignore-missing-imports
+
+  # ════════════════════════════════════════════════════════
+  #  JOB 3: Tests Python con cobertura
+  # ════════════════════════════════════════════════════════
+  test-python:
+    name: "🧪 Tests Python (pytest)"
+    runs-on: windows-latest
+    needs: [lint-python]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run tests with coverage
+        run: pytest --cov=servidor --cov=agente --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: coverage.xml
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  # ════════════════════════════════════════════════════════
+  #  JOB 4: Lint y tests Frontend
+  # ════════════════════════════════════════════════════════
+  test-frontend:
+    name: "⚛️ Lint & Build Frontend (Vite)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: dashboard/package-lock.json
+
+      - name: Install dependencies
+        working-directory: dashboard
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: dashboard
+        run: npm run lint
+
+      - name: Build (verifica que el bundle no rompa)
+        working-directory: dashboard
+        run: npm run build
+
+  # ════════════════════════════════════════════════════════
+  #  JOB 5: Auditoría de seguridad de dependencias
+  # ════════════════════════════════════════════════════════
+  security-audit:
+    name: "🔒 Security Audit"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Audit Python dependencies
+        run: pip-audit --requirement servidor/requirements.txt --requirement agente/requirements.txt || true
+
+      - name: Audit npm dependencies
+        working-directory: dashboard
+        run: npm audit --audit-level=high || true

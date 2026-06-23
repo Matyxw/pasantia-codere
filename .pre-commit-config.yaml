@@ -1,0 +1,72 @@
+# .pre-commit-config.yaml
+# Hooks que se ejecutan AUTOMATICAMENTE antes de cada git commit
+# Instalación: pip install pre-commit && pre-commit install
+#
+# Para correr manualmente en todos los archivos:
+#   pre-commit run --all-files
+
+repos:
+  # ── Hooks básicos de calidad ───────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace          # Elimina espacios al final de línea
+      - id: end-of-file-fixer            # Asegura newline al final de archivos
+      - id: check-yaml                   # Valida YAML
+      - id: check-json                   # Valida JSON
+      - id: check-toml                   # Valida TOML (pyproject.toml)
+      - id: check-merge-conflict         # Detecta markers de merge sin resolver
+      - id: check-added-large-files      # Bloquea archivos > 1MB
+        args: ["--maxkb=1024"]
+      - id: no-commit-to-branch          # Protege main y develop de commits directos
+        args: ["--branch", "main", "--branch", "develop"]
+      - id: detect-private-key           # Detecta claves privadas hardcodeadas
+      - id: mixed-line-ending            # Detecta mezcla de CRLF/LF
+        args: ["--fix=lf"]
+
+  # ── Ruff — Linter + Formatter Python (todo en uno) ────────────────
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.10
+    hooks:
+      - id: ruff                         # Linting (con auto-fix)
+        args: ["--fix", "--exit-non-zero-on-fix"]
+      - id: ruff-format                  # Formato (Black-compatible)
+
+  # ── Prettier — Formato JS/CSS/JSON/YAML/Markdown ─────────────────
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v4.0.0-alpha.8
+    hooks:
+      - id: prettier
+        types_or: [javascript, jsx, css, json, yaml, markdown]
+        exclude: "dashboard/dist/|node_modules/"
+        additional_dependencies:
+          - "prettier@3.3.0"
+
+  # ── Detección de secretos ─────────────────────────────────────────
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args:
+          - "--baseline"
+          - ".secrets.baseline"
+        exclude: ".env.example|pyproject.toml"
+
+  # ── Conventional Commits — formato de mensajes ───────────────────
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.2.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: []
+        # Tipos permitidos:
+        # feat:     Nueva funcionalidad
+        # fix:      Corrección de bug
+        # docs:     Solo documentación
+        # style:    Formato, sin cambios de lógica
+        # refactor: Refactor sin nueva func ni fix
+        # perf:     Mejora de performance
+        # test:     Tests
+        # build:    Sistema de build, dependencias
+        # ci:       Cambios en CI/CD
+        # chore:    Otras tareas de mantenimiento

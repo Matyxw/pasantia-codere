@@ -1,0 +1,39 @@
+{
+  "recommendations": [
+    // ── Python ──────────────────────────────────────────────────────────
+    "ms-python.python",                    // Python base
+    "ms-python.vscode-pylance",            // IntelliSense avanzado
+    "charliermarsh.ruff",                  // Linter + Formatter (Ruff)
+
+    // ── JavaScript / React ───────────────────────────────────────────
+    "esbenp.prettier-vscode",              // Formatter JS/CSS/JSON
+    "dbaeumer.vscode-eslint",              // ESLint
+
+    // ── Git ─────────────────────────────────────────────────────────────
+    "eamodio.gitlens",                     // Git history, blame, diff avanzado
+    "mhutchie.git-graph",                  // Árbol visual de commits/branches
+
+    // ── API Testing ─────────────────────────────────────────────────────
+    "rangav.vscode-thunder-client",        // REST client integrado (alternativa a Postman)
+
+    // ── Productividad ───────────────────────────────────────────────────
+    "usernamehw.errorlens",                // Errores inline en el código
+    "PKief.material-icon-theme",           // Íconos de archivos
+    "wayou.vscode-todo-highlight",         // Resalta TODO, FIXME, HACK
+    "oderwat.indent-rainbow",              // Colores para indentación
+    "streetsidesoftware.code-spell-checker", // Corrector ortográfico en código
+    "gruntfuggly.todo-tree",               // Panel de todos los TODOs del proyecto
+
+    // ── YAML / TOML / ENV ───────────────────────────────────────────────
+    "redhat.vscode-yaml",                  // YAML con schemas
+    "tamasfe.even-better-toml",            // TOML (pyproject.toml)
+    "mikestead.dotenv",                    // .env highlighting
+
+    // ── IA Gratuita ─────────────────────────────────────────────────────
+    "Codeium.codeium",                     // Autocompletado IA gratuito (mejor alternativa libre a Copilot)
+    "Continue.continue",                   // Agente IA open-source en el editor
+
+    // ── Seguridad ────────────────────────────────────────────────────────
+    "snyk-security.snyk-vulnerability-scanner" // Escaneo de vulnerabilidades en tiempo real
+  ]
+}

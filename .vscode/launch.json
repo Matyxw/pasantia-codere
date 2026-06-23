@@ -1,0 +1,67 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    // ── Servidor Central FastAPI ─────────────────────────────────────────
+    {
+      "name": "🖥 Servidor Central (FastAPI)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/servidor/main.py",
+      "cwd": "${workspaceFolder}/servidor",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "ENVIRONMENT": "development"
+      },
+      "justMyCode": false,
+      "args": []
+    },
+
+    // ── Agente PC ────────────────────────────────────────────────────────
+    {
+      "name": "🤖 Agente (FastAPI)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/agente/agente.py",
+      "cwd": "${workspaceFolder}/agente",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "justMyCode": false
+    },
+
+    // ── Tests Python ─────────────────────────────────────────────────────
+    {
+      "name": "🧪 Tests Python (pytest)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/", "-v", "--no-cov"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+
+    // ── Test específico bajo cursor ───────────────────────────────────────
+    {
+      "name": "🧪 Test actual (cursor)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["${file}", "-v", "--no-cov"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ],
+
+  // ── Compound: arrancar servidor + agente juntos ──────────────────────
+  "compounds": [
+    {
+      "name": "🚀 Sistema Completo (Servidor + Agente)",
+      "configurations": ["🖥 Servidor Central (FastAPI)", "🤖 Agente (FastAPI)"],
+      "stopAll": true
+    }
+  ]
+}
