@@ -3,7 +3,7 @@ name = "pc-monitor"
 version = "2.0.0"
 description = "Enterprise PC monitoring system — real-time, WebSocket-first, 200+ nodes"
 authors = [
-    { name = "Matyxw", email = "" },
+    { name = "Matias", email = "" },
 ]
 readme = "README.md"
 license = { text = "MIT" }

@@ -5,12 +5,11 @@ Un solo import de `settings` da acceso a toda la configuración tipada.
 """
 
 import secrets
+import sys
 from pathlib import Path
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
-import sys
 
 if getattr(sys, 'frozen', False):
     BASE_DIR = Path(sys.executable).parent

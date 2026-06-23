@@ -1,5 +1,6 @@
-from PIL import Image, ImageDraw, ImageFont
 import os
+
+from PIL import Image, ImageDraw, ImageFont
 
 output_path = "codere_icon.ico"
 size = 256

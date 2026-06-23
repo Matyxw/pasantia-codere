@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar'
 import PCModal from './components/PCModal'
 import RegisterModal from './components/RegisterModal'
 import ScanModal from './components/ScanModal'
-import AlertToast from './components/AlertToast'
+import { ToastContainer, toast } from './components/Toast'
 import './App.css'
 
 const API = 'http://localhost:8000/api'
@@ -24,16 +24,24 @@ export default function App() {
   const [selectedPC, setSelectedPC] = useState(null)
   const [showRegister, setShowRegister] = useState(false)
   const [showScan, setShowScan] = useState(false)
-  const [wsStatus, setWsStatus] = useState('connecting') // connecting | open | closed
-  const [alerts, setAlerts] = useState([])
+  const [wsStatus, setWsStatus] = useState('connecting')
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('codere-theme') === 'dark'
+  })
   const wsRef = useRef(null)
   const reconnectTimer = useRef(null)
 
-  const pushAlert = useCallback((message, type = 'info') => {
-    const id = Date.now() + Math.random()
-    setAlerts(prev => [...prev, { id, message, type }])
-    setTimeout(() => setAlerts(prev => prev.filter(a => a.id !== id)), 6000)
-  }, [])
+  // Apply dark mode class to root
+  useEffect(() => {
+    const root = document.documentElement
+    if (darkMode) {
+      root.classList.add('dark')
+      localStorage.setItem('codere-theme', 'dark')
+    } else {
+      root.classList.remove('dark')
+      localStorage.setItem('codere-theme', 'light')
+    }
+  }, [darkMode])
 
   const handleMessage = useCallback((msg) => {
     switch (msg.type) {
@@ -65,13 +73,13 @@ export default function App() {
         const ev = msg.data
         setEvents(prev => [ev, ...prev].slice(0, 100))
         if (ev.event_type === 'offline') {
-          pushAlert(`🔴 ${ev.pc_name} se desconectó`, 'offline')
+          toast.error(`La máquina ${ev.pc_name} se ha desconectado.`)
           setPcs(prev => prev.map(pc =>
             pc.id === ev.pc_id ? { ...pc, status: 'offline' } : pc
           ))
         } else if (ev.event_type === 'online') {
           const dt = formatDowntime(ev.downtime_seconds)
-          pushAlert(`🟢 ${ev.pc_name} volvió online${dt ? ` (offline ${dt})` : ''}`, 'online')
+          toast.success(`${ev.pc_name} vuelve a estar en línea${dt ? ` (Downtime: ${dt})` : ''}.`)
           setPcs(prev => prev.map(pc =>
             pc.id === ev.pc_id ? { ...pc, status: 'online' } : pc
           ))
@@ -94,10 +102,10 @@ export default function App() {
       default:
         break
     }
-  }, [pushAlert])
+  }, [])
 
   const connectWS = useCallback(() => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) return
+    if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) return
 
     setWsStatus('connecting')
     const ws = new WebSocket(WS_URL)
@@ -157,14 +165,14 @@ export default function App() {
       if (prev.find(p => p.id === data.id)) return prev
       return [...prev, data]
     })
-    pushAlert(`✅ ${name} registrada`, 'success')
+    toast.success(`La máquina ${name} fue registrada exitosamente.`)
   }
 
   const handleDelete = async (pcId) => {
     await fetch(`${API}/pcs/${pcId}`, { method: 'DELETE' })
     setPcs(prev => prev.filter(p => p.id !== pcId))
     setSelectedPC(null)
-    pushAlert('PC eliminada del sistema', 'info')
+    toast.warning('La máquina fue eliminada del inventario.')
   }
 
   const stats = {
@@ -182,6 +190,8 @@ export default function App() {
         onRegister={() => setShowRegister(true)}
         onScan={() => setShowScan(true)}
         apiUrl={API}
+        darkMode={darkMode}
+        onToggleDark={() => setDarkMode(d => !d)}
       />
 
       <div className="main-layout">
@@ -220,11 +230,7 @@ export default function App() {
         />
       )}
 
-      <div className="alerts-stack">
-        {alerts.map(a => (
-          <AlertToast key={a.id} message={a.message} type={a.type} />
-        ))}
-      </div>
+      <ToastContainer />
     </div>
   )
 }

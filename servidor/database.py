@@ -4,11 +4,12 @@ Tablas: pcs, events, metrics
 WAL mode habilitado para acceso concurrente
 """
 
-from sqlalchemy import create_engine, Column, Integer, String, Float, Text, event
-from sqlalchemy.orm import declarative_base, sessionmaker
-from datetime import datetime
 import os
 import sys
+from datetime import datetime
+
+from sqlalchemy import Column, Float, Integer, String, Text, create_engine, event
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 if getattr(sys, 'frozen', False):
     DB_PATH = os.path.join(os.path.dirname(sys.executable), "monitor.db")

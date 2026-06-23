@@ -59,7 +59,7 @@ def build() -> None:
         exe = DIST / "PCMonitor-Agente.exe"
         size_mb = exe.stat().st_size / (1024 ** 2)
         print()
-        print(f"  ✅ Build exitoso!")
+        print("  ✅ Build exitoso!")
         print(f"  📦 {exe}")
         print(f"  📏 Tamaño: {size_mb:.1f} MB")
     else:

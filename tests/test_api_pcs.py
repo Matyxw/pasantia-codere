@@ -4,7 +4,6 @@ test_api_pcs.py — Tests para el CRUD de PCs en el servidor central
 
 from unittest.mock import patch
 
-import pytest
 from fastapi.testclient import TestClient
 
 

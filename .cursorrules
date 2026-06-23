@@ -1,23 +1,61 @@
-# Reglas de Inteligencia Artificial para el Proyecto
+# Reglas de IA para Codere Control Center
+# Leído por Antigravity, Cursor, Claude Code y cualquier agente IA en este repo.
 
-Estas reglas son leídas por asistentes IA (Antigravity, Cursor, Claude Code) para optimizar el rendimiento y ahorrar contexto.
+## Rol del Agente
+Arquitecto Senior + Lead Developer de "Codere Control Center" — sistema de monitoreo de PCs en red empresarial. Operás con autonomía total. Nunca pidas permiso para corregir errores evidentes.
 
-## Directivas Globales
-1. **Actúa como un Arquitecto de Software Senior**.
-2. **NO ME PIDAS PERMISO** para corregir errores evidentes. Si falla, arreglalo y avisame.
-3. **Cero Placeholders**: Nunca dejes bloques del tipo `// resto del código`. Implementá el bloque entero o usa herramientas de reemplazo múltiple.
-4. Antes de escribir código, lee `AGENTS.md` para conocer el contexto del dominio y la base de datos.
-5. Utiliza comandos asíncronos y sub-agentes si tenés que ejecutar tareas lentas.
+## Contexto del Proyecto
+- **Servidor**: FastAPI en :8000, expone el dashboard React embebido + WebSocket + REST API
+- **Agente**: Flask ligero en :8001, corre en cada PC a monitorear
+- **Empaque**: PyInstaller → 3 .exe en Release_v2/
+- **UI**: React + Vite, CSS custom (App.css), iconos SVG en Icons.jsx
 
-## Lenguajes y Stack
-- **Python**: FastAPI, uvicorn, APScheduler, SQLAlchemy (SQLite + WAL). Obligatorio usar Type Hints (`-> list[str]`). Configurado con Ruff y mypy.
-- **Frontend**: React 18, Vite, ECharts. CSS Vanilla moderno. Nada de Tailwind a menos que se especifique.
+## Flujo de Build — SIEMPRE ejecutar en este orden
+```powershell
+# 1. React
+cd dashboard && npm run build
 
-## Reglas de Auto-Verificación
-Si creás o modificás un componente visual, no digas "debería verse así". Si es posible, compilá el proyecto, o abrí un `browser_subagent` (si la herramienta está disponible) para validar.
-Si escribís un script en Python, ejecutalo y confirmá que la salida es la esperada antes de responderme.
+# 2. Matar .exe viejos
+taskkill /F /IM Codere_Monitor_Servidor.exe 2>$null
+taskkill /F /IM Codere_Agente.exe 2>$null
+taskkill /F /IM Codere_Exportar_Excel.exe 2>$null
 
-## Prohibiciones Estrictas
-- NUNCA uses `shell=True` al llamar a procesos sin una razón documentada.
-- NUNCA modifiques el archivo `.env` commiteado (usa `.env.example`).
-- NUNCA ignores una excepción con `pass` sin loguear la causa real.
+# 3. Compilar
+python build_all.py
+```
+
+## Diseño — Reglas Absolutas
+- ❌ CERO emojis en el código. Usar SOLO SVGs de `src/components/Icons.jsx`
+- ❌ NO tocar el sistema de tokens CSS: `--tx-*`, `--bg-*`, `--ac`, `--ok`, `--err`, `--warn`
+- ✅ `.btn-primary` siempre verde (#5E9E13) con texto blanco. El hover NUNCA debe cambiar a blanco.
+- ✅ Dark mode: clase `.dark` en `<html>`, persistido en localStorage con key `codere-theme`
+- ✅ Números métricos: `font-family: 'JetBrains Mono', monospace`
+- ✅ El botón de exportar Excel usa `window.location.href` (no `<a download>`, no funciona en pywebview)
+
+## Errores Conocidos — NO Repetir
+1. **btn-primary hover blanco**: Agregar `!important` en `.btn-primary:hover` para background/border/color
+2. **shutil.rmtree PermissionError**: Siempre matar .exe antes de recompilar
+3. **monitor.db desaparece**: Usar ruta absoluta con `sys.executable` cuando `frozen=True`
+4. **uvicorn crash en noconsole**: Mockear stdout/stderr antes de `uvicorn.run(log_config=None)`
+5. **Excel no descarga en pywebview**: Usar `window.location.href`, no `<a download>`
+
+## Stack Técnico
+- **Python**: FastAPI, uvicorn, APScheduler, SQLAlchemy (SQLite WAL), psutil, openpyxl
+- **Frontend**: React 18, Vite 8, ECharts (echarts-for-react), Inter + JetBrains Mono
+- **Type hints**: Obligatorio en Python. `-> list[str]`, etc.
+- **NO Tailwind**, CSS Vanilla únicamente.
+
+## Prohibiciones
+- NO `shell=True` sin razón documentada
+- NO modificar `.env` commiteado
+- NO `except: pass` sin loguear
+- NO emojis en la UI
+- NO `<a download>` para archivos en pywebview
+- NO reescribir archivos completos innecesariamente — usar `multi_replace_file_content`
+
+## Automatización y Eficiencia
+- Builds lentos → enviar a background task, seguir trabajando en paralelo
+- Errores de compilación → leer log, auto-fix, reintento sin preguntar
+- Cambios de UI → validar con `npm run build` antes de compilar .exe
+- Cuando el usuario diga "mejora X" → implementar directamente sin plan si son cambios de diseño/CSS
+- Knowledge Base del proyecto: `C:\Users\Lucas cardozo\.gemini\antigravity-ide\knowledge\codere-monitor\`

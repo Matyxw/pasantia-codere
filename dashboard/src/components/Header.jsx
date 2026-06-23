@@ -1,63 +1,117 @@
-export default function Header({ stats, wsStatus, onRegister, onScan, apiUrl }) {
-  const now = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+import { useState, useEffect } from 'react'
+import {
+  IconMonitor, IconSearch, IconPlus, IconSheet,
+  IconMoon, IconSun, IconRefresh, IconCircle
+} from './Icons'
 
-  const wsLabel = wsStatus === 'open' ? 'Conectado' : wsStatus === 'connecting' ? 'Conectando...' : 'Desconectado'
+export default function Header({ stats, wsStatus, onRegister, onScan, apiUrl, darkMode, onToggleDark }) {
+  const [time, setTime] = useState(new Date())
+
+  useEffect(() => {
+    const t = setInterval(() => setTime(new Date()), 1000)
+    return () => clearInterval(t)
+  }, [])
+
+  const timeStr = time.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+  const wsLabel = wsStatus === 'open' ? 'WS activo' : wsStatus === 'connecting' ? 'Conectando' : 'Sin conexión'
 
   return (
     <header className="header">
-      <div className="header-logo">
-        <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="50" fill="var(--color-accent)"/>
-          <text x="50" y="70" fontFamily="Arial, sans-serif" fontSize="60" fill="white" fontWeight="bold" textAnchor="middle">C</text>
-        </svg>
-        <span>Codere <span style={{ color: 'var(--text-secondary)', fontSize: 13, fontWeight: 500 }}>Control Center</span></span>
+      <div className="header-brand">
+        <div className="header-brand-logo">
+          <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
+            <text x="50" y="76" fontFamily="Arial Black, sans-serif" fontSize="76"
+              fill={darkMode ? '#ffffff' : 'var(--ac)'} fontWeight="900" textAnchor="middle">C</text>
+          </svg>
+        </div>
+        <div className="header-brand-name" style={{ color: darkMode ? 'var(--tx-1)' : '#ffffff' }}>
+          Codere <span style={{ color: darkMode ? 'var(--tx-3)' : 'rgba(255,255,255,0.8)' }}>Control Center</span>
+        </div>
       </div>
 
+      {/* Stats */}
       <div className="header-stats">
-        <div className="stat-badge total">
-          <span>🖥</span>
-          <span>{stats.total} PCs</span>
+        <div className="stat-chip">
+          <IconMonitor size={12} />
+          {stats.total} equipos
         </div>
-        <div className="stat-badge online">
-          <span>●</span>
-          <span>{stats.online} Online</span>
-        </div>
-        {stats.offline > 0 && (
-          <div className="stat-badge offline">
-            <span>●</span>
-            <span>{stats.offline} Offline</span>
+
+        {stats.online > 0 && (
+          <div className="stat-chip ok">
+            <span className="stat-dot" />
+            {stats.online} en línea
           </div>
         )}
+
+        {stats.offline > 0 && (
+          <div className="stat-chip err">
+            <span className="stat-dot" />
+            {stats.offline} offline
+          </div>
+        )}
+
         {stats.unknown > 0 && (
-          <div className="stat-badge unknown">
-            <span>●</span>
-            <span>{stats.unknown} ?</span>
+          <div className="stat-chip warn">
+            <span className="stat-dot" />
+            {stats.unknown} sin estado
           </div>
         )}
       </div>
 
+      {/* Right actions */}
       <div className="header-actions">
-        <div className="ws-indicator">
-          <div className={`ws-dot ${wsStatus}`} />
-          <span>{wsLabel}</span>
+        <div className="header-clock">{timeStr}</div>
+
+        <div className="ws-chip" title={`WebSocket: ${wsLabel}`}>
+          <span className={`ws-led ${wsStatus}`} />
+          {wsLabel}
         </div>
 
-        <button className="btn" onClick={onScan} title="Escanear red">
-          🔍 Escanear
+        <button className="btn-icon" onClick={onToggleDark} title={darkMode ? 'Modo claro' : 'Modo oscuro'}>
+          {darkMode ? <IconSun size={14} /> : <IconMoon size={14} />}
+        </button>
+
+        <button className="btn" onClick={onScan} title="Escanear red local">
+          <IconSearch size={13} />
+          Escanear
         </button>
 
         <button className="btn btn-primary" onClick={onRegister}>
-          + Registrar PC
+          <IconPlus size={13} />
+          Registrar PC
         </button>
 
-        <a
-          href={`${apiUrl}/export/excel`}
+        <button
           className="btn"
-          title="Exportar a Excel"
-          download
+          title="Exportar datos a Excel"
+          onClick={async () => {
+            try {
+              if (window.pywebview && window.pywebview.api) {
+                const res = await window.pywebview.api.export_excel_dialog()
+                if (res.error) alert('Error al exportar: ' + res.error)
+                else if (res.success) alert('Exportado con éxito a:\n' + res.filepath)
+              } else {
+                // Fallback si corre en navegador
+                const res = await fetch(`${apiUrl}/export/excel`)
+                if (!res.ok) throw new Error(`Error ${res.status}`)
+                const blob = await res.blob()
+                const url  = URL.createObjectURL(blob)
+                const a    = document.createElement('a')
+                a.href     = url
+                a.download = `codere_monitor_${new Date().toISOString().slice(0,10)}.xlsx`
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+                URL.revokeObjectURL(url)
+              }
+            } catch (e) {
+              alert('Error al exportar: ' + e.message)
+            }
+          }}
         >
-          📊 Excel
-        </a>
+          <IconSheet size={13} />
+          Exportar
+        </button>
       </div>
     </header>
   )

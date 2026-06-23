@@ -5,8 +5,8 @@ Corre en cada PC que quieras monitorear.
 Puerto: 8001
 """
 
-import sys
 import os
+import sys
 
 # Fix for --noconsole mode (sys.stdout is None)
 if sys.stdout is None:
@@ -14,14 +14,15 @@ if sys.stdout is None:
 if sys.stderr is None:
     sys.stderr = open(os.devnull, 'w')
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-import psutil
-import socket
 import platform
+import socket
 import subprocess
 from datetime import datetime
+
+import psutil
 import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="PC Monitor Agent", version="2.0.0", docs_url="/docs")
 

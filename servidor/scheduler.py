@@ -7,8 +7,8 @@ Detecta cambios de estado (online/offline) y los broadcastea por WebSocket.
 import asyncio
 import json
 import logging
+from collections.abc import Callable
 from datetime import datetime
-from typing import Callable, Optional
 
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -19,8 +19,8 @@ from notificaciones import notify_offline, notify_online
 logger = logging.getLogger("scheduler")
 
 _scheduler = BackgroundScheduler(timezone="UTC")
-_broadcast_callback: Optional[Callable] = None
-_event_loop: Optional[asyncio.AbstractEventLoop] = None
+_broadcast_callback: Callable | None = None
+_event_loop: asyncio.AbstractEventLoop | None = None
 
 HEARTBEAT_INTERVAL = 15  # segundos
 REQUEST_TIMEOUT = 5       # segundos por request al agente
@@ -52,8 +52,11 @@ def _heartbeat():
         db.close()
 
 
+_failed_pings = {}
+
 def _check_pc(db, pc: PC):
     """Verifica una PC individual y actualiza su estado en la DB"""
+    global _failed_pings
     try:
         resp = requests.get(
             f"http://{pc.ip}:8001/metrics",
@@ -61,6 +64,9 @@ def _check_pc(db, pc: PC):
         )
         if resp.status_code != 200:
             raise ConnectionError("Status != 200")
+
+        # Reset failed count on success
+        _failed_pings[pc.id] = 0
 
         metrics_data = resp.json()
         now = datetime.now().isoformat()
@@ -146,49 +152,54 @@ def _check_pc(db, pc: PC):
         })
 
     except Exception:
-        # La PC no respondio → offline
-        now = datetime.now().isoformat()
+        # La PC no respondio
+        count = _failed_pings.get(pc.id, 0) + 1
+        _failed_pings[pc.id] = count
 
-        if pc.status != "offline":
-            # Acaba de caerse
-            pc.status = "offline"
-            pc.last_offline = now
+        # Solo marcamos como offline si falla 3 veces seguidas
+        if count >= 3:
+            now = datetime.now().isoformat()
 
-            event = Event(
-                pc_id=pc.id,
-                pc_name=pc.name,
-                pc_ip=pc.ip,
-                type="offline",
-                timestamp=now,
-            )
-            db.add(event)
-            db.commit()
+            if pc.status != "offline":
+                # Acaba de caerse
+                pc.status = "offline"
+                pc.last_offline = now
 
-            notify_offline(pc.name, pc.ip)
+                event = Event(
+                    pc_id=pc.id,
+                    pc_name=pc.name,
+                    pc_ip=pc.ip,
+                    type="offline",
+                    timestamp=now,
+                )
+                db.add(event)
+                db.commit()
 
-            _broadcast({
-                "type": "event",
-                "data": {
-                    "pc_id": pc.id,
-                    "pc_name": pc.name,
-                    "ip": pc.ip,
-                    "event_type": "offline",
-                    "timestamp": now,
-                    "downtime_seconds": None,
-                },
-            })
+                notify_offline(pc.name, pc.ip)
 
-            # Broadcast status change
-            _broadcast({
-                "type": "status_change",
-                "data": {
-                    "pc_id": pc.id,
-                    "name": pc.name,
-                    "ip": pc.ip,
-                    "status": "offline",
-                    "timestamp": now,
-                },
-            })
+                _broadcast({
+                    "type": "event",
+                    "data": {
+                        "pc_id": pc.id,
+                        "pc_name": pc.name,
+                        "ip": pc.ip,
+                        "event_type": "offline",
+                        "timestamp": now,
+                        "downtime_seconds": None,
+                    },
+                })
+
+                # Broadcast status change
+                _broadcast({
+                    "type": "status_change",
+                    "data": {
+                        "pc_id": pc.id,
+                        "name": pc.name,
+                        "ip": pc.ip,
+                        "status": "offline",
+                        "timestamp": now,
+                    },
+                })
 
 
 def start():

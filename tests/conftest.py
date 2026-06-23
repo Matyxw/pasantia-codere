@@ -3,15 +3,16 @@ conftest.py — Fixtures compartidas para todos los tests
 Provee: cliente HTTP async, DB de test en memoria, PC de ejemplo
 """
 
+# ── Parchear la DB antes de importar la app ────────────────────────────────────
+import os
+
 import pytest
 import pytest_asyncio
 from fastapi.testclient import TestClient
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# ── Parchear la DB antes de importar la app ────────────────────────────────────
-import os
 os.environ.setdefault("DATABASE_PATH", ":memory:")
 os.environ.setdefault("SECRET_KEY", "test-secret-key-not-real")
 os.environ.setdefault("ENVIRONMENT", "development")

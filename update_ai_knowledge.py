@@ -11,11 +11,10 @@ Uso por el Agente:
     (Y luego leer docs/ai_context_dump.md)
 """
 
-import os
 import json
 import subprocess
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 ROOT = Path(__file__).parent
 OUTPUT = ROOT / "docs" / "ai_context_dump.md"
@@ -70,7 +69,7 @@ Este archivo es un snapshot automático del proyecto. Léelo para actualizar tu 
 """
     with open(OUTPUT, "w", encoding="utf-8") as f:
         f.write(content)
-    
+
     print(f"✅ Contexto IA actualizado exitosamente en: {OUTPUT.relative_to(ROOT)}")
 
 

@@ -2,8 +2,8 @@
 test_agente.py — Tests para los endpoints del Agente FastAPI
 """
 
-import sys
 import os
+import sys
 
 # Agregar el directorio del agente al path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "agente"))

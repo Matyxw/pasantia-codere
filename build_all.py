@@ -1,6 +1,6 @@
 import os
-import subprocess
 import shutil
+import subprocess
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 RELEASE_DIR = os.path.join(ROOT_DIR, "Release_v2")
