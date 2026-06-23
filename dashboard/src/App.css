@@ -4,24 +4,24 @@
    DESIGN TOKENS
 ───────────────────────────────────── */
 :root {
-  --bg-base:        #080b14;
-  --bg-surface:     #0e1320;
-  --bg-card:        rgba(255, 255, 255, 0.04);
-  --bg-card-hover:  rgba(255, 255, 255, 0.07);
-  --bg-glass:       rgba(14, 19, 32, 0.85);
-  --bg-modal:       #0e1320;
+  --bg-base:        #09090b;
+  --bg-surface:     #121214;
+  --bg-card:        rgba(255, 255, 255, 0.03);
+  --bg-card-hover:  rgba(255, 255, 255, 0.06);
+  --bg-glass:       rgba(18, 18, 20, 0.85);
+  --bg-modal:       #121214;
 
-  --color-online:   #00e676;
-  --color-online-glow: rgba(0, 230, 118, 0.3);
-  --color-offline:  #ff3d57;
-  --color-offline-glow: rgba(255, 61, 87, 0.3);
-  --color-unknown:  #ffd740;
-  --color-accent:   #448aff;
-  --color-accent-2: #7c4dff;
+  --color-online:   #7DB828;
+  --color-online-glow: rgba(125, 184, 40, 0.3);
+  --color-offline:  #ef4444;
+  --color-offline-glow: rgba(239, 68, 68, 0.3);
+  --color-unknown:  #eab308;
+  --color-accent:   #7DB828;
+  --color-accent-2: #659a1d;
 
-  --text-primary:   #e8eaf6;
-  --text-secondary: #8892b0;
-  --text-muted:     #4a5568;
+  --text-primary:   #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted:     #475569;
   --text-heading:   #ffffff;
 
   --border:         rgba(255, 255, 255, 0.07);
@@ -67,8 +67,8 @@ html, body, #root {
   height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(68, 138, 255, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(124, 77, 255, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(125, 184, 40, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(101, 154, 29, 0.08) 0%, transparent 60%),
     var(--bg-base);
 }
 
