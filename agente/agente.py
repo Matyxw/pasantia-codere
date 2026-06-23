@@ -5,6 +5,15 @@ Corre en cada PC que quieras monitorear.
 Puerto: 8001
 """
 
+import sys
+import os
+
+# Fix for --noconsole mode (sys.stdout is None)
+if sys.stdout is None:
+    sys.stdout = open(os.devnull, 'w')
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, 'w')
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import psutil
@@ -267,4 +276,4 @@ if __name__ == "__main__":
     print(f"  URL      : http://{local_ip}:8001")
     print(f"  Docs     : http://{local_ip}:8001/docs")
     print("=" * 50)
-    uvicorn.run(app, host="0.0.0.0", port=8001, log_level="warning")
+    uvicorn.run(app, host="0.0.0.0", port=8001, log_config=None)
