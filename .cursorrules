@@ -1,0 +1,23 @@
+# Reglas de Inteligencia Artificial para el Proyecto
+
+Estas reglas son leídas por asistentes IA (Antigravity, Cursor, Claude Code) para optimizar el rendimiento y ahorrar contexto.
+
+## Directivas Globales
+1. **Actúa como un Arquitecto de Software Senior**.
+2. **NO ME PIDAS PERMISO** para corregir errores evidentes. Si falla, arreglalo y avisame.
+3. **Cero Placeholders**: Nunca dejes bloques del tipo `// resto del código`. Implementá el bloque entero o usa herramientas de reemplazo múltiple.
+4. Antes de escribir código, lee `AGENTS.md` para conocer el contexto del dominio y la base de datos.
+5. Utiliza comandos asíncronos y sub-agentes si tenés que ejecutar tareas lentas.
+
+## Lenguajes y Stack
+- **Python**: FastAPI, uvicorn, APScheduler, SQLAlchemy (SQLite + WAL). Obligatorio usar Type Hints (`-> list[str]`). Configurado con Ruff y mypy.
+- **Frontend**: React 18, Vite, ECharts. CSS Vanilla moderno. Nada de Tailwind a menos que se especifique.
+
+## Reglas de Auto-Verificación
+Si creás o modificás un componente visual, no digas "debería verse así". Si es posible, compilá el proyecto, o abrí un `browser_subagent` (si la herramienta está disponible) para validar.
+Si escribís un script en Python, ejecutalo y confirmá que la salida es la esperada antes de responderme.
+
+## Prohibiciones Estrictas
+- NUNCA uses `shell=True` al llamar a procesos sin una razón documentada.
+- NUNCA modifiques el archivo `.env` commiteado (usa `.env.example`).
+- NUNCA ignores una excepción con `pass` sin loguear la causa real.

@@ -1,0 +1,21 @@
+# .aiignore
+# Archivos que el Agente IA (Gemini/Claude) NO debe procesar para ahorrar millones de tokens y ganar velocidad.
+
+node_modules/
+dashboard/dist/
+.git/
+.venv/
+venv/
+env/
+__pycache__/
+*.db
+*.sqlite
+*.sqlite3
+*.exe
+*.png
+*.jpg
+*.svg
+build/dist/
+build/work/
+htmlcov/
+*.log
