@@ -769,6 +769,10 @@
   ('base64', 'C:\\Python314\\Lib\\base64.py', 'PYMODULE'),
   ('bdb', 'C:\\Python314\\Lib\\bdb.py', 'PYMODULE'),
   ('bisect', 'C:\\Python314\\Lib\\bisect.py', 'PYMODULE'),
+  ('bottle',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\bottle.py',
+   'PYMODULE'),
   ('brotli',
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\brotli.py',
@@ -782,6 +786,70 @@
   ('certifi.core',
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\certifi\\core.py',
+   'PYMODULE'),
+  ('cffi',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\__init__.py',
+   'PYMODULE'),
+  ('cffi._imp_emulation',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\_imp_emulation.py',
+   'PYMODULE'),
+  ('cffi._shimmed_dist_utils',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\_shimmed_dist_utils.py',
+   'PYMODULE'),
+  ('cffi.api',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\api.py',
+   'PYMODULE'),
+  ('cffi.cffi_opcode',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\cffi_opcode.py',
+   'PYMODULE'),
+  ('cffi.commontypes',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\commontypes.py',
+   'PYMODULE'),
+  ('cffi.cparser',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\cparser.py',
+   'PYMODULE'),
+  ('cffi.error',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\error.py',
+   'PYMODULE'),
+  ('cffi.ffiplatform',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\ffiplatform.py',
+   'PYMODULE'),
+  ('cffi.lock',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\lock.py',
+   'PYMODULE'),
+  ('cffi.model',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\model.py',
+   'PYMODULE'),
+  ('cffi.pkgconfig',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\pkgconfig.py',
+   'PYMODULE'),
+  ('cffi.recompiler',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\recompiler.py',
+   'PYMODULE'),
+  ('cffi.vengine_cpy',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\vengine_cpy.py',
+   'PYMODULE'),
+  ('cffi.vengine_gen',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\vengine_gen.py',
+   'PYMODULE'),
+  ('cffi.verifier',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\cffi\\verifier.py',
    'PYMODULE'),
   ('charset_normalizer',
    'C:\\Users\\Lucas '
@@ -874,6 +942,70 @@
   ('click.utils',
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\click\\utils.py',
+   'PYMODULE'),
+  ('clr',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr.py',
+   'PYMODULE'),
+  ('clr_loader',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\__init__.py',
+   'PYMODULE'),
+  ('clr_loader.ffi',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\ffi\\__init__.py',
+   'PYMODULE'),
+  ('clr_loader.ffi.hostfxr',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\ffi\\hostfxr.py',
+   'PYMODULE'),
+  ('clr_loader.ffi.mono',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\ffi\\mono.py',
+   'PYMODULE'),
+  ('clr_loader.ffi.netfx',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\ffi\\netfx.py',
+   'PYMODULE'),
+  ('clr_loader.hostfxr',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\hostfxr.py',
+   'PYMODULE'),
+  ('clr_loader.mono',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\mono.py',
+   'PYMODULE'),
+  ('clr_loader.netfx',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\netfx.py',
+   'PYMODULE'),
+  ('clr_loader.types',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\types.py',
+   'PYMODULE'),
+  ('clr_loader.util',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\util\\__init__.py',
+   'PYMODULE'),
+  ('clr_loader.util.clr_error',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\util\\clr_error.py',
+   'PYMODULE'),
+  ('clr_loader.util.coreclr_errors',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\util\\coreclr_errors.py',
+   'PYMODULE'),
+  ('clr_loader.util.find',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\util\\find.py',
+   'PYMODULE'),
+  ('clr_loader.util.hostfxr_errors',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\util\\hostfxr_errors.py',
+   'PYMODULE'),
+  ('clr_loader.util.runtime_spec',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\clr_loader\\util\\runtime_spec.py',
    'PYMODULE'),
   ('cmd', 'C:\\Python314\\Lib\\cmd.py', 'PYMODULE'),
   ('code', 'C:\\Python314\\Lib\\code.py', 'PYMODULE'),
@@ -1159,8 +1291,22 @@
    'PYMODULE'),
   ('csv', 'C:\\Python314\\Lib\\csv.py', 'PYMODULE'),
   ('ctypes', 'C:\\Python314\\Lib\\ctypes\\__init__.py', 'PYMODULE'),
+  ('ctypes._aix', 'C:\\Python314\\Lib\\ctypes\\_aix.py', 'PYMODULE'),
   ('ctypes._endian', 'C:\\Python314\\Lib\\ctypes\\_endian.py', 'PYMODULE'),
   ('ctypes._layout', 'C:\\Python314\\Lib\\ctypes\\_layout.py', 'PYMODULE'),
+  ('ctypes.macholib',
+   'C:\\Python314\\Lib\\ctypes\\macholib\\__init__.py',
+   'PYMODULE'),
+  ('ctypes.macholib.dyld',
+   'C:\\Python314\\Lib\\ctypes\\macholib\\dyld.py',
+   'PYMODULE'),
+  ('ctypes.macholib.dylib',
+   'C:\\Python314\\Lib\\ctypes\\macholib\\dylib.py',
+   'PYMODULE'),
+  ('ctypes.macholib.framework',
+   'C:\\Python314\\Lib\\ctypes\\macholib\\framework.py',
+   'PYMODULE'),
+  ('ctypes.util', 'C:\\Python314\\Lib\\ctypes\\util.py', 'PYMODULE'),
   ('ctypes.wintypes', 'C:\\Python314\\Lib\\ctypes\\wintypes.py', 'PYMODULE'),
   ('curses', 'C:\\Python314\\Lib\\curses\\__init__.py', 'PYMODULE'),
   ('curses.has_key', 'C:\\Python314\\Lib\\curses\\has_key.py', 'PYMODULE'),
@@ -1576,6 +1722,98 @@
   ('itsdangerous.url_safe',
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\itsdangerous\\url_safe.py',
+   'PYMODULE'),
+  ('jinja2',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\__init__.py',
+   'PYMODULE'),
+  ('jinja2._identifier',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\_identifier.py',
+   'PYMODULE'),
+  ('jinja2.async_utils',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\async_utils.py',
+   'PYMODULE'),
+  ('jinja2.bccache',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\bccache.py',
+   'PYMODULE'),
+  ('jinja2.compiler',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\compiler.py',
+   'PYMODULE'),
+  ('jinja2.constants',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\constants.py',
+   'PYMODULE'),
+  ('jinja2.debug',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\debug.py',
+   'PYMODULE'),
+  ('jinja2.defaults',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\defaults.py',
+   'PYMODULE'),
+  ('jinja2.environment',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\environment.py',
+   'PYMODULE'),
+  ('jinja2.exceptions',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\exceptions.py',
+   'PYMODULE'),
+  ('jinja2.ext',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\ext.py',
+   'PYMODULE'),
+  ('jinja2.filters',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\filters.py',
+   'PYMODULE'),
+  ('jinja2.idtracking',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\idtracking.py',
+   'PYMODULE'),
+  ('jinja2.lexer',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\lexer.py',
+   'PYMODULE'),
+  ('jinja2.loaders',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\loaders.py',
+   'PYMODULE'),
+  ('jinja2.nodes',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\nodes.py',
+   'PYMODULE'),
+  ('jinja2.optimizer',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\optimizer.py',
+   'PYMODULE'),
+  ('jinja2.parser',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\parser.py',
+   'PYMODULE'),
+  ('jinja2.runtime',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\runtime.py',
+   'PYMODULE'),
+  ('jinja2.sandbox',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\sandbox.py',
+   'PYMODULE'),
+  ('jinja2.tests',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\tests.py',
+   'PYMODULE'),
+  ('jinja2.utils',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\utils.py',
+   'PYMODULE'),
+  ('jinja2.visitor',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\jinja2\\visitor.py',
    'PYMODULE'),
   ('json', 'C:\\Python314\\Lib\\json\\__init__.py', 'PYMODULE'),
   ('json.decoder', 'C:\\Python314\\Lib\\json\\decoder.py', 'PYMODULE'),
@@ -3157,6 +3395,10 @@
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\plyer\\utils.py',
    'PYMODULE'),
   ('pprint', 'C:\\Python314\\Lib\\pprint.py', 'PYMODULE'),
+  ('proxy_tools',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\proxy_tools\\__init__.py',
+   'PYMODULE'),
   ('psutil',
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\psutil\\__init__.py',
@@ -3174,6 +3416,26 @@
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\psutil\\_pswindows.py',
    'PYMODULE'),
   ('py_compile', 'C:\\Python314\\Lib\\py_compile.py', 'PYMODULE'),
+  ('pycparser',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pycparser\\__init__.py',
+   'PYMODULE'),
+  ('pycparser.ast_transforms',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pycparser\\ast_transforms.py',
+   'PYMODULE'),
+  ('pycparser.c_ast',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pycparser\\c_ast.py',
+   'PYMODULE'),
+  ('pycparser.c_lexer',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pycparser\\c_lexer.py',
+   'PYMODULE'),
+  ('pycparser.c_parser',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pycparser\\c_parser.py',
+   'PYMODULE'),
   ('pydantic',
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pydantic\\__init__.py',
@@ -3609,6 +3871,10 @@
    'PYMODULE'),
   ('pydoc_data.topics',
    'C:\\Python314\\Lib\\pydoc_data\\topics.py',
+   'PYMODULE'),
+  ('pythonnet',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\pythonnet\\__init__.py',
    'PYMODULE'),
   ('queue', 'C:\\Python314\\Lib\\queue.py', 'PYMODULE'),
   ('quopri', 'C:\\Python314\\Lib\\quopri.py', 'PYMODULE'),
@@ -5775,6 +6041,174 @@
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\websockets\\version.py',
    'PYMODULE'),
+  ('webview',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\__init__.py',
+   'PYMODULE'),
+  ('webview.dom',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\dom\\__init__.py',
+   'PYMODULE'),
+  ('webview.dom.classlist',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\dom\\classlist.py',
+   'PYMODULE'),
+  ('webview.dom.dom',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\dom\\dom.py',
+   'PYMODULE'),
+  ('webview.dom.element',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\dom\\element.py',
+   'PYMODULE'),
+  ('webview.dom.event',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\dom\\event.py',
+   'PYMODULE'),
+  ('webview.dom.propsdict',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\dom\\propsdict.py',
+   'PYMODULE'),
+  ('webview.errors',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\errors.py',
+   'PYMODULE'),
+  ('webview.event',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\event.py',
+   'PYMODULE'),
+  ('webview.guilib',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\guilib.py',
+   'PYMODULE'),
+  ('webview.http',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\http.py',
+   'PYMODULE'),
+  ('webview.localization',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\localization.py',
+   'PYMODULE'),
+  ('webview.menu',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\menu.py',
+   'PYMODULE'),
+  ('webview.models',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\models.py',
+   'PYMODULE'),
+  ('webview.platforms',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\__init__.py',
+   'PYMODULE'),
+  ('webview.platforms.android',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\__init__.py',
+   'PYMODULE'),
+  ('webview.platforms.android.app',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\app.py',
+   'PYMODULE'),
+  ('webview.platforms.android.base',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\base.py',
+   'PYMODULE'),
+  ('webview.platforms.android.event',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\event.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jclass',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jclass\\__init__.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jclass.app',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jclass\\app.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jclass.content',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jclass\\content.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jclass.net',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jclass\\net.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jclass.os',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jclass\\os.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jclass.view',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jclass\\view.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jclass.webkit',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jclass\\webkit.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jinterface',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jinterface\\__init__.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jinterface.pywebview',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jinterface\\pywebview.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jinterface.view',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jinterface\\view.py',
+   'PYMODULE'),
+  ('webview.platforms.android.jinterface.webkit',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\android\\jinterface\\webkit.py',
+   'PYMODULE'),
+  ('webview.platforms.cef',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\cef.py',
+   'PYMODULE'),
+  ('webview.platforms.cocoa',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\cocoa.py',
+   'PYMODULE'),
+  ('webview.platforms.edgechromium',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\edgechromium.py',
+   'PYMODULE'),
+  ('webview.platforms.gtk',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\gtk.py',
+   'PYMODULE'),
+  ('webview.platforms.mshtml',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\mshtml.py',
+   'PYMODULE'),
+  ('webview.platforms.qt',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\qt.py',
+   'PYMODULE'),
+  ('webview.platforms.win32',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\win32.py',
+   'PYMODULE'),
+  ('webview.platforms.winforms',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\platforms\\winforms.py',
+   'PYMODULE'),
+  ('webview.screen',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\screen.py',
+   'PYMODULE'),
+  ('webview.state',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\state.py',
+   'PYMODULE'),
+  ('webview.util',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\util.py',
+   'PYMODULE'),
+  ('webview.window',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\webview\\window.py',
+   'PYMODULE'),
   ('werkzeug',
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\__init__.py',
@@ -5955,6 +6389,14 @@
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\werkzeug\\wsgi.py',
    'PYMODULE'),
+  ('wsgiref', 'C:\\Python314\\Lib\\wsgiref\\__init__.py', 'PYMODULE'),
+  ('wsgiref.handlers', 'C:\\Python314\\Lib\\wsgiref\\handlers.py', 'PYMODULE'),
+  ('wsgiref.headers', 'C:\\Python314\\Lib\\wsgiref\\headers.py', 'PYMODULE'),
+  ('wsgiref.simple_server',
+   'C:\\Python314\\Lib\\wsgiref\\simple_server.py',
+   'PYMODULE'),
+  ('wsgiref.types', 'C:\\Python314\\Lib\\wsgiref\\types.py', 'PYMODULE'),
+  ('wsgiref.util', 'C:\\Python314\\Lib\\wsgiref\\util.py', 'PYMODULE'),
   ('xml', 'C:\\Python314\\Lib\\xml\\__init__.py', 'PYMODULE'),
   ('xml.etree', 'C:\\Python314\\Lib\\xml\\etree\\__init__.py', 'PYMODULE'),
   ('xml.etree.ElementInclude',

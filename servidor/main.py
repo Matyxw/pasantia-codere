@@ -447,11 +447,34 @@ if os.path.exists(dist_path):
 # Run
 # ──────────────────────────────────────────
 if __name__ == "__main__":
+    import threading
+    import webview
+    import sys
+    import os
+
+    # Evitamos crashes en modo noconsole mockeando sys.stdout
+    if sys.stdout is None:
+        sys.stdout = open(os.devnull, 'w')
+    if sys.stderr is None:
+        sys.stderr = open(os.devnull, 'w')
+
     print("=" * 55)
-    print("  PC MONITOR v2.0 — SERVIDOR CENTRAL")
+    print("  PC MONITOR v2.0 — SERVIDOR CENTRAL (GUI)")
     print("=" * 55)
-    print(f"  API  : http://0.0.0.0:8000")
-    print(f"  Docs : http://localhost:8000/docs")
-    print(f"  WS   : ws://localhost:8000/ws")
-    print("=" * 55)
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+
+    def run_server():
+        # log_config=None para que uvicorn no busque isatty en --noconsole
+        uvicorn.run(app, host="0.0.0.0", port=8000, log_config=None)
+
+    # Iniciar servidor FastAPI en segundo plano
+    t = threading.Thread(target=run_server, daemon=True)
+    t.start()
+
+    # Iniciar WebView en el hilo principal
+    # Apuntamos al localhost:8000 donde corre nuestro dashboard montado en FastAPI
+    window = webview.create_window('Codere PC Monitor', 'http://127.0.0.1:8000', width=1200, height=800)
+    webview.start()
+    
+    # Al cerrar la ventana, matamos forzadamente el proceso para que uvicorn se apague
+    os._exit(0)
+

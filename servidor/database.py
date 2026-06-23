@@ -8,8 +8,13 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, Text, even
 from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
 import os
+import sys
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "monitor.db")
+if getattr(sys, 'frozen', False):
+    DB_PATH = os.path.join(os.path.dirname(sys.executable), "monitor.db")
+else:
+    DB_PATH = os.path.join(os.path.dirname(__file__), "monitor.db")
+
 DATABASE_URL = f"sqlite:///{DB_PATH}"
 
 engine = create_engine(

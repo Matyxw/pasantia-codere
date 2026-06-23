@@ -20,7 +20,7 @@ def build():
 
     # 1. Servidor
     print("\n[1/3] Compilando Servidor Central (con Dashboard incrustado)...")
-    cmd_servidor = f'python -m PyInstaller --noconfirm --clean --onefile --name "PC_Monitor_Servidor" --exclude-module PyQt5 --exclude-module tkinter --add-data "{ROOT_DIR}/dashboard/dist;dashboard_dist" {ROOT_DIR}/servidor/main.py'
+    cmd_servidor = f'python -m PyInstaller --noconfirm --clean --onefile --noconsole --name "PC_Monitor_Servidor" --hidden-import webview --exclude-module PyQt5 --exclude-module tkinter --add-data "{ROOT_DIR}/dashboard/dist;dashboard_dist" {ROOT_DIR}/servidor/main.py'
     run_cmd(cmd_servidor)
     shutil.copy(os.path.join(ROOT_DIR, "dist", "PC_Monitor_Servidor.exe"), RELEASE_DIR)
 
