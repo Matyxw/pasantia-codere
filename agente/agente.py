@@ -169,6 +169,23 @@ def get_metrics():
     }
 
 def discover_server():
+    # 1. Fallback de archivo de configuración (Enterprise Override)
+    # Permite fijar la IP si el router bloquea el UDP Broadcast (LAN vs WiFi)
+    if getattr(sys, 'frozen', False):
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        
+    config_path = os.path.join(base_dir, "agent_config.json")
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, "r") as f:
+                cfg = json.load(f)
+                if "server_ip" in cfg:
+                    return cfg["server_ip"]
+        except Exception:
+            pass
+
     print("[UDP] Buscando servidor Codere en la red...")
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
@@ -210,7 +227,7 @@ def execute_command(comando: str):
 def main():
     local_ip = _get_local_ip()
     hostname = socket.gethostname()
-    os_info = f"{platform.system()} {platform.release()}"
+    os_info = f"{platform.system()} {platform.release()} ({platform.architecture()[0]})"
     
     print("=" * 50)
     print("  AGENTE PUSH CODERE v3.0")

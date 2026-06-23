@@ -548,7 +548,7 @@ if __name__ == "__main__":
         def __init__(self):
             self.window = None
 
-        def export_excel_dialog(self):
+        def export_excel_dialog(self, target_ip=None):
             import webview
             from datetime import datetime
             from database import SessionLocal, PC, Event, Metric
@@ -597,7 +597,11 @@ if __name__ == "__main__":
                     cell.font = h_font
                     cell.alignment = Alignment(horizontal="center", vertical="center")
 
-                for pc in db.query(PC).all():
+                query = db.query(PC)
+                if target_ip and str(target_ip).strip():
+                    query = query.filter(PC.ip == str(target_ip).strip())
+
+                for pc in query.all():
                     # Parsear last_metrics si existe
                     cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, conns, procs = ("", "", "", "", "", "", "", "")
                     if pc.last_metrics:
@@ -613,10 +617,19 @@ if __name__ == "__main__":
                                 first_disk = list(disks.values())[0]
                                 disk_pct = f"{first_disk.get('percent', '')}%"
                                 
-                            temp = m.get('temperature', {}).get('cpu_avg', '')
+                            max_temp = 0.0
+                            temps_dict = m.get('temperatures', {})
+                            for sensor_list in temps_dict.values():
+                                for sensor in sensor_list:
+                                    if sensor.get('current', 0) > max_temp:
+                                        max_temp = sensor.get('current', 0)
+                            if max_temp > 0:
+                                temp = f"{round(max_temp, 1)} °C"
+                                
                             conns = m.get('network', {}).get('connections', '')
                             procs = m.get('processes', {}).get('total', '')
-                        except:
+                        except Exception as e:
+                            print("Error parsing metrics for Excel:", e)
                             pass
                             
                     ws.append([

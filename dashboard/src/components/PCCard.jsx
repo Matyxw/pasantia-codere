@@ -51,7 +51,16 @@ export default memo(function PCCard({ pc, selected, onClick }) {
   })()
 
   const uptime  = m?.uptime_seconds ? formatUptime(m.uptime_seconds) : null
-  const temp    = m?.temperature?.cpu_avg ?? m?.temperature?.current ?? null
+  const temp = (() => {
+    if (!m?.temperatures) return null;
+    let maxT = 0;
+    Object.values(m.temperatures).forEach(sensors => {
+      sensors.forEach(s => {
+        if (s.current > maxT) maxT = s.current;
+      });
+    });
+    return maxT > 0 ? maxT : null;
+  })();
   const netSent = m?.network?.bytes_sent_rate ?? null
   const netRecv = m?.network?.bytes_recv_rate ?? null
   const procs   = m?.processes?.total ?? null
