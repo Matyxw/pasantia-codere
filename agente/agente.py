@@ -106,7 +106,7 @@ def get_metrics() -> dict[str, Any]:
                 "percent": usage.percent,
             }
         except PermissionError:
-            pass
+            logger.debug("Permiso denegado leyendo partición %s", part.device)
         except Exception as e:
             logger.debug("Error accediendo a particiones de disco (%s): %s", part.device, e, exc_info=True)
 
@@ -138,8 +138,8 @@ def get_metrics() -> dict[str, Any]:
                 "memory_mb": round(mem_info.rss / (1024 ** 2), 1) if mem_info else 0,
                 "status": p.info.get('status', ''),
             })
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-            pass
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess) as e:
+            logger.debug("Error esperado leyendo proceso: %s", e)
         except Exception as e:
             logger.debug("Excepción procesando PID: %s", e, exc_info=True)
 
@@ -167,8 +167,8 @@ def get_metrics() -> dict[str, Any]:
                 "host": u.host or "",
                 "started": u.started
             })
-    except psutil.AccessDenied:
-        pass
+    except psutil.AccessDenied as e:
+        logger.debug("Permiso denegado listando usuarios: %s", e)
     except Exception as e:
         logger.debug("Fallo al listar usuarios activos: %s", e, exc_info=True)
 

@@ -35,8 +35,8 @@ from database import PC, Event, Metric, SessionLocal, get_db
 try:
     from openpyxl import Workbook  # noqa: F401
     from openpyxl.styles import Alignment, Font, PatternFill  # noqa: F401
-except ImportError:
-    pass
+except ImportError as e:
+    logger.warning("Falta openpyxl. La exportación a Excel no estará disponible: %s", e)
 
 pending_commands = {}
 command_results = {}
