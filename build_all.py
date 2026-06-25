@@ -30,6 +30,7 @@ def build_dashboard() -> None:
         [npm, "run", "build"],
         cwd=dashboard_dir,
         check=True,
+        shell=(sys.platform == "win32"),
     )
 
 
@@ -77,7 +78,8 @@ def build() -> None:
     if os.path.exists(icon_path):
         cmd_servidor.insert(6, f"--icon={icon_path}")
     run_cmd(cmd_servidor)
-    shutil.copy(os.path.join(ROOT_DIR, "dist", "Codere_Monitor_Servidor.exe"), RELEASE_DIR)
+    ext = ".exe" if sys.platform == "win32" else ""
+    shutil.copy(os.path.join(ROOT_DIR, "dist", f"Codere_Monitor_Servidor{ext}"), RELEASE_DIR)
 
     # 2. Agente
     logger.info("\n[2/3] Compilando Agente Invisible...")
@@ -98,7 +100,7 @@ def build() -> None:
     if os.path.exists(icon_path):
         cmd_agente.insert(6, f"--icon={icon_path}")
     run_cmd(cmd_agente)
-    shutil.copy(os.path.join(ROOT_DIR, "dist", "Codere_Agente.exe"), RELEASE_DIR)
+    shutil.copy(os.path.join(ROOT_DIR, "dist", f"Codere_Agente{ext}"), RELEASE_DIR)
 
     # 3. Exportador Excel (si existe el script)
     excel_script = os.path.join(ROOT_DIR, "servidor", "generar_excel_logic.py")
@@ -120,7 +122,7 @@ def build() -> None:
         if os.path.exists(icon_path):
             cmd_excel.insert(6, f"--icon={icon_path}")
         run_cmd(cmd_excel)
-        shutil.copy(os.path.join(ROOT_DIR, "dist", "Codere_Exportar_Excel.exe"), RELEASE_DIR)
+        shutil.copy(os.path.join(ROOT_DIR, "dist", f"Codere_Exportar_Excel{ext}"), RELEASE_DIR)
     else:
         logger.warning("[3/3] Exportador Excel omitido (script no encontrado).")
 
