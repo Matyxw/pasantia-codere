@@ -12,6 +12,7 @@ Este módulo aplica logging estructurado, tipado fuerte y manejo granular de err
 que ninguna caída del módulo o problema de acceso WMI bloquee el ciclo de reporte.
 """
 
+import base64
 import json
 import logging
 import os
@@ -28,11 +29,17 @@ from urllib.parse import urlparse
 import psutil
 import requests
 
+# Cargar variables desde .env si existe en el directorio del ejecutable
+if getattr(sys, "frozen", False):
+    _base_dir = os.path.dirname(sys.executable)
+else:
+    _base_dir = os.path.dirname(os.path.abspath(__file__))
+
 # Configuración de Logging de alto nivel
 logging.basicConfig(
     level=logging.WARNING,
     format="%(asctime)s [%(levelname)s] AGENTE - %(message)s",
-    handlers=[logging.FileHandler("agent.log"), logging.StreamHandler(sys.stdout)],
+    handlers=[logging.FileHandler(os.path.join(_base_dir, "agent.log")), logging.StreamHandler(sys.stdout)],
 )
 logger = logging.getLogger("AgentePush")
 
@@ -45,22 +52,15 @@ if sys.stderr is None:
 BOOT_TIME = datetime.fromtimestamp(psutil.boot_time())
 AGENT_VERSION = "3.1.0-SecurePush"
 
-# Cargar variables desde .env si existe en el directorio del ejecutable
-if getattr(sys, "frozen", False):
-    _base_dir = os.path.dirname(sys.executable)
-else:
-    _base_dir = os.path.dirname(os.path.abspath(__file__))
-
 _env_path = os.path.join(_base_dir, ".env")
 if os.path.exists(_env_path):
-    with open(_env_path, "r", encoding="utf-8") as _f:
+    with open(_env_path, encoding="utf-8") as _f:
         for _line in _f:
             _line = _line.strip()
             if _line and not _line.startswith("#"):
                 _k, _, _v = _line.partition("=")
                 os.environ[_k.strip()] = _v.strip().strip('"').strip("'")
 
-import base64
 _OBF = b"Y29kZXJlX3NlY3JldG9fc3VwZXJfc2VndXJvXzEyMw=="
 SECRET_KEY = os.environ.get("SECRET_KEY", base64.b64decode(_OBF).decode())
 SERVER_URL = os.environ.get("SERVER_URL", "http://10.2.43.30:8000").rstrip("/")

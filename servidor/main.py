@@ -99,7 +99,8 @@ class ConnectionManager:
         # Iterar sobre una copia para evitar RuntimeError si el dict cambia
         for ws, lock in list(self.active.items()):
             try:
-                await ws.send_json(message)
+                async with lock:
+                    await ws.send_json(message)
             except Exception as e:
                 logger.error(
                     "Error transmitiendo a WebSocket. Cliente desconectado abruptamente: %s", e
@@ -614,9 +615,10 @@ if __name__ == "__main__":
             pass
 
         def save_excel(self, target_ip: str | None = None) -> bool:
-            import webview
             from datetime import datetime
-            
+
+            import webview
+
             filename = f"monitor_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
             result = self.window.create_file_dialog(
                 webview.SAVE_DIALOG,
@@ -624,26 +626,24 @@ if __name__ == "__main__":
                 save_filename=filename,
                 file_types=('Excel Files (*.xlsx)', 'All files (*.*)')
             )
-            
+
             if result and len(result) > 0:
                 filepath = result[0]
                 try:
-                    from servidor.database import get_db
                     try:
+                        from database import SessionLocal
                         from generar_excel_logic import build_excel_workbook
                     except ImportError:
+                        from servidor.database import SessionLocal
                         from servidor.generar_excel_logic import build_excel_workbook
 
-                    db_gen = get_db()
-                    db = next(db_gen)
-                    
-                    wb = build_excel_workbook(db, target_ip=target_ip)
-                    wb.save(filepath)
-                    
+                    db = SessionLocal()
                     try:
-                        next(db_gen)
-                    except StopIteration:
-                        pass
+                        wb = build_excel_workbook(db, target_ip=target_ip)
+                        wb.save(filepath)
+                    finally:
+                        db.close()
+
                     return True
                 except Exception as e:
                     print("Error exportando excel:", e)
@@ -657,8 +657,8 @@ if __name__ == "__main__":
     except ImportError:
         from servidor.config import settings
 
-    import time
     import socket
+    import time
     def wait_for_server(port: int, host: str = "127.0.0.1", timeout: float = 5.0) -> None:
         start_time = time.time()
         while time.time() - start_time < timeout:
@@ -667,7 +667,7 @@ if __name__ == "__main__":
                     return
             except OSError:
                 time.sleep(0.1)
-                
+
     # Esperamos a que uvicorn esté listo antes de levantar EdgeChromium
     # Esto evita picos de CPU simultáneos que "traban" la ventana en Windows.
     wait_for_server(settings.server_port)
