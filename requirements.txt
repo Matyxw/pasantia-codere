@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+psutil
+requests
+pydantic-settings
+sqlalchemy
+anyio
+pyinstaller
+openpyxl
