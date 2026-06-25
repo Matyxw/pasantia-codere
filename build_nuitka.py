@@ -54,6 +54,7 @@ def build_with_nuitka():
     flags_servidor.extend([
         "--enable-plugin=pywebview",
         f'--include-data-dir="{os.path.join(ROOT_DIR, "dashboard", "dist")}=dashboard_dist"',
+        "--include-module=plyer.platforms.win.notification",
         "--output-dir=build_nuitka_temp",
         "--output-filename=Codere_Monitor_Servidor.exe"
     ])

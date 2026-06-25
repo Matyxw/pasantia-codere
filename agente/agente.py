@@ -139,6 +139,10 @@ def get_metrics():
     return {
         "timestamp": datetime.now().isoformat(),
         "uptime_seconds": uptime_secs,
+        "system": {
+            "architecture": platform.architecture()[0],
+            "processor": platform.processor()
+        },
         "cpu": {
             "percent": cpu_percent,
             "per_core": cpu_per_core,

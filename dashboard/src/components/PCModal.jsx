@@ -216,8 +216,8 @@ export default function PCModal({ pc, onClose, onDelete, apiUrl }) {
                 <div className="section-title">Hardware y red</div>
                 <div className="info-grid">
                   <StatCard label="Arquitectura"
-                    value={pc.architecture || '—'}
-                    sub={pc.processor?.split(' @')[0] || ''} />
+                    value={m?.system?.architecture || pc.architecture || '—'}
+                    sub={(m?.system?.processor || pc.processor)?.split(' @')[0] || ''} />
                   {m?.battery ? (
                     <StatCard label="Batería"
                       value={`${m.battery.percent}%`}
@@ -253,7 +253,7 @@ export default function PCModal({ pc, onClose, onDelete, apiUrl }) {
                         </div>
                         <div>
                           <div className="user-name">{u.name}</div>
-                          <div className="user-meta">Terminal: {u.terminal || 'Consola'}{u.host ? ` · Desde: ${u.host}` : ''}</div>
+                          <div className="user-meta">Sesión: {u.terminal || 'Consola local'}{u.host ? ` · IP: ${u.host}` : ''}</div>
                         </div>
                       </div>
                     ))}
