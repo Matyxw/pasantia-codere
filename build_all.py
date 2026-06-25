@@ -77,6 +77,9 @@ def build() -> None:
         "Codere_Monitor_Servidor",
         "--add-data",
         f"{dashboard_dist}{os.pathsep}dashboard_dist",
+        "--hidden-import", "plyer.platforms.win.notification",
+        "--hidden-import", "webview.platforms.edgechromium",
+        "--hidden-import", "pythonnet",
         os.path.join(ROOT_DIR, "servidor", "main.py"),
     ]
     if os.path.exists(icon_path):
