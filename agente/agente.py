@@ -63,6 +63,7 @@ if os.path.exists(_env_path):
 import base64
 _OBF = b"Y29kZXJlX3NlY3JldG9fc3VwZXJfc2VndXJvXzEyMw=="
 SECRET_KEY = os.environ.get("SECRET_KEY", base64.b64decode(_OBF).decode())
+SERVER_URL = os.environ.get("SERVER_URL", "http://10.2.43.30:8000").rstrip("/")
 if SECRET_KEY == "CAMBIAR_POR_CLAVE_ALEATORIA_DE_64_CARACTERES":
     logger.warning(
         "SECRET_KEY no configurada. Usando valor por defecto INSEGURO.\n"
