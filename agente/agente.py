@@ -382,9 +382,17 @@ def execute_command(comando: str) -> dict[str, Any]:
         return {"error": "Comando no permitido o malformado", "command": comando}
 
     try:
-        result = subprocess.run(  # noqa: S603
-            cmd_args, capture_output=True, timeout=30, encoding="utf-8", errors="replace"
-        )
+        kwargs = {
+            "capture_output": True,
+            "timeout": 30,
+            "text": True,
+            "errors": "replace",
+            "stdin": subprocess.DEVNULL,
+        }
+        if platform.system() == "Windows":
+            kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+
+        result = subprocess.run(cmd_args, **kwargs)  # noqa: S603
         logger.info("Comando '%s' ejecutado exitosamente con código %d", comando, result.returncode)
         return {
             "command": comando,
