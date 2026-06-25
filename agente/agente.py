@@ -359,8 +359,7 @@ def try_connect(host: str, port: int) -> bool:
         resp = requests.get(
             f"http://{host}:{port}/api/stats",
             headers={"Authorization": f"Bearer {SECRET_KEY}"},
-            timeout=5,
-            proxies={"http": None, "https": None}
+            timeout=5
         )
         if resp.status_code == 200:
             return True
@@ -478,8 +477,7 @@ def main() -> None:
                 f"{server_url}/api/agent/push",
                 json=payload,
                 headers=headers,
-                timeout=5,
-                proxies={"http": None, "https": None}
+                timeout=5
             )
 
             if resp.status_code == 403:
@@ -499,8 +497,7 @@ def main() -> None:
                         f"{server_url}/api/agent/command_result",
                         json={"agent_id": AGENT_ID, "command_id": cmd_id, "result": res},
                         headers=headers,
-                        timeout=5,
-                        proxies={"http": None, "https": None}
+                        timeout=5
                     )
             else:
                 logger.warning("HTTP %d del servidor", resp.status_code)
