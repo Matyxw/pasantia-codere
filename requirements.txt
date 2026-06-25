@@ -10,3 +10,4 @@ pyinstaller
 openpyxl
 apscheduler
 websockets
+plyer
