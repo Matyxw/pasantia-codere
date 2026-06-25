@@ -4,30 +4,38 @@ Tablas: pcs, events, metrics
 WAL mode habilitado para acceso concurrente
 """
 
-import os
-import sys
+import sqlite3
+import typing
 from datetime import datetime
 
 from sqlalchemy import Column, Float, Integer, String, Text, create_engine, event
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
+from sqlalchemy.pool import StaticPool
+from sqlalchemy.pool.base import _ConnectionRecord
 
-if getattr(sys, 'frozen', False):
-    DB_PATH = os.path.join(os.path.dirname(sys.executable), "monitor.db")
-else:
-    DB_PATH = os.path.join(os.path.dirname(__file__), "monitor.db")
+try:
+    from config import settings
+except ImportError:
+    from servidor.config import settings
 
-DATABASE_URL = f"sqlite:///{DB_PATH}"
+_engine_kwargs: dict[str, typing.Any] = {
+    "connect_args": {"check_same_thread": False},
+    "echo": False,
+}
+if settings.database_path.strip() == ":memory:":
+    _engine_kwargs["poolclass"] = StaticPool
 
 engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False},
-    echo=False,
+    settings.database_url,
+    **_engine_kwargs,
 )
 
 
 # Habilitar WAL mode y optimizaciones al crear la conexion
 @event.listens_for(engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
+def set_sqlite_pragma(
+    dbapi_connection: sqlite3.Connection, connection_record: _ConnectionRecord
+) -> None:
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA journal_mode=WAL")
     cursor.execute("PRAGMA cache_size=10000")
@@ -44,7 +52,8 @@ class PC(Base):
     __tablename__ = "pcs"
 
     id = Column(Integer, primary_key=True, index=True)
-    ip = Column(String, unique=True, index=True, nullable=False)
+    agent_id = Column(String, unique=True, index=True, nullable=True)
+    ip = Column(String, nullable=False)
     name = Column(String, nullable=False)
     hostname = Column(String)
     os = Column(String)
@@ -87,7 +96,7 @@ class Metric(Base):
 Base.metadata.create_all(bind=engine)
 
 
-def get_db():
+def get_db() -> typing.Generator[Session, None, None]:
     """Dependency para FastAPI"""
     db = SessionLocal()
     try:

@@ -3,14 +3,12 @@ import Header from './components/Header'
 import PCGrid from './components/PCGrid'
 import Sidebar from './components/Sidebar'
 import PCModal from './components/PCModal'
-import RegisterModal from './components/RegisterModal'
-import ScanModal from './components/ScanModal'
 import { ToastContainer, toast } from './components/Toast'
 import './App.css'
 
-const API = '/api'
-const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-const WS_URL = `${wsProtocol}//${window.location.host}/ws`
+const API = import.meta.env.VITE_API_URL || (window.location.protocol + '//' + window.location.host + '/api')
+const WS_PROTOCOL = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+const WS_URL = import.meta.env.VITE_WS_URL || (WS_PROTOCOL + '//' + window.location.host + '/ws')
 
 function formatDowntime(secs) {
   if (!secs) return null
@@ -23,8 +21,6 @@ export default function App() {
   const [pcs, setPcs] = useState([])
   const [events, setEvents] = useState([])
   const [selectedPC, setSelectedPC] = useState(null)
-  const [showRegister, setShowRegister] = useState(false)
-  const [showScan, setShowScan] = useState(false)
   const [wsStatus, setWsStatus] = useState('connecting')
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem('codere-theme') === 'dark'
@@ -105,39 +101,42 @@ export default function App() {
     }
   }, [])
 
-  const connectWS = useCallback(() => {
-    if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) return
-
-    setWsStatus('connecting')
-    const ws = new WebSocket(WS_URL)
-    wsRef.current = ws
-
-    ws.onopen = () => {
-      setWsStatus('open')
-      if (reconnectTimer.current) {
-        clearInterval(reconnectTimer.current)
-        reconnectTimer.current = null
-      }
-    }
-
-    ws.onmessage = (e) => {
-      try {
-        handleMessage(JSON.parse(e.data))
-      } catch {}
-    }
-
-    ws.onclose = () => {
-      setWsStatus('closed')
-      if (!reconnectTimer.current) {
-        reconnectTimer.current = setInterval(connectWS, 3000)
-      }
-    }
-
-    ws.onerror = () => ws.close()
-  }, [handleMessage])
-
   useEffect(() => {
+    function connectWS() {
+      if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) return
+
+      setWsStatus('connecting')
+      const ws = new WebSocket(WS_URL)
+      wsRef.current = ws
+
+      ws.onopen = () => {
+        setWsStatus('open')
+        if (reconnectTimer.current) {
+          clearInterval(reconnectTimer.current)
+          reconnectTimer.current = null
+        }
+      }
+
+      ws.onmessage = (e) => {
+        try {
+          handleMessage(JSON.parse(e.data))
+        } catch (err) {
+          console.error("WS Parse Error", err)
+        }
+      }
+
+      ws.onclose = () => {
+        setWsStatus('closed')
+        if (!reconnectTimer.current) {
+          reconnectTimer.current = setInterval(() => connectWS(), 3000)
+        }
+      }
+
+      ws.onerror = () => ws.close()
+    }
+
     connectWS()
+    
     return () => {
       if (wsRef.current) {
         wsRef.current.onclose = null // Evitar loop de reconexión al desmontar
@@ -148,7 +147,7 @@ export default function App() {
         reconnectTimer.current = null
       }
     }
-  }, [connectWS])
+  }, [handleMessage])
 
   // Keep-alive ping every 30s
   useEffect(() => {
@@ -159,21 +158,6 @@ export default function App() {
     }, 30000)
     return () => clearInterval(ping)
   }, [])
-
-  const handleRegister = async (ip, name) => {
-    const resp = await fetch(`${API}/pcs`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ip, name }),
-    })
-    const data = await resp.json()
-    if (!resp.ok) throw new Error(data.detail || 'Error al registrar')
-    setPcs(prev => {
-      if (prev.find(p => p.id === data.id)) return prev
-      return [...prev, data]
-    })
-    toast.success(`La máquina ${name} fue registrada exitosamente.`)
-  }
 
   const handleDelete = async (pcId) => {
     await fetch(`${API}/pcs/${pcId}`, { method: 'DELETE' })
@@ -194,8 +178,6 @@ export default function App() {
       <Header
         stats={stats}
         wsStatus={wsStatus}
-        onRegister={() => setShowRegister(true)}
-        onScan={() => setShowScan(true)}
         apiUrl={API}
         darkMode={darkMode}
         onToggleDark={() => setDarkMode(d => !d)}
@@ -221,21 +203,7 @@ export default function App() {
         />
       )}
 
-      {showRegister && (
-        <RegisterModal
-          onClose={() => setShowRegister(false)}
-          onRegister={handleRegister}
-        />
-      )}
 
-      {showScan && (
-        <ScanModal
-          onClose={() => setShowScan(false)}
-          onRegister={handleRegister}
-          apiUrl={API}
-          existingIPs={pcs.map(p => p.ip)}
-        />
-      )}
 
       <ToastContainer />
     </div>

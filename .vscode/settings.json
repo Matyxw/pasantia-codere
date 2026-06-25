@@ -81,6 +81,5 @@
 
   // ── Extensiones ─────────────────────────────────────────────────────
   "workbench.colorTheme": "Dark Modern",
-  "workbench.iconTheme": "material-icon-theme",
-  "snyk.advanced.autoSelectOrganization": true
+  "workbench.iconTheme": "material-icon-theme"
 }

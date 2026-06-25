@@ -2,8 +2,6 @@
 test_api_pcs.py — Tests para el CRUD de PCs en el servidor central
 """
 
-
-import pytest
 from fastapi.testclient import TestClient
 
 

@@ -1,0 +1,259 @@
+import json
+import logging
+
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font, PatternFill
+from sqlalchemy.orm import Session
+
+try:
+    from database import PC, Event, Metric
+except ImportError:
+    from servidor.database import PC, Event, Metric
+
+logger = logging.getLogger("ExcelLogic")
+
+
+def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
+    """
+    Construye y ensambla un Workbook de openpyxl estructurado para exportar la telemetría corporativa.
+
+    [POR QUÉ EXISTE ESTE MÓDULO]:
+    En fases anteriores, tanto el CLI local como la API Web generaban los Excel con lógica duplicada y acoplada.
+    Este módulo abstrae la generación para cumplir con el principio DRY (Don't Repeat Yourself), permitiendo que
+    cualquier cliente (CLI, Tareas en segundo plano, o Requests HTTP) pueda exportar reportes bajo una misma
+    fuente de verdad y estándares visuales (Codere Branding).
+
+    [CONSIDERACIONES DE PERFORMANCE]:
+    Esta es una operación intensiva en CPU e I/O (miles de registros). Cuando es invocada desde FastAPI,
+    el endpoint DEBE estar declarado como `def` síncrono (no `async def`) para ser delegado al ThreadPool
+    interno de uvicorn, evitando la asfixia (Starvation) del Event Loop ASGI principal (Regla #8 de AGENTS.md).
+
+    Args:
+        db (Session): Sesión de base de datos activa SQLAlchemy.
+        target_ip (str | None): IP de filtrado para generar un reporte aislado de un único nodo.
+
+    Returns:
+        Workbook: Instancia en memoria del libro Excel con hojas renderizadas.
+    """
+    wb = Workbook()
+
+    # ── Hoja 1: Resumen de Flota (PCs) ──
+    ws = wb.active
+    ws.title = "Resumen de Flota"
+
+    headers = [
+        "ID",
+        "IP",
+        "Nombre",
+        "Hostname",
+        "SO",
+        "Estado",
+        "Arquitectura",
+        "Procesador",
+        "CPU %",
+        "RAM Total (GB)",
+        "RAM Uso (GB)",
+        "RAM %",
+        "Disco %",
+        "Temp Máx (ºC)",
+        "Batería %",
+        "Conexiones",
+        "Procesos",
+        "Último visto",
+        "Registrado",
+    ]
+    ws.append(headers)
+
+    # Codere Branding Headers
+    h_fill = PatternFill(start_color="7EBB28", end_color="7EBB28", fill_type="solid")
+    h_font = Font(bold=True, color="FFFFFF", size=11)
+    for cell in ws[1]:
+        cell.fill = h_fill
+        cell.font = h_font
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    query = db.query(PC)
+    if target_ip and str(target_ip).strip():
+        query = query.filter(PC.ip == str(target_ip).strip())
+
+    for pc in query.all():
+        arch, proc, cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, battery, conns, procs = (
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        )
+        if pc.last_metrics:
+            try:
+                m = json.loads(pc.last_metrics)
+
+                arch = m.get("system", {}).get("architecture", "")
+                proc = m.get("system", {}).get("processor", "")
+
+                cpu = f"{m.get('cpu', {}).get('percent', '')}%"
+                ram_tot = m.get("memory", {}).get("total_gb", "")
+                ram_use = m.get("memory", {}).get("used_gb", "")
+                ram_pct = f"{m.get('memory', {}).get('percent', '')}%"
+
+                disks = m.get("disk", {})
+                if disks:
+                    first_disk = list(disks.values())[0]
+                    disk_pct = f"{first_disk.get('percent', '')}%"
+
+                max_temp = 0.0
+                temps_dict = m.get("temperatures", {})
+                if temps_dict:
+                    for sensor_list in temps_dict.values():
+                        for sensor in sensor_list:
+                            if sensor.get("current", 0) > max_temp:
+                                max_temp = sensor.get("current", 0)
+                if max_temp > 0:
+                    temp = f"{round(max_temp, 1)} °C"
+
+                bat = m.get("battery")
+                if bat:
+                    battery = f"{bat.get('percent', '')}%"
+
+                conns = m.get("network", {}).get("connections", "")
+                procs = m.get("processes", {}).get("total", "")
+            except json.JSONDecodeError as e:
+                logger.error("JSON corrupto en métricas para PC ID %s: %s", pc.id, e)
+            except Exception as e:
+                logger.error(
+                    "Fallo imprevisto parseando métricas para Excel (PC %s): %s",
+                    pc.id,
+                    e,
+                    exc_info=True,
+                )
+
+        ws.append(
+            [
+                pc.id,
+                pc.ip,
+                pc.name,
+                pc.hostname or "",
+                pc.os or "",
+                pc.status,
+                arch,
+                proc,
+                cpu,
+                ram_tot,
+                ram_use,
+                ram_pct,
+                disk_pct,
+                temp,
+                battery,
+                conns,
+                procs,
+                pc.last_seen or "",
+                pc.registered_at,
+            ]
+        )
+
+    for col in ws.columns:
+        max_len = 0
+        for cell in col:
+            if cell.value:
+                max_len = max(max_len, len(str(cell.value)))
+        ws.column_dimensions[col[0].column_letter].width = min(max_len + 4, 40)
+
+    # ── Hoja 2: Eventos ──
+    ws2 = wb.create_sheet("Historial Eventos")
+    ws2.append(["PC", "IP", "Evento", "Timestamp", "Downtime (seg)"])
+    for cell in ws2[1]:
+        cell.fill = h_fill
+        cell.font = h_font
+        cell.alignment = Alignment(horizontal="center")
+
+    query_events = db.query(Event).order_by(Event.timestamp.desc())
+    if target_ip and str(target_ip).strip():
+        query_events = query_events.filter(Event.pc_ip == str(target_ip).strip())
+    query_events = query_events.limit(5000)
+
+    for e in query_events.all():
+        ws2.append([e.pc_name, e.pc_ip, e.type, e.timestamp, e.downtime_seconds or ""])
+
+    for col in ws2.columns:
+        ws2.column_dimensions[col[0].column_letter].width = 25
+
+    # ── Hoja 3: Métricas Crudas ──
+    ws3 = wb.create_sheet("Métricas Históricas")
+    ws3.append(["PC_ID", "Timestamp", "CPU %", "RAM %", "Disco %", "Procesos", "Conexiones"])
+    for cell in ws3[1]:
+        cell.fill = h_fill
+        cell.font = h_font
+        cell.alignment = Alignment(horizontal="center")
+
+    query_metrics = db.query(Metric).order_by(Metric.timestamp.desc())
+    if target_ip and str(target_ip).strip():
+        pc = db.query(PC).filter(PC.ip == str(target_ip).strip()).first()
+        if pc:
+            query_metrics = query_metrics.filter(Metric.pc_id == pc.id)
+    query_metrics = query_metrics.limit(10000)
+
+    for m in query_metrics.all():
+        ws3.append(
+            [
+                m.pc_id,
+                m.timestamp,
+                m.cpu_percent,
+                m.ram_percent,
+                m.disk_percent,
+                m.processes_count,
+                m.network_connections,
+            ]
+        )
+
+    for col in ws3.columns:
+        ws3.column_dimensions[col[0].column_letter].width = 20
+
+    return wb
+
+
+if __name__ == "__main__":
+    import os
+    import sys
+    from datetime import datetime
+
+    try:
+        from database import SessionLocal
+    except ImportError:
+        from servidor.database import SessionLocal
+
+    print("==================================================")
+    print(" CODERE - EXPORTADOR DE TELEMETRÍA A EXCEL")
+    print("==================================================")
+    
+    db = SessionLocal()
+    try:
+        print("[*] Conectando a la base de datos local...")
+        wb = build_excel_workbook(db)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"Reporte_Codere_{timestamp}.xlsx"
+        
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        if os.path.exists(desktop_path):
+            filepath = os.path.join(desktop_path, filename)
+        else:
+            filepath = filename
+            
+        print(f"[*] Guardando archivo en: {filepath}")
+        wb.save(filepath)
+        print("[+] ¡Exportación completada con éxito!")
+        print(f"[+] Archivo: {filename}")
+        
+    except Exception as e:
+        print(f"[-] ERROR CRÍTICO exportando Excel: {e}")
+    finally:
+        db.close()
+        
+    print("==================================================")
+    input("Presione ENTER para salir...")

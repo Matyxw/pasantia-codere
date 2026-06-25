@@ -6,28 +6,66 @@ Puerto: 8000
 
 import asyncio
 import json
+import logging
 import os
 import socket
 import sys
 import threading
 import uuid
+from contextlib import asynccontextmanager
 from datetime import datetime
 
-import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
-from sqlalchemy.orm import Session
+# Configuración del logger para el servidor
+logging.basicConfig(
+    level=logging.WARNING,
+    format="%(asctime)s [%(levelname)s] SERVER - %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+logger = logging.getLogger("ServidorCentral")
 
-import scheduler as sched
-from database import PC, Event, Metric, SessionLocal, get_db
+import uvicorn  # noqa: E402
+from fastapi import (  # noqa: E402
+    Depends,
+    FastAPI,
+    HTTPException,
+    Security,
+    WebSocket,
+    WebSocketDisconnect,
+)
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from fastapi.responses import FileResponse  # noqa: E402
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer  # noqa: E402
+from fastapi.staticfiles import StaticFiles  # noqa: E402
+from sqlalchemy.orm import Session  # noqa: E402
+
+security = HTTPBearer()
+
+
+def verify_token(credentials: HTTPAuthorizationCredentials = Security(security)):
+    try:
+        from config import settings
+    except ImportError:
+        from servidor.config import settings
+
+    if credentials.credentials != settings.secret_key:
+        raise HTTPException(status_code=403, detail="Invalid token")
+    return credentials.credentials
+
 
 try:
-    from openpyxl import Workbook
-    from openpyxl.styles import Alignment, Font, PatternFill
+    import scheduler as sched
+    from database import PC, Event, Metric, SessionLocal, get_db
+    from generar_excel_logic import build_excel_workbook
 except ImportError:
-    pass
+    from servidor import scheduler as sched
+    from servidor.database import PC, Event, Metric, SessionLocal, get_db
+    from servidor.generar_excel_logic import build_excel_workbook
+
+try:
+    from openpyxl import Workbook  # noqa: F401
+    from openpyxl.styles import Alignment, Font, PatternFill  # noqa: F401
+except ImportError as e:
+    logger.warning("Falta openpyxl. La exportación a Excel no estará disponible: %s", e)
 
 pending_commands = {}
 command_results = {}
@@ -35,45 +73,37 @@ command_results = {}
 # ──────────────────────────────────────────
 # App
 # ──────────────────────────────────────────
-app = FastAPI(
-    title="PC Monitor Central",
-    version="2.0.0",
-    description="Sistema de monitoreo de PCs en red — Servidor Central",
-)
+try:
+    from config import settings  # noqa: E402
+except ImportError:
+    from servidor.config import settings  # noqa: E402
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+IS_TESTING = os.environ.get("TESTING") == "1"
+global_loop = None
 
 
-# ──────────────────────────────────────────
-# WebSocket Manager
-# ──────────────────────────────────────────
 class ConnectionManager:
-    def __init__(self):
-        # Usar un lock por cada WebSocket para evitar colisiones al enviar
-        self.active: dict[WebSocket, asyncio.Lock] = {}
+    def __init__(self) -> None:
+        self.active: list[WebSocket] = []
 
-    async def connect(self, ws: WebSocket):
+    async def connect(self, ws: WebSocket) -> None:
         await ws.accept()
         self.active[ws] = asyncio.Lock()
 
-    def disconnect(self, ws: WebSocket):
+    def disconnect(self, ws: WebSocket) -> None:
         if ws in self.active:
             del self.active[ws]
 
-    async def broadcast(self, message: dict):
+    async def broadcast(self, message: dict) -> None:
         dead = []
         # Iterar sobre una copia para evitar RuntimeError si el dict cambia
         for ws, lock in list(self.active.items()):
             try:
-                async with lock:
-                    await ws.send_json(message)
-            except Exception:
+                await ws.send_json(message)
+            except Exception as e:
+                logger.error(
+                    "Error transmitiendo a WebSocket. Cliente desconectado abruptamente: %s", e
+                )
                 dead.append(ws)
         for ws in dead:
             self.disconnect(ws)
@@ -81,42 +111,56 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 
-# ──────────────────────────────────────────
-# Lifecycle
-# ──────────────────────────────────────────
-def udp_discovery_server():
+def udp_discovery_server() -> None:
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.bind(('', 8002))
+        s.bind(("", 8002))
         while True:
             data, addr = s.recvfrom(1024)
             if b"CODERE_DISCOVERY_REQUEST" in data:
                 s.sendto(b"CODERE_SERVER", addr)
     except Exception as e:
-        print(f"[UDP] Error en discovery: {e}")
-
-@app.on_event("startup")
-async def on_startup():
-    loop = asyncio.get_event_loop()
-    sched.init(loop, manager.broadcast)
-    sched.start()
-
-    t = threading.Thread(target=udp_discovery_server, daemon=True)
-    t.start()
-
-    print("[Server] Servidor Central iniciado en http://0.0.0.0:8000")
+        logger.error("[UDP] Error fatal en discovery server: %s", e, exc_info=True)
 
 
-@app.on_event("shutdown")
-async def on_shutdown():
-    sched.stop()
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    global global_loop
+    global_loop = asyncio.get_running_loop()
+    if not IS_TESTING:
+        sched.init(global_loop, manager.broadcast)
+        sched.start()
+        threading.Thread(target=udp_discovery_server, daemon=True).start()
+        print(
+            f"[Server] Servidor Central iniciado en http://{settings.server_host}:{settings.server_port}"
+        )
+    yield
+    if not IS_TESTING:
+        sched.stop()
+
+
+app = FastAPI(
+    title="PC Monitor Central",
+    version="2.0.0",
+    description="Sistema de monitoreo de PCs en red — Servidor Central",
+    lifespan=lifespan,
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # ──────────────────────────────────────────
 # WebSocket endpoint
 # ──────────────────────────────────────────
 @app.websocket("/ws")
-async def websocket_endpoint(ws: WebSocket):
+async def websocket_endpoint(ws: WebSocket) -> None:
     await manager.connect(ws)
     try:
         # Enviar estado inicial completo
@@ -125,13 +169,15 @@ async def websocket_endpoint(ws: WebSocket):
         events = db.query(Event).order_by(Event.timestamp.desc()).limit(50).all()
         db.close()
 
-        await ws.send_json({
-            "type": "initial_state",
-            "data": {
-                "pcs": [_pc_to_dict(pc) for pc in pcs],
-                "events": [_event_to_dict(e) for e in events],
-            },
-        })
+        await ws.send_json(
+            {
+                "type": "initial_state",
+                "data": {
+                    "pcs": [_pc_to_dict(pc) for pc in pcs],
+                    "events": [_event_to_dict(e) for e in events],
+                },
+            }
+        )
 
         # Mantener conexion viva (recibir pings del cliente)
         while True:
@@ -139,7 +185,8 @@ async def websocket_endpoint(ws: WebSocket):
 
     except WebSocketDisconnect:
         manager.disconnect(ws)
-    except Exception:
+    except Exception as e:
+        logger.error("Error inesperado en WebSocket endpoint: %s", e, exc_info=True)
         manager.disconnect(ws)
 
 
@@ -151,8 +198,8 @@ def _pc_to_dict(pc: PC) -> dict:
     if pc.last_metrics:
         try:
             last_metrics = json.loads(pc.last_metrics)
-        except Exception:
-            pass
+        except json.JSONDecodeError as e:
+            logger.error("Corrupción de datos JSON detectada para PC ID %s. Detalle: %s", pc.id, e)
     return {
         "id": pc.id,
         "ip": pc.ip,
@@ -197,7 +244,7 @@ def _metric_to_dict(m: Metric) -> dict:
 # REST API — PCs
 # ──────────────────────────────────────────
 @app.get("/api/pcs")
-async def get_pcs(db: Session = Depends(get_db)):
+def get_pcs(db: Session = Depends(get_db)):
     return [_pc_to_dict(pc) for pc in db.query(PC).all()]
 
 
@@ -214,7 +261,7 @@ async def register_pc(body: dict, db: Session = Depends(get_db)):
     if pc:
         raise HTTPException(409, f"La IP {ip} ya está registrada")
 
-    pc = PC(ip=ip, name=name, status="unknown")
+    pc = PC(ip=ip, name=name, status="unknown", agent_id=f"manual-{uuid.uuid4().hex}")
     db.add(pc)
     db.commit()
     db.refresh(pc)
@@ -224,7 +271,7 @@ async def register_pc(body: dict, db: Session = Depends(get_db)):
 
 
 @app.get("/api/pcs/{pc_id}")
-async def get_pc(pc_id: int, db: Session = Depends(get_db)):
+def get_pc(pc_id: int, db: Session = Depends(get_db)):
     pc = db.query(PC).filter(PC.id == pc_id).first()
     if not pc:
         raise HTTPException(404, "PC no encontrada")
@@ -246,9 +293,7 @@ async def delete_pc(pc_id: int, db: Session = Depends(get_db)):
 # REST API — Métricas e historial
 # ──────────────────────────────────────────
 @app.get("/api/pcs/{pc_id}/metrics")
-async def get_metrics(
-    pc_id: int, limit: int = 60, db: Session = Depends(get_db)
-):
+def get_metrics(pc_id: int, limit: int = 60, db: Session = Depends(get_db)):
     """Últimas N métricas de una PC (por defecto 60 = 15 minutos)"""
     rows = (
         db.query(Metric)
@@ -261,9 +306,7 @@ async def get_metrics(
 
 
 @app.get("/api/pcs/{pc_id}/events")
-async def get_pc_events(
-    pc_id: int, limit: int = 100, db: Session = Depends(get_db)
-):
+def get_pc_events(pc_id: int, limit: int = 100, db: Session = Depends(get_db)):
     rows = (
         db.query(Event)
         .filter(Event.pc_id == pc_id)
@@ -275,13 +318,8 @@ async def get_pc_events(
 
 
 @app.get("/api/events")
-async def get_all_events(limit: int = 100, db: Session = Depends(get_db)):
-    rows = (
-        db.query(Event)
-        .order_by(Event.timestamp.desc())
-        .limit(limit)
-        .all()
-    )
+def get_all_events(limit: int = 100, db: Session = Depends(get_db)):
+    rows = db.query(Event).order_by(Event.timestamp.desc()).limit(limit).all()
     return [_event_to_dict(e) for e in rows]
 
 
@@ -290,7 +328,7 @@ async def get_all_events(limit: int = 100, db: Session = Depends(get_db)):
 # ──────────────────────────────────────────
 @app.post("/api/pcs/{pc_id}/execute")
 async def execute_command(
-    pc_id: int, body: dict, db: Session = Depends(get_db)
+    pc_id: int, body: dict, db: Session = Depends(get_db), token: str = Depends(verify_token)
 ):
     pc = db.query(PC).filter(PC.id == pc_id).first()
     if not pc:
@@ -298,26 +336,25 @@ async def execute_command(
     if pc.status != "online":
         raise HTTPException(503, f"La PC {pc.name} no está online")
 
+    if not pc.agent_id:
+        raise HTTPException(400, "La PC no tiene agente asociado")
+
     command = body.get("command", "").strip()
     if not command:
         raise HTTPException(400, "Comando vacío")
 
     cmd_id = str(uuid.uuid4())
-    if pc.ip not in pending_commands:
-        pending_commands[pc.ip] = []
+    if pc.agent_id not in pending_commands:
+        pending_commands[pc.agent_id] = []
 
-    pending_commands[pc.ip].append({
-        "id": cmd_id,
-        "command": command
-    })
+    pending_commands[pc.agent_id].append({"id": cmd_id, "command": command})
 
     # Simular polling bloqueante (para la UI actual)
-    for _ in range(60): # 30 seg (0.5 * 60)
+    for _ in range(60):  # 30 seg (0.5 * 60)
         if cmd_id in command_results:
             res = command_results.pop(cmd_id)
             return res
-        import time
-        time.sleep(0.5)
+        await asyncio.sleep(0.5)
 
     raise HTTPException(504, "Timeout: el agente no recogió ni respondió el comando")
 
@@ -326,17 +363,18 @@ async def execute_command(
 # REST API — Escaneo de red
 # ──────────────────────────────────────────
 @app.post("/api/agent/push")
-async def agent_push(body: dict, db: Session = Depends(get_db)):
+def agent_push(body: dict, db: Session = Depends(get_db), token: str = Depends(verify_token)):
+    agent_id = body.get("agent_id")
     ip = body.get("ip")
     name = body.get("name")
     hostname = body.get("hostname")
     os_info = body.get("os")
     metrics_data = body.get("metrics")
 
-    if not ip or not metrics_data:
-        raise HTTPException(400, "Faltan datos")
+    if not agent_id or not ip or not metrics_data:
+        raise HTTPException(400, "Faltan datos requeridos (agent_id, ip, metrics)")
 
-    pc = db.query(PC).filter(PC.ip == ip).first()
+    pc = db.query(PC).filter(PC.agent_id == agent_id).first()
     now = datetime.now().isoformat()
 
     went_online = False
@@ -344,11 +382,23 @@ async def agent_push(body: dict, db: Session = Depends(get_db)):
 
     if not pc:
         # Auto-registro
-        pc = PC(ip=ip, name=name, hostname=hostname, os=os_info, status="online", registered_at=now, last_seen=now)
+        pc = PC(
+            agent_id=agent_id,
+            ip=ip,
+            name=name,
+            hostname=hostname,
+            os=os_info,
+            status="online",
+            registered_at=now,
+            last_seen=now,
+        )
         db.add(pc)
         db.commit()
         db.refresh(pc)
-        await manager.broadcast({"type": "pc_registered", "data": _pc_to_dict(pc)})
+        if global_loop:
+            asyncio.run_coroutine_threadsafe(
+                manager.broadcast({"type": "pc_registered", "data": _pc_to_dict(pc)}), global_loop
+            )
         went_online = True
     else:
         if pc.status != "online":
@@ -357,11 +407,14 @@ async def agent_push(body: dict, db: Session = Depends(get_db)):
                 try:
                     last_off = datetime.fromisoformat(pc.last_offline)
                     downtime_secs = (datetime.now() - last_off).total_seconds()
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.warning(
+                        "Fallo al calcular downtime_secs para %s. Detalle: %s", pc.name, e
+                    )
 
         pc.status = "online"
         pc.last_seen = now
+        pc.ip = ip
         pc.hostname = hostname or pc.hostname
         pc.os = os_info or pc.os
 
@@ -388,38 +441,75 @@ async def agent_push(body: dict, db: Session = Depends(get_db)):
     db.add(metric)
 
     if went_online:
-        event = Event(pc_id=pc.id, pc_name=pc.name, pc_ip=pc.ip, type="online", timestamp=now, downtime_seconds=downtime_secs)
+        event = Event(
+            pc_id=pc.id,
+            pc_name=pc.name,
+            pc_ip=pc.ip,
+            type="online",
+            timestamp=now,
+            downtime_seconds=downtime_secs,
+        )
         db.add(event)
-        from notificaciones import notify_online
+        try:
+            from notificaciones import notify_online
+        except ImportError:
+            from servidor.notificaciones import notify_online
+
         notify_online(pc.name, pc.ip, downtime_secs)
-        await manager.broadcast({
-            "type": "event",
-            "data": {"pc_id": pc.id, "pc_name": pc.name, "ip": pc.ip, "event_type": "online", "timestamp": now}
-        })
-        await manager.broadcast({"type": "status_change", "data": {"pc_id": pc.id, "ip": pc.ip, "status": "online", "timestamp": now}})
+        if global_loop:
+            asyncio.run_coroutine_threadsafe(
+                manager.broadcast(
+                    {
+                        "type": "event",
+                        "data": {
+                            "pc_id": pc.id,
+                            "pc_name": pc.name,
+                            "ip": pc.ip,
+                            "event_type": "online",
+                            "timestamp": now,
+                        },
+                    }
+                ),
+                global_loop,
+            )
+            asyncio.run_coroutine_threadsafe(
+                manager.broadcast(
+                    {
+                        "type": "status_change",
+                        "data": {"pc_id": pc.id, "ip": pc.ip, "status": "online", "timestamp": now},
+                    }
+                ),
+                global_loop,
+            )
 
     db.commit()
 
-    await manager.broadcast({
-        "type": "metrics_update",
-        "data": {
-            "pc_id": pc.id,
-            "ip": pc.ip,
-            "name": pc.name,
-            "status": "online",
-            "last_seen": now,
-            "metrics": metrics_data,
-        },
-    })
+    if global_loop:
+        asyncio.run_coroutine_threadsafe(
+            manager.broadcast(
+                {
+                    "type": "metrics_update",
+                    "data": {
+                        "pc_id": pc.id,
+                        "ip": pc.ip,
+                        "name": pc.name,
+                        "status": "online",
+                        "last_seen": now,
+                        "metrics": metrics_data,
+                    },
+                }
+            ),
+            global_loop,
+        )
 
     # Entregar comandos pendientes
-    cmds = pending_commands.pop(pc.ip, [])
+    cmds = pending_commands.pop(pc.agent_id, [])
 
     return {"status": "ok", "pending_commands": cmds}
 
 
 @app.post("/api/agent/command_result")
-async def agent_command_result(body: dict):
+def agent_command_result(body: dict, token: str = Depends(verify_token)):
     cmd_id = body.get("command_id")
     result = body.get("result")
     if cmd_id:
@@ -431,60 +521,15 @@ async def agent_command_result(body: dict):
 # REST API — Export Excel
 # ──────────────────────────────────────────
 @app.get("/api/export/excel")
-async def export_excel(db: Session = Depends(get_db)):
-    from openpyxl import Workbook
-    from openpyxl.styles import Alignment, Font, PatternFill
+def export_excel(ip: str | None = None, db: Session = Depends(get_db)):
+    # Eliminado el import local porque rompía PyInstaller
+    pass
 
-    wb = Workbook()
+    wb = build_excel_workbook(db, target_ip=ip)
 
-    # ── Hoja 1: PCs ──
-    ws = wb.active
-    ws.title = "PCs"
-
-    headers = ["ID", "IP", "Nombre", "Hostname", "SO", "Estado", "Último visto", "Registrado"]
-    ws.append(headers)
-
-    h_fill = PatternFill(start_color="0d1b2a", end_color="0d1b2a", fill_type="solid")
-    h_font = Font(bold=True, color="00ff87", size=11)
-    for cell in ws[1]:
-        cell.fill = h_fill
-        cell.font = h_font
-        cell.alignment = Alignment(horizontal="center")
-
-    for pc in db.query(PC).all():
-        ws.append([
-            pc.id, pc.ip, pc.name, pc.hostname or "",
-            pc.os or "", pc.status, pc.last_seen or "", pc.registered_at,
-        ])
-
-    for col in ws.columns:
-        ws.column_dimensions[col[0].column_letter].auto_size = True
-
-    # ── Hoja 2: Eventos ──
-    ws2 = wb.create_sheet("Historial Eventos")
-    ws2.append(["PC", "IP", "Evento", "Timestamp", "Downtime (seg)"])
-    for cell in ws2[1]:
-        cell.fill = h_fill
-        cell.font = h_font
-        cell.alignment = Alignment(horizontal="center")
-
-    for e in db.query(Event).order_by(Event.timestamp.desc()).limit(5000).all():
-        ws2.append([e.pc_name, e.pc_ip, e.type, e.timestamp, e.downtime_seconds or ""])
-
-    # ── Hoja 3: Métricas ──
-    ws3 = wb.create_sheet("Metricas")
-    ws3.append(["PC_ID", "Timestamp", "CPU %", "RAM %", "Disco %", "Procesos", "Conexiones"])
-    for cell in ws3[1]:
-        cell.fill = h_fill
-        cell.font = h_font
-        cell.alignment = Alignment(horizontal="center")
-
-    for m in db.query(Metric).order_by(Metric.timestamp.desc()).limit(10000).all():
-        ws3.append([m.pc_id, m.timestamp, m.cpu_percent, m.ram_percent,
-                    m.disk_percent, m.processes_count, m.network_connections])
-
+    import tempfile
     filename = f"monitor_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
-    filepath = os.path.join(os.path.dirname(__file__), filename)
+    filepath = os.path.join(tempfile.gettempdir(), filename)
     wb.save(filepath)
 
     return FileResponse(
@@ -498,7 +543,7 @@ async def export_excel(db: Session = Depends(get_db)):
 # Stats endpoint
 # ──────────────────────────────────────────
 @app.get("/api/stats")
-async def get_stats(db: Session = Depends(get_db)):
+def get_stats(db: Session = Depends(get_db)):
     pcs = db.query(PC).all()
     return {
         "total": len(pcs),
@@ -514,7 +559,7 @@ async def get_stats(db: Session = Depends(get_db)):
 # ──────────────────────────────────────────
 # Frontend estático (PyInstaller o Dev)
 # ──────────────────────────────────────────
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     dist_path = os.path.join(sys._MEIPASS, "dashboard_dist")
 else:
     dist_path = os.path.join(os.path.dirname(__file__), "..", "dashboard", "dist")
@@ -534,165 +579,57 @@ if __name__ == "__main__":
 
     # Evitamos crashes en modo noconsole mockeando sys.stdout
     if sys.stdout is None:
-        sys.stdout = open(os.devnull, 'w')
+        sys.stdout = open(os.devnull, "w")
     if sys.stderr is None:
-        sys.stderr = open(os.devnull, 'w')
+        sys.stderr = open(os.devnull, "w")
 
     print("=" * 55)
     print("  PC MONITOR v2.0 — SERVIDOR CENTRAL (GUI)")
     print("=" * 55)
 
-    def run_server():
+    def run_server() -> None:
+        try:
+            from config import settings
+        except ImportError:
+            from servidor.config import settings
+
         # log_config=None para que uvicorn no busque isatty en --noconsole
-        uvicorn.run(app, host="0.0.0.0", port=8000, log_config=None)
+        uvicorn.run(
+            app,
+            host=settings.server_host,
+            port=settings.server_port,
+            log_config=None,
+            access_log=False,
+        )
 
     # Iniciar servidor FastAPI en segundo plano
     t = threading.Thread(target=run_server, daemon=True)
     t.start()
 
     class Api:
-        def __init__(self):
+        def __init__(self) -> None:
             self.window = None
 
-        def export_excel_dialog(self, target_ip=None):
-            from datetime import datetime
-
-            import webview
-            from openpyxl import Workbook
-            from openpyxl.styles import Alignment, Font, PatternFill
-
-            from database import PC, Event, Metric, SessionLocal
-
-            if not self.window:
-                return {"error": "Ventana no cargada"}
-
-            default_filename = f"monitor_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
-
-            result = self.window.create_file_dialog(
-                webview.SAVE_DIALOG,
-                directory='',
-                save_filename=default_filename,
-                file_types=('Excel Files (*.xlsx)', 'All files (*.*)')
-            )
-
-            if not result:
-                return {"cancelled": True}
-
-            filepath = result[0] if isinstance(result, tuple) else result
-
-            try:
-                import json
-                db = SessionLocal()
-                wb = Workbook()
-
-                # ── Hoja 1: Resumen de Flota (PCs) ──
-                ws = wb.active
-                ws.title = "Resumen de Flota"
-
-                headers = [
-                    "ID", "IP", "Nombre", "Hostname", "SO", "Estado",
-                    "CPU %", "RAM Total (GB)", "RAM Uso (GB)", "RAM %",
-                    "Disco %", "Temp ºC", "Conexiones", "Procesos",
-                    "Último visto", "Registrado"
-                ]
-                ws.append(headers)
-
-                # Codere Branding Headers
-                h_fill = PatternFill(start_color="7EBB28", end_color="7EBB28", fill_type="solid")
-                h_font = Font(bold=True, color="FFFFFF", size=11)
-                for cell in ws[1]:
-                    cell.fill = h_fill
-                    cell.font = h_font
-                    cell.alignment = Alignment(horizontal="center", vertical="center")
-
-                query = db.query(PC)
-                if target_ip and str(target_ip).strip():
-                    query = query.filter(PC.ip == str(target_ip).strip())
-
-                for pc in query.all():
-                    # Parsear last_metrics si existe
-                    cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, conns, procs = ("", "", "", "", "", "", "", "")
-                    if pc.last_metrics:
-                        try:
-                            m = json.loads(pc.last_metrics)
-                            cpu = f"{m.get('cpu', {}).get('percent', '')}%"
-                            ram_tot = m.get('memory', {}).get('total_gb', '')
-                            ram_use = m.get('memory', {}).get('used_gb', '')
-                            ram_pct = f"{m.get('memory', {}).get('percent', '')}%"
-
-                            disks = m.get('disk', {})
-                            if disks:
-                                first_disk = list(disks.values())[0]
-                                disk_pct = f"{first_disk.get('percent', '')}%"
-
-                            max_temp = 0.0
-                            temps_dict = m.get('temperatures', {})
-                            for sensor_list in temps_dict.values():
-                                for sensor in sensor_list:
-                                    if sensor.get('current', 0) > max_temp:
-                                        max_temp = sensor.get('current', 0)
-                            if max_temp > 0:
-                                temp = f"{round(max_temp, 1)} °C"
-
-                            conns = m.get('network', {}).get('connections', '')
-                            procs = m.get('processes', {}).get('total', '')
-                        except Exception as e:
-                            print("Error parsing metrics for Excel:", e)
-                            pass
-
-                    ws.append([
-                        pc.id, pc.ip, pc.name, pc.hostname or "",
-                        pc.os or "", pc.status,
-                        cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, conns, procs,
-                        pc.last_seen or "", pc.registered_at
-                    ])
-
-                for col in ws.columns:
-                    max_len = 0
-                    for cell in col:
-                        if cell.value:
-                            max_len = max(max_len, len(str(cell.value)))
-                    ws.column_dimensions[col[0].column_letter].width = min(max_len + 4, 40)
-
-                # ── Hoja 2: Eventos ──
-                ws2 = wb.create_sheet("Historial Eventos")
-                ws2.append(["PC", "IP", "Evento", "Timestamp", "Downtime (seg)"])
-                for cell in ws2[1]:
-                    cell.fill = h_fill
-                    cell.font = h_font
-                    cell.alignment = Alignment(horizontal="center")
-
-                for e in db.query(Event).order_by(Event.timestamp.desc()).limit(5000).all():
-                    ws2.append([e.pc_name, e.pc_ip, e.type, e.timestamp, e.downtime_seconds or ""])
-
-                for col in ws2.columns:
-                    ws2.column_dimensions[col[0].column_letter].width = 25
-
-                # ── Hoja 3: Métricas Crudas ──
-                ws3 = wb.create_sheet("Métricas Históricas")
-                ws3.append(["PC_ID", "Timestamp", "CPU %", "RAM %", "Disco %", "Procesos", "Conexiones"])
-                for cell in ws3[1]:
-                    cell.fill = h_fill
-                    cell.font = h_font
-                    cell.alignment = Alignment(horizontal="center")
-
-                for m in db.query(Metric).order_by(Metric.timestamp.desc()).limit(10000).all():
-                    ws3.append([m.pc_id, m.timestamp, m.cpu_percent, m.ram_percent,
-                                m.disk_percent, m.processes_count, m.network_connections])
-
-                wb.save(filepath)
-                db.close()
-                return {"success": True, "filepath": filepath}
-            except Exception as e:
-                return {"error": str(e)}
+        def dummy(self) -> None:
+            pass
 
     # Iniciar WebView en el hilo principal
     # Apuntamos al localhost:8000 donde corre nuestro dashboard montado en FastAPI
     api = Api()
-    window = webview.create_window('Codere PC Monitor', 'http://127.0.0.1:8000', width=1200, height=800, js_api=api)
+    try:
+        from config import settings
+    except ImportError:
+        from servidor.config import settings
+
+    window = webview.create_window(
+        "Codere PC Monitor",
+        f"http://127.0.0.1:{settings.server_port}",
+        width=1200,
+        height=800,
+        js_api=api,
+    )
     api.window = window
     webview.start(private_mode=False)
 
     # Al cerrar la ventana, matamos forzadamente el proceso para que uvicorn se apague
     os._exit(0)
-

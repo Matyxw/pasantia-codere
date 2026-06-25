@@ -11,10 +11,12 @@ from pathlib import Path
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     BASE_DIR = Path(sys.executable).parent
+    ENV_PATH = BASE_DIR / ".env"
 else:
     BASE_DIR = Path(__file__).parent
+    ENV_PATH = BASE_DIR.parent / ".env"
 
 
 class Settings(BaseSettings):
@@ -25,14 +27,14 @@ class Settings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        env_file=BASE_DIR.parent / ".env",
+        env_file=ENV_PATH,
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
     )
 
     # ── Servidor ──────────────────────────────────────────
-    server_host: str = Field(default="0.0.0.0", description="Host del servidor FastAPI")
+    server_host: str = Field(default="0.0.0.0", description="Host del servidor FastAPI")  # noqa: S104
     server_port: int = Field(default=8000, ge=1, le=65535)
     cors_origins: str = Field(default="http://localhost:5173,http://localhost:4173")
     environment: str = Field(default="development")
@@ -50,7 +52,9 @@ class Settings(BaseSettings):
     database_path: str = Field(default="./monitor.db")
 
     # ── Heartbeat ─────────────────────────────────────────
-    heartbeat_interval: int = Field(default=15, ge=5, le=300, description="Segundos entre verificaciones")
+    heartbeat_interval: int = Field(
+        default=15, ge=5, le=300, description="Segundos entre verificaciones"
+    )
     agent_timeout: int = Field(default=5, ge=1, le=30)
 
     # ── Notificaciones ────────────────────────────────────
@@ -73,7 +77,8 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
-        # Resolver ruta relativa al directorio del servidor
+        if self.database_path.strip() == ":memory:":
+            return "sqlite:///:memory:"
         path = Path(self.database_path)
         if not path.is_absolute():
             path = BASE_DIR / path
