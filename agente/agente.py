@@ -84,7 +84,12 @@ ALLOWED_COMMANDS = {
 
 def _get_agent_id() -> str:
     """Obtiene o genera un UUID persistente para este agente."""
-    id_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".agent_id")
+    if getattr(sys, "frozen", False):
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    id_file = os.path.join(base_dir, ".agent_id")
     if os.path.exists(id_file):
         with open(id_file) as f:
             return f.read().strip()
