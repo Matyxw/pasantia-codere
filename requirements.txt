@@ -11,3 +11,4 @@ openpyxl
 apscheduler
 websockets
 plyer
+pywebview
