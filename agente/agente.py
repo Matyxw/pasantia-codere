@@ -83,23 +83,12 @@ ALLOWED_COMMANDS = {
 
 
 def _get_agent_id() -> str:
-    """Obtiene o genera un UUID persistente para este agente."""
-    if getattr(sys, "frozen", False):
-        base_dir = os.path.dirname(sys.executable)
-    else:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-    
-    id_file = os.path.join(base_dir, ".agent_id")
-    if os.path.exists(id_file):
-        with open(id_file) as f:
-            return f.read().strip()
-    new_id = uuid.uuid4().hex
-    try:
-        with open(id_file, "w") as f:
-            f.write(new_id)
-    except Exception as e:
-        logger.warning("No se pudo persistir el agent_id: %s", e)
-    return new_id
+    """Genera un ID único y persistente basado en el hardware (MAC + Hostname)."""
+    mac = str(uuid.getnode())
+    hostname = socket.gethostname()
+    unique_str = f"{hostname}_{mac}"
+    import hashlib
+    return hashlib.sha256(unique_str.encode()).hexdigest()[:16]
 
 
 AGENT_ID = _get_agent_id()
