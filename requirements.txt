@@ -9,3 +9,4 @@ anyio
 pyinstaller
 openpyxl
 apscheduler
+websockets
