@@ -16,29 +16,19 @@ export default function ExportModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   const handleExport = async () => {
-    setIsExporting(true);
     try {
       const apiUrl = import.meta.env.VITE_API_URL || (window.location.protocol + '//' + window.location.host + '/api');
-      
       const url = exportMode === 'single' ? `${apiUrl}/export/excel?ip=${targetIp}` : `${apiUrl}/export/excel`;
-      const res = await fetch(url);
       
-      if (res.ok) {
-        const blob = await res.blob();
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = downloadUrl;
-        a.download = `codere_export_${new Date().getTime()}.xlsx`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(downloadUrl);
-      } else {
-        alert("Error del servidor: " + res.statusText);
-      }
+      // Regla de Oro 8: Descargas: window.location.href, NO <a download>
+      window.location.href = url;
+      
+      setTimeout(() => {
+        setIsExporting(false);
+        onClose();
+      }, 1000);
     } catch (err) {
       alert("Error exportando excel: " + err.message);
-    } finally {
       setIsExporting(false);
       onClose();
     }
