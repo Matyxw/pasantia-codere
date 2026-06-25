@@ -114,7 +114,7 @@ async def on_startup():
     t = threading.Thread(target=udp_discovery_server, daemon=True)
     t.start()
 
-    print("[Server] Servidor Central iniciado en http://0.0.0.0:8000")
+    print(f"[Server] Servidor Central iniciado en http://{settings.server_host}:{settings.server_port}")
 
 
 @app.on_event("shutdown")

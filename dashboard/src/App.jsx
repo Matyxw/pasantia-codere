@@ -105,47 +105,47 @@ export default function App() {
     }
   }, [])
 
-  const connectWS = useCallback(() => {
-    if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) return
-
-    setWsStatus('connecting')
-    const ws = new WebSocket(WS_URL)
-    wsRef.current = ws
-
-    ws.onopen = () => {
-      setWsStatus('open')
-      if (reconnectTimer.current) {
-        clearInterval(reconnectTimer.current)
-        reconnectTimer.current = null
-      }
-    }
-
-    ws.onmessage = (e) => {
-      try {
-        handleMessage(JSON.parse(e.data))
-      } catch (err) {
-        console.error("WS Parse Error", err)
-      }
-    }
-
-    ws.onclose = () => {
-      setWsStatus('closed')
-      if (!reconnectTimer.current) {
-        // eslint-disable-next-line no-use-before-define
-        reconnectTimer.current = setInterval(() => connectWS(), 3000)
-      }
-    }
-
-    ws.onerror = () => ws.close()
-  }, [handleMessage])
-
   useEffect(() => {
+    function connectWS() {
+      if (wsRef.current?.readyState === WebSocket.OPEN || wsRef.current?.readyState === WebSocket.CONNECTING) return
+
+      setWsStatus('connecting')
+      const ws = new WebSocket(WS_URL)
+      wsRef.current = ws
+
+      ws.onopen = () => {
+        setWsStatus('open')
+        if (reconnectTimer.current) {
+          clearInterval(reconnectTimer.current)
+          reconnectTimer.current = null
+        }
+      }
+
+      ws.onmessage = (e) => {
+        try {
+          handleMessage(JSON.parse(e.data))
+        } catch (err) {
+          console.error("WS Parse Error", err)
+        }
+      }
+
+      ws.onclose = () => {
+        setWsStatus('closed')
+        if (!reconnectTimer.current) {
+          reconnectTimer.current = setInterval(() => connectWS(), 3000)
+        }
+      }
+
+      ws.onerror = () => ws.close()
+    }
+
     connectWS()
+    
     return () => {
       wsRef.current?.close()
       if (reconnectTimer.current) clearInterval(reconnectTimer.current)
     }
-  }, [connectWS])
+  }, [handleMessage])
 
   // Keep-alive ping every 30s
   useEffect(() => {
