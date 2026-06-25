@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from database import PC, Event, Metric, SessionLocal
+from database import PC, Event, Metric, Session, SessionLocal
 from notificaciones import notify_offline
 
 logger = logging.getLogger("scheduler")
@@ -20,7 +20,7 @@ _scheduler = BackgroundScheduler(timezone="UTC")
 _broadcast_callback: Callable | None = None
 _event_loop: asyncio.AbstractEventLoop | None = None
 
-from config import settings
+from config import settings  # noqa: E402
 
 HEARTBEAT_INTERVAL = settings.heartbeat_interval  # segundos
 REQUEST_TIMEOUT = settings.agent_timeout  # segundos por request al agente
@@ -55,7 +55,7 @@ def _heartbeat() -> None:
 _failed_pings = {}
 
 
-def _check_pc(db, pc: PC) -> None:
+def _check_pc(db: Session, pc: PC) -> None:
     """Verifica el timeout de una PC usando last_seen"""
     now = datetime.now()
     try:

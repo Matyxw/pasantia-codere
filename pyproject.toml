@@ -3,7 +3,7 @@ name = "pc-monitor"
 version = "2.0.0"
 description = "Enterprise PC monitoring system — real-time, WebSocket-first, 200+ nodes"
 authors = [
-    { name = "Matias", email = "" },
+    { name = "Matias", email = "matias@example.com" },
 ]
 readme = "README.md"
 license = { text = "MIT" }
@@ -75,8 +75,6 @@ select = [
     "S",    # bandit (seguridad)
 ]
 ignore = [
-    "ANN101",  # missing type annotation for self
-    "ANN102",  # missing type annotation for cls
     "E501",    # line too long
     "SIM105",  # Use contextlib.suppress
     "E722",    # Bare except

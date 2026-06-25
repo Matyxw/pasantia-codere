@@ -4,10 +4,13 @@ Tablas: pcs, events, metrics
 WAL mode habilitado para acceso concurrente
 """
 
+import sqlite3
+import typing
 from datetime import datetime
 
 from sqlalchemy import Column, Float, Integer, String, Text, create_engine, event
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
+from sqlalchemy.pool.base import _ConnectionRecord
 
 from config import settings
 
@@ -18,13 +21,11 @@ engine = create_engine(
 )
 
 
-import sqlite3
-import typing
-from sqlalchemy.pool.base import _ConnectionRecord
-
 # Habilitar WAL mode y optimizaciones al crear la conexion
 @event.listens_for(engine, "connect")
-def set_sqlite_pragma(dbapi_connection: sqlite3.Connection, connection_record: _ConnectionRecord) -> None:
+def set_sqlite_pragma(
+    dbapi_connection: sqlite3.Connection, connection_record: _ConnectionRecord
+) -> None:
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA journal_mode=WAL")
     cursor.execute("PRAGMA cache_size=10000")
@@ -84,8 +85,6 @@ class Metric(Base):
 # Crear tablas si no existen
 Base.metadata.create_all(bind=engine)
 
-
-from sqlalchemy.orm import Session
 
 def get_db() -> typing.Generator[Session, None, None]:
     """Dependency para FastAPI"""

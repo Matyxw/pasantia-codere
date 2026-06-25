@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     )
 
     # ── Servidor ──────────────────────────────────────────
-    server_host: str = Field(default="0.0.0.0", description="Host del servidor FastAPI")
+    server_host: str = Field(default="0.0.0.0", description="Host del servidor FastAPI")  # noqa: S104
     server_port: int = Field(default=8000, ge=1, le=65535)
     cors_origins: str = Field(default="http://localhost:5173,http://localhost:4173")
     environment: str = Field(default="development")

@@ -46,7 +46,7 @@ BOOT_TIME = datetime.fromtimestamp(psutil.boot_time())
 AGENT_VERSION = "3.1.0-SecurePush"
 
 # Obtener SECRET_KEY para autenticación
-SECRET_KEY = os.environ.get("SECRET_KEY", "CAMBIAR_POR_CLAVE_ALEATORIA_DE_64_CARACTERES")
+SECRET_KEY = os.environ.get("SECRET_KEY", "CAMBIAR_POR_CLAVE_ALEATORIA_DE_64_CARACTERES")  # noqa: S105
 if SECRET_KEY == "CAMBIAR_POR_CLAVE_ALEATORIA_DE_64_CARACTERES":
     logger.warning(
         "SECRET_KEY no configurada. Usando valor por defecto INSEGURO.\n"
@@ -290,8 +290,8 @@ def discover_server() -> tuple[str, int] | None:
             port = parsed.port or 8000
             logger.info("[CONFIG] SERVER_URL: %s:%d", host, port)
             return host, port
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("SERVER_URL parse error: %s", e)
 
     # ── Capa 2: agent_config.json ──
     config_path = os.path.join(base_dir, "agent_config.json")
@@ -319,7 +319,7 @@ def discover_server() -> tuple[str, int] | None:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         s.settimeout(2.0)
-        for attempt in range(5):
+        for _attempt in range(5):
             try:
                 s.sendto(b"CODERE_DISCOVERY_REQUEST", ("<broadcast>", 8002))
                 data, addr = s.recvfrom(1024)
@@ -371,7 +371,7 @@ def execute_command(comando: str) -> dict[str, Any]:
         return {"error": "Comando no permitido o malformado", "command": comando}
 
     try:
-        result = subprocess.run(
+        result = subprocess.run(  # noqa: S603
             cmd_args, capture_output=True, timeout=30, encoding="utf-8", errors="replace"
         )
         logger.info("Comando '%s' ejecutado exitosamente con código %d", comando, result.returncode)
@@ -412,13 +412,11 @@ def main() -> None:
 
     while True:
         # ── Fase 1: Descubrir servidor ──
-        if server_url:
-            # Verificar que el servidor sigue respondiendo
-            if not try_connect(server_host, server_port):
-                logger.warning("Servidor dejó de responder. Redescubriendo...")
-                server_url = ""
-                server_host = None
-                backoff = 5
+        if server_url and not try_connect(server_host, server_port):
+            logger.warning("Servidor dejó de responder. Redescubriendo...")
+            server_url = ""
+            server_host = None
+            backoff = 5
 
         if not server_url:
             result = discover_server()

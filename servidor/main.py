@@ -22,13 +22,20 @@ logging.basicConfig(
 )
 logger = logging.getLogger("ServidorCentral")
 
-import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, Security, WebSocket, WebSocketDisconnect
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from fastapi.staticfiles import StaticFiles
-from sqlalchemy.orm import Session
+import uvicorn  # noqa: E402
+from fastapi import (  # noqa: E402
+    Depends,
+    FastAPI,
+    HTTPException,
+    Security,
+    WebSocket,
+    WebSocketDisconnect,
+)
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from fastapi.responses import FileResponse  # noqa: E402
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer  # noqa: E402
+from fastapi.staticfiles import StaticFiles  # noqa: E402
+from sqlalchemy.orm import Session  # noqa: E402
 
 security = HTTPBearer()
 
@@ -41,8 +48,8 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Security(security))
     return credentials.credentials
 
 
-import scheduler as sched
-from database import PC, Event, Metric, SessionLocal, get_db
+import scheduler as sched  # noqa: E402
+from database import PC, Event, Metric, SessionLocal, get_db  # noqa: E402
 
 try:
     from openpyxl import Workbook  # noqa: F401
@@ -56,13 +63,14 @@ command_results = {}
 # ──────────────────────────────────────────
 # App
 # ──────────────────────────────────────────
+from config import settings  # noqa: E402
+
 app = FastAPI(
     title="PC Monitor Central",
     version="2.0.0",
     description="Sistema de monitoreo de PCs en red — Servidor Central",
 )
 
-from config import settings
 
 app.add_middleware(
     CORSMiddleware,
