@@ -3,7 +3,6 @@ conftest.py — Fixtures compartidas para todos los tests
 Provee: cliente HTTP async, DB de test en memoria, PC de ejemplo
 """
 
-# ── Parchear la DB antes de importar la app ────────────────────────────────────
 import os
 
 import pytest
@@ -12,21 +11,27 @@ from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
-os.environ.setdefault("DATABASE_PATH", ":memory:")
+os.environ["DATABASE_PATH"] = ":memory:"
+os.environ["TESTING"] = "1"
 os.environ.setdefault("SECRET_KEY", "test-secret-key-not-real")
 os.environ.setdefault("ENVIRONMENT", "development")
 
-# Importar DESPUES de setear env
-from servidor.database import Base, get_db
-from servidor.main import app
+import servidor.database as db_module
+from servidor.database import Base
 
-# ── Engine de test (SQLite en memoria) ────────────────────────────────────────
 TEST_ENGINE = create_engine(
     "sqlite:///:memory:",
     connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
 )
 TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=TEST_ENGINE)
+
+db_module.engine = TEST_ENGINE
+db_module.SessionLocal = TestSessionLocal
+
+from servidor.main import app, get_db  # noqa: E402
 
 
 @pytest.fixture(autouse=True)

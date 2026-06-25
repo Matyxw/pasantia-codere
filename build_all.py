@@ -25,11 +25,11 @@ def build_dashboard() -> None:
     """Compila el frontend React antes de empaquetar."""
     dashboard_dir = os.path.join(ROOT_DIR, "dashboard")
     logger.info("[0/3] Compilando Dashboard React...")
+    npm = "npm.cmd" if sys.platform == "win32" else "npm"
     subprocess.run(
-        ["npm", "run", "build"],
+        [npm, "run", "build"],
         cwd=dashboard_dir,
         check=True,
-        shell=True,  # npm en Windows requiere shell
     )
 
 

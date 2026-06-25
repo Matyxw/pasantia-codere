@@ -45,6 +45,21 @@ if sys.stderr is None:
 BOOT_TIME = datetime.fromtimestamp(psutil.boot_time())
 AGENT_VERSION = "3.1.0-SecurePush"
 
+# Cargar variables desde .env si existe en el directorio del ejecutable
+if getattr(sys, "frozen", False):
+    _base_dir = os.path.dirname(sys.executable)
+else:
+    _base_dir = os.path.dirname(os.path.abspath(__file__))
+
+_env_path = os.path.join(_base_dir, ".env")
+if os.path.exists(_env_path):
+    with open(_env_path, "r", encoding="utf-8") as _f:
+        for _line in _f:
+            _line = _line.strip()
+            if _line and not _line.startswith("#"):
+                _k, _, _v = _line.partition("=")
+                os.environ[_k.strip()] = _v.strip().strip('"').strip("'")
+
 # Obtener SECRET_KEY para autenticación
 SECRET_KEY = os.environ.get("SECRET_KEY", "CAMBIAR_POR_CLAVE_ALEATORIA_DE_64_CARACTERES")  # noqa: S105
 if SECRET_KEY == "CAMBIAR_POR_CLAVE_ALEATORIA_DE_64_CARACTERES":
@@ -345,6 +360,7 @@ def try_connect(host: str, port: int) -> bool:
             f"http://{host}:{port}/api/stats",
             headers={"Authorization": f"Bearer {SECRET_KEY}"},
             timeout=5,
+            proxies={"http": None, "https": None}
         )
         if resp.status_code == 200:
             return True
@@ -459,7 +475,11 @@ def main() -> None:
                 "metrics": get_metrics(),
             }
             resp = requests.post(
-                f"{server_url}/api/agent/push", json=payload, headers=headers, timeout=5
+                f"{server_url}/api/agent/push",
+                json=payload,
+                headers=headers,
+                timeout=5,
+                proxies={"http": None, "https": None}
             )
 
             if resp.status_code == 403:
@@ -480,6 +500,7 @@ def main() -> None:
                         json={"agent_id": AGENT_ID, "command_id": cmd_id, "result": res},
                         headers=headers,
                         timeout=5,
+                        proxies={"http": None, "https": None}
                     )
             else:
                 logger.warning("HTTP %d del servidor", resp.status_code)

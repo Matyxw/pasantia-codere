@@ -62,14 +62,17 @@ def notify_offline(pc_name: str, ip: str) -> None:
     logger.info("Equipo Offline detectado: %s (%s)", pc_name, ip)
     print(f"\033[91m[{ts}] OFFLINE: {pc_name} ({ip})\033[0m")
 
-    from config import settings
+    try:
+        from config import settings
+    except ImportError:
+        from servidor.config import settings
 
     if not _PLYER_OK or not settings.desktop_notifications:
         return
 
     try:
         plyer_notify.notify(
-            title="⚠️  PC DESCONECTADA",
+            title="PC DESCONECTADA",
             message=f"{pc_name} ({ip}) se desconectó de la red",
             app_name="PC Monitor v2",
             timeout=8,
@@ -104,14 +107,17 @@ def notify_online(pc_name: str, ip: str, downtime_seconds: float | None = None) 
     logger.info("Equipo Online detectado: %s (%s) %s", pc_name, ip, downtime_str)
     print(f"\033[92m[{ts}] ONLINE:  {pc_name} ({ip}){downtime_str}\033[0m")
 
-    from config import settings
+    try:
+        from config import settings
+    except ImportError:
+        from servidor.config import settings
 
     if not _PLYER_OK or not settings.desktop_notifications:
         return
 
     try:
         plyer_notify.notify(
-            title="✅  PC RECONECTADA",
+            title="PC RECONECTADA",
             message=f"{pc_name} ({ip}) volvió a estar online{downtime_str}",
             app_name="PC Monitor v2",
             timeout=5,

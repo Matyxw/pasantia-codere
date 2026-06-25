@@ -5,7 +5,10 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from sqlalchemy.orm import Session
 
-from database import PC, Event, Metric
+try:
+    from database import PC, Event, Metric
+except ImportError:
+    from servidor.database import PC, Event, Metric
 
 logger = logging.getLogger("ExcelLogic")
 
@@ -169,9 +172,10 @@ def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
         cell.font = h_font
         cell.alignment = Alignment(horizontal="center")
 
-    query_events = db.query(Event).order_by(Event.timestamp.desc()).limit(5000)
+    query_events = db.query(Event).order_by(Event.timestamp.desc())
     if target_ip and str(target_ip).strip():
         query_events = query_events.filter(Event.pc_ip == str(target_ip).strip())
+    query_events = query_events.limit(5000)
 
     for e in query_events.all():
         ws2.append([e.pc_name, e.pc_ip, e.type, e.timestamp, e.downtime_seconds or ""])
@@ -187,13 +191,12 @@ def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
         cell.font = h_font
         cell.alignment = Alignment(horizontal="center")
 
-    query_metrics = db.query(Metric)
+    query_metrics = db.query(Metric).order_by(Metric.timestamp.desc())
     if target_ip and str(target_ip).strip():
         pc = db.query(PC).filter(PC.ip == str(target_ip).strip()).first()
         if pc:
             query_metrics = query_metrics.filter(Metric.pc_id == pc.id)
-
-    query_metrics = query_metrics.order_by(Metric.timestamp.desc()).limit(10000)
+    query_metrics = query_metrics.limit(10000)
 
     for m in query_metrics.all():
         ws3.append(
@@ -212,3 +215,45 @@ def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
         ws3.column_dimensions[col[0].column_letter].width = 20
 
     return wb
+
+
+if __name__ == "__main__":
+    import os
+    import sys
+    from datetime import datetime
+
+    try:
+        from database import SessionLocal
+    except ImportError:
+        from servidor.database import SessionLocal
+
+    print("==================================================")
+    print(" CODERE - EXPORTADOR DE TELEMETRÍA A EXCEL")
+    print("==================================================")
+    
+    db = SessionLocal()
+    try:
+        print("[*] Conectando a la base de datos local...")
+        wb = build_excel_workbook(db)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"Reporte_Codere_{timestamp}.xlsx"
+        
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+        if os.path.exists(desktop_path):
+            filepath = os.path.join(desktop_path, filename)
+        else:
+            filepath = filename
+            
+        print(f"[*] Guardando archivo en: {filepath}")
+        wb.save(filepath)
+        print("[+] ¡Exportación completada con éxito!")
+        print(f"[+] Archivo: {filename}")
+        
+    except Exception as e:
+        print(f"[-] ERROR CRÍTICO exportando Excel: {e}")
+    finally:
+        db.close()
+        
+    print("==================================================")
+    input("Presione ENTER para salir...")

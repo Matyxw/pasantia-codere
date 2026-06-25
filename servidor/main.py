@@ -12,6 +12,7 @@ import socket
 import sys
 import threading
 import uuid
+from contextlib import asynccontextmanager
 from datetime import datetime
 
 # Configuración del logger para el servidor
@@ -41,15 +42,24 @@ security = HTTPBearer()
 
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Security(security)):
-    from config import settings
+    try:
+        from config import settings
+    except ImportError:
+        from servidor.config import settings
 
     if credentials.credentials != settings.secret_key:
         raise HTTPException(status_code=403, detail="Invalid token")
     return credentials.credentials
 
 
-import scheduler as sched  # noqa: E402
-from database import PC, Event, Metric, SessionLocal, get_db  # noqa: E402
+try:
+    import scheduler as sched
+    from database import PC, Event, Metric, SessionLocal, get_db
+    from generar_excel_logic import build_excel_workbook
+except ImportError:
+    from servidor import scheduler as sched
+    from servidor.database import PC, Event, Metric, SessionLocal, get_db
+    from servidor.generar_excel_logic import build_excel_workbook
 
 try:
     from openpyxl import Workbook  # noqa: F401
@@ -63,27 +73,15 @@ command_results = {}
 # ──────────────────────────────────────────
 # App
 # ──────────────────────────────────────────
-from config import settings  # noqa: E402
+try:
+    from config import settings  # noqa: E402
+except ImportError:
+    from servidor.config import settings  # noqa: E402
 
-app = FastAPI(
-    title="PC Monitor Central",
-    version="2.0.0",
-    description="Sistema de monitoreo de PCs en red — Servidor Central",
-)
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+IS_TESTING = os.environ.get("TESTING") == "1"
+global_loop = None
 
 
-# ──────────────────────────────────────────
-# WebSocket Manager
-# ──────────────────────────────────────────
 class ConnectionManager:
     def __init__(self) -> None:
         self.active: list[WebSocket] = []
@@ -113,9 +111,6 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 
-# ──────────────────────────────────────────
-# Lifecycle
-# ──────────────────────────────────────────
 def udp_discovery_server() -> None:
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -128,27 +123,37 @@ def udp_discovery_server() -> None:
         logger.error("[UDP] Error fatal en discovery server: %s", e, exc_info=True)
 
 
-global_loop = None
-
-
-@app.on_event("startup")
-async def on_startup() -> None:
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
     global global_loop
     global_loop = asyncio.get_running_loop()
-    sched.init(global_loop, manager.broadcast)
-    sched.start()
+    if not IS_TESTING:
+        sched.init(global_loop, manager.broadcast)
+        sched.start()
+        threading.Thread(target=udp_discovery_server, daemon=True).start()
+        print(
+            f"[Server] Servidor Central iniciado en http://{settings.server_host}:{settings.server_port}"
+        )
+    yield
+    if not IS_TESTING:
+        sched.stop()
 
-    t = threading.Thread(target=udp_discovery_server, daemon=True)
-    t.start()
 
-    print(
-        f"[Server] Servidor Central iniciado en http://{settings.server_host}:{settings.server_port}"
-    )
+app = FastAPI(
+    title="PC Monitor Central",
+    version="2.0.0",
+    description="Sistema de monitoreo de PCs en red — Servidor Central",
+    lifespan=lifespan,
+)
 
 
-@app.on_event("shutdown")
-async def on_shutdown() -> None:
-    sched.stop()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # ──────────────────────────────────────────
@@ -256,7 +261,7 @@ async def register_pc(body: dict, db: Session = Depends(get_db)):
     if pc:
         raise HTTPException(409, f"La IP {ip} ya está registrada")
 
-    pc = PC(ip=ip, name=name, status="unknown")
+    pc = PC(ip=ip, name=name, status="unknown", agent_id=f"manual-{uuid.uuid4().hex}")
     db.add(pc)
     db.commit()
     db.refresh(pc)
@@ -330,6 +335,9 @@ async def execute_command(
         raise HTTPException(404, "PC no encontrada")
     if pc.status != "online":
         raise HTTPException(503, f"La PC {pc.name} no está online")
+
+    if not pc.agent_id:
+        raise HTTPException(400, "La PC no tiene agente asociado")
 
     command = body.get("command", "").strip()
     if not command:
@@ -442,7 +450,10 @@ def agent_push(body: dict, db: Session = Depends(get_db), token: str = Depends(v
             downtime_seconds=downtime_secs,
         )
         db.add(event)
-        from notificaciones import notify_online
+        try:
+            from notificaciones import notify_online
+        except ImportError:
+            from servidor.notificaciones import notify_online
 
         notify_online(pc.name, pc.ip, downtime_secs)
         if global_loop:
@@ -511,12 +522,14 @@ def agent_command_result(body: dict, token: str = Depends(verify_token)):
 # ──────────────────────────────────────────
 @app.get("/api/export/excel")
 def export_excel(ip: str | None = None, db: Session = Depends(get_db)):
-    from generar_excel_logic import build_excel_workbook
+    # Eliminado el import local porque rompía PyInstaller
+    pass
 
     wb = build_excel_workbook(db, target_ip=ip)
 
+    import tempfile
     filename = f"monitor_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
-    filepath = os.path.join(os.path.dirname(__file__), filename)
+    filepath = os.path.join(tempfile.gettempdir(), filename)
     wb.save(filepath)
 
     return FileResponse(
@@ -575,7 +588,10 @@ if __name__ == "__main__":
     print("=" * 55)
 
     def run_server() -> None:
-        from config import settings
+        try:
+            from config import settings
+        except ImportError:
+            from servidor.config import settings
 
         # log_config=None para que uvicorn no busque isatty en --noconsole
         uvicorn.run(
@@ -600,7 +616,10 @@ if __name__ == "__main__":
     # Iniciar WebView en el hilo principal
     # Apuntamos al localhost:8000 donde corre nuestro dashboard montado en FastAPI
     api = Api()
-    from config import settings
+    try:
+        from config import settings
+    except ImportError:
+        from servidor.config import settings
 
     window = webview.create_window(
         "Codere PC Monitor",

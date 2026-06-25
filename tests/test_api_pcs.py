@@ -2,16 +2,13 @@
 test_api_pcs.py — Tests para el CRUD de PCs en el servidor central
 """
 
-from unittest.mock import patch
-
 from fastapi.testclient import TestClient
 
 
 class TestRegisterPC:
     def test_register_pc_ok(self, client: TestClient, sample_pc_data: dict):
         """Registrar una PC válida debe retornar 201 con los datos correctos."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            resp = client.post("/api/pcs", json=sample_pc_data)
+        resp = client.post("/api/pcs", json=sample_pc_data)
 
         assert resp.status_code == 201
         data = resp.json()
@@ -22,9 +19,8 @@ class TestRegisterPC:
 
     def test_register_pc_duplicate_ip(self, client: TestClient, sample_pc_data: dict):
         """Registrar una IP ya existente debe retornar 409."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            client.post("/api/pcs", json=sample_pc_data)
-            resp = client.post("/api/pcs", json=sample_pc_data)
+        client.post("/api/pcs", json=sample_pc_data)
+        resp = client.post("/api/pcs", json=sample_pc_data)
 
         assert resp.status_code == 409
 
@@ -48,8 +44,7 @@ class TestGetPCs:
 
     def test_list_pcs_after_register(self, client: TestClient, sample_pc_data: dict):
         """Después de registrar, debe aparecer en la lista."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            client.post("/api/pcs", json=sample_pc_data)
+        client.post("/api/pcs", json=sample_pc_data)
 
         resp = client.get("/api/pcs")
         assert resp.status_code == 200
@@ -58,8 +53,7 @@ class TestGetPCs:
 
     def test_get_single_pc(self, client: TestClient, sample_pc_data: dict):
         """GET /api/pcs/{id} debe retornar la PC correcta."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            created = client.post("/api/pcs", json=sample_pc_data).json()
+        created = client.post("/api/pcs", json=sample_pc_data).json()
 
         resp = client.get(f"/api/pcs/{created['id']}")
         assert resp.status_code == 200
@@ -74,8 +68,7 @@ class TestGetPCs:
 class TestDeletePC:
     def test_delete_pc(self, client: TestClient, sample_pc_data: dict):
         """Eliminar una PC debe retornar 200 y quitarla de la lista."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            created = client.post("/api/pcs", json=sample_pc_data).json()
+        created = client.post("/api/pcs", json=sample_pc_data).json()
 
         resp = client.delete(f"/api/pcs/{created['id']}")
         assert resp.status_code == 200

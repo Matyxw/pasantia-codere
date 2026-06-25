@@ -10,14 +10,24 @@ from datetime import datetime
 
 from sqlalchemy import Column, Float, Integer, String, Text, create_engine, event
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
+from sqlalchemy.pool import StaticPool
 from sqlalchemy.pool.base import _ConnectionRecord
 
-from config import settings
+try:
+    from config import settings
+except ImportError:
+    from servidor.config import settings
+
+_engine_kwargs: dict[str, typing.Any] = {
+    "connect_args": {"check_same_thread": False},
+    "echo": False,
+}
+if settings.database_path.strip() == ":memory:":
+    _engine_kwargs["poolclass"] = StaticPool
 
 engine = create_engine(
     settings.database_url,
-    connect_args={"check_same_thread": False},
-    echo=False,
+    **_engine_kwargs,
 )
 
 
@@ -42,7 +52,7 @@ class PC(Base):
     __tablename__ = "pcs"
 
     id = Column(Integer, primary_key=True, index=True)
-    agent_id = Column(String, unique=True, index=True, nullable=False)
+    agent_id = Column(String, unique=True, index=True, nullable=True)
     ip = Column(String, nullable=False)
     name = Column(String, nullable=False)
     hostname = Column(String)

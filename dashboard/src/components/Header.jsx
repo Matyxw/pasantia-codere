@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import {
-  IconMonitor, IconSearch, IconPlus, IconSheet,
-  IconMoon, IconSun, IconRefresh, IconCircle
+  IconMonitor, IconSheet,
+  IconMoon, IconSun, IconCircle
 } from './Icons'
 import ExportModal from './ExportModal'
 

@@ -13,8 +13,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 if getattr(sys, "frozen", False):
     BASE_DIR = Path(sys.executable).parent
+    ENV_PATH = BASE_DIR / ".env"
 else:
     BASE_DIR = Path(__file__).parent
+    ENV_PATH = BASE_DIR.parent / ".env"
 
 
 class Settings(BaseSettings):
@@ -25,7 +27,7 @@ class Settings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        env_file=BASE_DIR.parent / ".env",
+        env_file=ENV_PATH,
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
@@ -75,7 +77,8 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
-        # Resolver ruta relativa al directorio del servidor
+        if self.database_path.strip() == ":memory:":
+            return "sqlite:///:memory:"
         path = Path(self.database_path)
         if not path.is_absolute():
             path = BASE_DIR / path
