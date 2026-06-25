@@ -325,8 +325,7 @@ async def execute_command(
         if cmd_id in command_results:
             res = command_results.pop(cmd_id)
             return res
-        import time
-        time.sleep(0.5)
+        await asyncio.sleep(0.5)
 
     raise HTTPException(504, "Timeout: el agente no recogió ni respondió el comando")
 
