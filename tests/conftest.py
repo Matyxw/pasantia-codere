@@ -18,6 +18,8 @@ os.environ["TESTING"] = "1"
 os.environ.setdefault("SECRET_KEY", "test-secret-key-not-real")
 os.environ.setdefault("ENVIRONMENT", "development")
 
+import servidor.config as config_module
+config_module.settings.secret_key = "test-secret-key-not-real"
 import servidor.database as db_module
 from servidor.database import Base
 

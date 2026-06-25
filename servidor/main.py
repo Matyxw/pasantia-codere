@@ -84,7 +84,7 @@ global_loop = None
 
 class ConnectionManager:
     def __init__(self) -> None:
-        self.active: list[WebSocket] = []
+        self.active: dict[WebSocket, asyncio.Lock] = {}
 
     async def connect(self, ws: WebSocket) -> None:
         await ws.accept()

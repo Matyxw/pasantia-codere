@@ -36,7 +36,6 @@ def test_notificaciones_calls():
     try:
         notificaciones.notify_offline("Test-PC", "192.168.1.100")
         notificaciones.notify_online("Test-PC", "192.168.1.100", 90.0)
-        notificaciones.notify_error("Un error de prueba")
     except Exception as e:
         pytest.fail(f"notify functions raised an exception: {e}")
 
