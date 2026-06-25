@@ -122,13 +122,16 @@ export default function App() {
     ws.onmessage = (e) => {
       try {
         handleMessage(JSON.parse(e.data))
-      } catch {}
+      } catch (err) {
+        console.error("WS Parse Error", err)
+      }
     }
 
     ws.onclose = () => {
       setWsStatus('closed')
       if (!reconnectTimer.current) {
-        reconnectTimer.current = setInterval(connectWS, 3000)
+        // eslint-disable-next-line no-use-before-define
+        reconnectTimer.current = setInterval(() => connectWS(), 3000)
       }
     }
 

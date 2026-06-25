@@ -21,7 +21,7 @@ def build():
     # 1. Servidor
     print("\n[1/3] Compilando Servidor Central (con Dashboard incrustado)...")
     icon_path = os.path.join(ROOT_DIR, "codere_icon.ico")
-    cmd_servidor = f'python -m PyInstaller --noconfirm --clean --onefile --noconsole --name "Codere_Monitor_Servidor" --icon="{icon_path}" --hidden-import webview --exclude-module PyQt5 --exclude-module tkinter --add-data "{ROOT_DIR}/dashboard/dist;dashboard_dist" {ROOT_DIR}/servidor/main.py'
+    cmd_servidor = f'python -m PyInstaller --noconfirm --clean --onefile --noconsole --name "Codere_Monitor_Servidor" --icon="{icon_path}" --hidden-import webview --hidden-import plyer.platforms.win.notification --exclude-module PyQt5 --exclude-module tkinter --add-data "{ROOT_DIR}/dashboard/dist;dashboard_dist" {ROOT_DIR}/servidor/main.py'
     run_cmd(cmd_servidor)
     shutil.copy(os.path.join(ROOT_DIR, "dist", "Codere_Monitor_Servidor.exe"), RELEASE_DIR)
 

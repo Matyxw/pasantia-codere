@@ -3378,6 +3378,30 @@
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\plyer\\facades\\wifi.py',
    'PYMODULE'),
+  ('plyer.platforms',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\plyer\\platforms\\__init__.py',
+   'PYMODULE'),
+  ('plyer.platforms.win',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\plyer\\platforms\\win\\__init__.py',
+   'PYMODULE'),
+  ('plyer.platforms.win.libs',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\plyer\\platforms\\win\\libs\\__init__.py',
+   'PYMODULE'),
+  ('plyer.platforms.win.libs.balloontip',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\plyer\\platforms\\win\\libs\\balloontip.py',
+   'PYMODULE'),
+  ('plyer.platforms.win.libs.win_api_defs',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\plyer\\platforms\\win\\libs\\win_api_defs.py',
+   'PYMODULE'),
+  ('plyer.platforms.win.notification',
+   'C:\\Users\\Lucas '
+   'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\plyer\\platforms\\win\\notification.py',
+   'PYMODULE'),
   ('plyer.utils',
    'C:\\Users\\Lucas '
    'cardozo\\AppData\\Roaming\\Python\\Python314\\site-packages\\plyer\\utils.py',

@@ -24,8 +24,8 @@ import scheduler as sched
 from database import PC, Event, Metric, SessionLocal, get_db
 
 try:
-    from openpyxl import Workbook
-    from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl import Workbook  # noqa: F401
+    from openpyxl.styles import Alignment, Font, PatternFill  # noqa: F401
 except ImportError:
     pass
 
