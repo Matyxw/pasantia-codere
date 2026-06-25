@@ -17,11 +17,18 @@ export default function ExportModal({ isOpen, onClose }) {
 
   const handleExport = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || (window.location.protocol + '//' + window.location.host + '/api');
-      const url = exportMode === 'single' ? `${apiUrl}/export/excel?ip=${targetIp}` : `${apiUrl}/export/excel`;
-      
-      // Regla de Oro 8: Descargas: window.location.href, NO <a download>
-      window.location.href = url;
+      if (window.pywebview && window.pywebview.api) {
+        const ipParam = exportMode === 'single' ? targetIp : null;
+        const success = await window.pywebview.api.save_excel(ipParam);
+        if (!success) {
+          // Si el usuario canceló el diálogo o hubo error, no hacemos nada más
+        }
+      } else {
+        const apiUrl = import.meta.env.VITE_API_URL || (window.location.protocol + '//' + window.location.host + '/api');
+        const url = exportMode === 'single' ? `${apiUrl}/export/excel?ip=${targetIp}` : `${apiUrl}/export/excel`;
+        // Regla de Oro 8: Descargas: window.location.href, NO <a download>
+        window.location.href = url;
+      }
       
       setTimeout(() => {
         setIsExporting(false);

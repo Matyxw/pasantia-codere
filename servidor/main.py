@@ -613,6 +613,42 @@ if __name__ == "__main__":
         def dummy(self) -> None:
             pass
 
+        def save_excel(self, target_ip: str | None = None) -> bool:
+            import webview
+            from datetime import datetime
+            
+            filename = f"monitor_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+            result = self.window.create_file_dialog(
+                webview.SAVE_DIALOG,
+                directory='',
+                save_filename=filename,
+                file_types=('Excel Files (*.xlsx)', 'All files (*.*)')
+            )
+            
+            if result and len(result) > 0:
+                filepath = result[0]
+                try:
+                    from servidor.database import get_db
+                    try:
+                        from generar_excel_logic import build_excel_workbook
+                    except ImportError:
+                        from servidor.generar_excel_logic import build_excel_workbook
+
+                    db_gen = get_db()
+                    db = next(db_gen)
+                    
+                    wb = build_excel_workbook(db, target_ip=target_ip)
+                    wb.save(filepath)
+                    
+                    try:
+                        next(db_gen)
+                    except StopIteration:
+                        pass
+                    return True
+                except Exception as e:
+                    print("Error exportando excel:", e)
+            return False
+
     # Iniciar WebView en el hilo principal
     # Apuntamos al localhost:8000 donde corre nuestro dashboard montado en FastAPI
     api = Api()
