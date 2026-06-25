@@ -19,36 +19,22 @@ export default function ExportModal({ isOpen, onClose }) {
     setIsExporting(true);
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-      if (window.pywebview) {
-        // En desktop app
-        try {
-            const result = await window.pywebview.api.export_excel_dialog(exportMode === 'single' ? targetIp : null);
-            if (result && result.error) {
-               alert("Error de Python: " + result.error);
-            } else if (result && result.cancelled) {
-               console.log("Cancelado por el usuario");
-            } else {
-               alert("¡Excel generado exitosamente en: " + (result?.filepath || "") + "!");
-            }
-        } catch (e) {
-            alert("Excepción llamando a pywebview: " + e.toString());
-        }
+      
+      const url = exportMode === 'single' ? `${apiUrl}/export/excel?ip=${targetIp}` : `${apiUrl}/export/excel`;
+      const res = await fetch(url);
+      
+      if (res.ok) {
+        const blob = await res.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = `codere_export_${new Date().getTime()}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(downloadUrl);
       } else {
-        // En navegador (dev mode)
-        const url = exportMode === 'single' ? `${apiUrl}/export/excel?ip=${targetIp}` : `${apiUrl}/export/excel`;
-        const res = await fetch(url);
-        if (res.ok) {
-          const blob = await res.blob();
-          const downloadUrl = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = downloadUrl;
-          a.download = `codere_export_${new Date().getTime()}.xlsx`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        } else {
-            alert("Error del servidor: " + res.statusText);
-        }
+        alert("Error del servidor: " + res.statusText);
       }
     } catch (err) {
       alert("Error exportando excel: " + err.message);

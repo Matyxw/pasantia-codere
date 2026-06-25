@@ -514,40 +514,8 @@ if __name__ == "__main__":
         def __init__(self):
             self.window = None
 
-        def export_excel_dialog(self, target_ip=None):
-            from datetime import datetime
-
-            import webview
-
-            from database import SessionLocal
-            from generar_excel_logic import build_excel_workbook
-
-            if not self.window:
-                return {"error": "Ventana no cargada"}
-
-            default_filename = f"monitor_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
-
-            result = self.window.create_file_dialog(
-                webview.SAVE_DIALOG,
-                directory='',
-                save_filename=default_filename,
-                file_types=('Excel Files (*.xlsx)', 'All files (*.*)')
-            )
-
-            if not result:
-                return {"cancelled": True}
-
-            filepath = result[0] if isinstance(result, tuple) else result
-
-            try:
-                db = SessionLocal()
-                wb = build_excel_workbook(db, target_ip=target_ip)
-                wb.save(filepath)
-                db.close()
-                return {"success": True, "filepath": filepath}
-            except Exception as e:
-                logger.error("Fallo general durante exportación GUI Excel: %s", e, exc_info=True)
-                return {"error": str(e)}
+        def dummy(self):
+            pass
 
     # Iniciar WebView en el hilo principal
     # Apuntamos al localhost:8000 donde corre nuestro dashboard montado en FastAPI
