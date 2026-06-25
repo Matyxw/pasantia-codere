@@ -54,11 +54,11 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Security(security))
 
 try:
     import scheduler as sched
-    from database import PC, Event, Metric, SessionLocal, get_db
+    from database import PC, Event, Metric, get_db
     from generar_excel_logic import build_excel_workbook
 except ImportError:
     from servidor import scheduler as sched
-    from servidor.database import PC, Event, Metric, SessionLocal, get_db
+    from servidor.database import PC, Event, Metric, get_db
     from servidor.generar_excel_logic import build_excel_workbook
 
 try:
@@ -161,21 +161,27 @@ app.add_middleware(
 # WebSocket endpoint
 # ──────────────────────────────────────────
 @app.websocket("/ws")
-async def websocket_endpoint(ws: WebSocket) -> None:
+async def websocket_endpoint(ws: WebSocket, db: Session = Depends(get_db)):
     await manager.connect(ws)
     try:
-        # Enviar estado inicial completo
-        db = SessionLocal()
-        pcs = db.query(PC).all()
-        events = db.query(Event).order_by(Event.timestamp.desc()).limit(50).all()
+        from starlette.concurrency import run_in_threadpool
+
+        def _fetch_data():
+            _pcs = db.query(PC).all()
+            _events = db.query(Event).order_by(Event.timestamp.desc()).limit(50).all()
+            return [_pc_to_dict(pc) for pc in _pcs], [_event_to_dict(e) for e in _events]
+
+        pcs_data, events_data = await run_in_threadpool(_fetch_data)
+
+        # No guardamos DB en ws state porque SQLAlchemy no es asíncrono
         db.close()
 
         await ws.send_json(
             {
                 "type": "initial_state",
                 "data": {
-                    "pcs": [_pc_to_dict(pc) for pc in pcs],
-                    "events": [_event_to_dict(e) for e in events],
+                    "pcs": pcs_data,
+                    "events": events_data,
                 },
             }
         )
@@ -250,7 +256,7 @@ def get_pcs(db: Session = Depends(get_db)):
 
 
 @app.post("/api/pcs", status_code=201)
-async def register_pc(body: dict, db: Session = Depends(get_db)):
+def register_pc(body: dict, db: Session = Depends(get_db)):
     # Mantener retrocompatibilidad o registro manual
     ip = body.get("ip", "").strip()
     name = body.get("name", "").strip()
@@ -267,7 +273,10 @@ async def register_pc(body: dict, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(pc)
 
-    await manager.broadcast({"type": "pc_registered", "data": _pc_to_dict(pc)})
+    if global_loop:
+        asyncio.run_coroutine_threadsafe(
+            manager.broadcast({"type": "pc_registered", "data": _pc_to_dict(pc)}), global_loop
+        )
     return _pc_to_dict(pc)
 
 
@@ -280,13 +289,17 @@ def get_pc(pc_id: int, db: Session = Depends(get_db)):
 
 
 @app.delete("/api/pcs/{pc_id}")
-async def delete_pc(pc_id: int, db: Session = Depends(get_db)):
+def delete_pc(pc_id: int, db: Session = Depends(get_db)):
     pc = db.query(PC).filter(PC.id == pc_id).first()
     if not pc:
         raise HTTPException(404, "PC no encontrada")
     db.delete(pc)
     db.commit()
-    await manager.broadcast({"type": "pc_deleted", "data": {"pc_id": pc_id}})
+
+    if global_loop:
+        asyncio.run_coroutine_threadsafe(
+            manager.broadcast({"type": "pc_deleted", "data": {"pc_id": pc_id}}), global_loop
+        )
     return {"message": f"PC {pc_id} eliminada"}
 
 

@@ -3,8 +3,8 @@ test_api_agent.py — Tests del flujo push del agente
 """
 
 from fastapi.testclient import TestClient
-
 from servidor.config import settings
+
 AUTH_HEADERS = {"Authorization": f"Bearer {settings.secret_key}"}
 
 

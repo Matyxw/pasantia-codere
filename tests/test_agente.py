@@ -4,7 +4,6 @@ test_agente.py — Tests para las funciones internas del Agente Push
 
 import os
 import sys
-from unittest.mock import MagicMock, mock_open, patch
 
 # Agregar el directorio del agente al path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "agente"))

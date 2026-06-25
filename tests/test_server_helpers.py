@@ -10,6 +10,7 @@ from unittest.mock import MagicMock, patch
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "servidor"))
 
 import pytest
+
 import config
 import notificaciones
 import scheduler
@@ -55,9 +56,10 @@ def test_scheduler_lifecycle():
 
 def test_scheduler_heartbeat_pc_goes_offline():
     """Verifica que el scheduler marque una PC offline si no reporta métricas a tiempo."""
-    from conftest import TestSessionLocal, TEST_ENGINE, Base
-    from database import PC, Event
     from datetime import datetime, timedelta
+
+    from conftest import TestSessionLocal
+    from database import PC, Event
 
     # Configurar PC con last_seen de hace 30 segundos
     last_seen_time = (datetime.now() - timedelta(seconds=30)).isoformat()
@@ -65,7 +67,7 @@ def test_scheduler_heartbeat_pc_goes_offline():
 
     with patch("scheduler.SessionLocal", TestSessionLocal), \
          patch("scheduler.notify_offline") as mock_notify:
-        
+
         # Guardar en base de datos de test
         db = TestSessionLocal()
         db.add(pc)
@@ -96,8 +98,9 @@ def test_config_database_url():
 def test_config_invalid_log_level():
     """Verifica que se lance ValidationError al configurar un nivel de log inválido."""
     from pydantic import ValidationError
+
     from config import Settings
-    
+
     with pytest.raises(ValidationError):
         Settings(log_level="INVALID_LEVEL")
 
@@ -118,9 +121,9 @@ def test_scheduler_check_pc_invalid_last_seen():
     """Verifica que el scheduler maneje correctamente campos last_seen con formatos inválidos."""
     from conftest import TestSessionLocal
     from database import PC
-    
+
     pc = PC(ip="10.0.0.9", name="PC-Invalid-Date", status="online", last_seen="invalid-date-string")
-    
+
     with patch("scheduler.SessionLocal", TestSessionLocal), \
          patch("scheduler.notify_offline") as mock_notify:
         db = TestSessionLocal()
@@ -128,9 +131,9 @@ def test_scheduler_check_pc_invalid_last_seen():
         db.commit()
         db.refresh(pc)
         db.close()
-        
+
         scheduler._heartbeat()
-        
+
         db = TestSessionLocal()
         updated_pc = db.query(PC).filter(PC.id == pc.id).first()
         assert updated_pc.status == "offline"

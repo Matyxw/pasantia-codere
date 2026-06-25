@@ -2,8 +2,8 @@
 test_api_pcs.py — Tests para el CRUD de PCs en el servidor central
 """
 
-from fastapi.testclient import TestClient
 import pytest
+from fastapi.testclient import TestClient
 
 
 class TestRegisterPC:
@@ -166,10 +166,10 @@ class TestPCExecuteCommand:
             "metrics": {"cpu": {"percent": 10.0}}
         }
         client.post("/api/agent/push", json=payload)
-        
+
         pcs = client.get("/api/pcs").json()
         pc_id = [p["id"] for p in pcs if p["ip"] == sample_pc_data["ip"]][0]
-        
+
         resp = client.post(f"/api/pcs/{pc_id}/execute", json={"command": ""})
         assert resp.status_code == 400
 
@@ -187,21 +187,22 @@ class TestConnectionManager:
     @pytest.mark.anyio
     async def test_connection_manager(self):
         """Verifica que el ConnectionManager registre, elimine y transmita a WebSockets correctamente."""
-        from main import manager
         from unittest.mock import AsyncMock, MagicMock
-        
+
+        from main import manager
+
         ws = MagicMock()
         ws.accept = AsyncMock()
         ws.send_json = AsyncMock()
-        
+
         # Test connect
         await manager.connect(ws)
         assert ws in manager.active
-        
+
         # Test broadcast
         await manager.broadcast({"type": "test_msg"})
         ws.send_json.assert_called_with({"type": "test_msg"})
-        
+
         # Test disconnect
         manager.disconnect(ws)
         assert ws not in manager.active
