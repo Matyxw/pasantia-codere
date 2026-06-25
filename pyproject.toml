@@ -55,9 +55,10 @@ dev = [
 #  RUFF — Linter + Formatter
 # ─────────────────────────────────────
 [tool.ruff]
-target-version = "py311"
+target-version = "py310"
 line-length = 100
 src = ["agente", "servidor", "tests"]
+output-format = "concise"
 
 [tool.ruff.lint]
 select = [
@@ -76,8 +77,6 @@ select = [
 ignore = [
     "ANN101",  # missing type annotation for self
     "ANN102",  # missing type annotation for cls
-    "ANN",     # disable strict annotations checking globally
-    "S",       # disable strict security checking globally (subprocess etc)
     "E501",    # line too long
     "SIM105",  # Use contextlib.suppress
     "E722",    # Bare except
@@ -88,6 +87,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["ANN", "S"]
+"servidor/main.py" = ["ANN"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -102,7 +102,6 @@ python_version = "3.12"
 warn_return_any = false
 warn_unused_configs = false
 ignore_missing_imports = true
-ignore_errors = true
 exclude = ["tests/", "build/"]
 
 # ─────────────────────────────────────

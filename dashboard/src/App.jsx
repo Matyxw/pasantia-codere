@@ -3,8 +3,6 @@ import Header from './components/Header'
 import PCGrid from './components/PCGrid'
 import Sidebar from './components/Sidebar'
 import PCModal from './components/PCModal'
-import RegisterModal from './components/RegisterModal'
-import ScanModal from './components/ScanModal'
 import { ToastContainer, toast } from './components/Toast'
 import './App.css'
 
@@ -23,8 +21,6 @@ export default function App() {
   const [pcs, setPcs] = useState([])
   const [events, setEvents] = useState([])
   const [selectedPC, setSelectedPC] = useState(null)
-  const [showRegister, setShowRegister] = useState(false)
-  const [showScan, setShowScan] = useState(false)
   const [wsStatus, setWsStatus] = useState('connecting')
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem('codere-theme') === 'dark'
@@ -157,21 +153,6 @@ export default function App() {
     return () => clearInterval(ping)
   }, [])
 
-  const handleRegister = async (ip, name) => {
-    const resp = await fetch(`${API}/pcs`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ip, name }),
-    })
-    const data = await resp.json()
-    if (!resp.ok) throw new Error(data.detail || 'Error al registrar')
-    setPcs(prev => {
-      if (prev.find(p => p.id === data.id)) return prev
-      return [...prev, data]
-    })
-    toast.success(`La máquina ${name} fue registrada exitosamente.`)
-  }
-
   const handleDelete = async (pcId) => {
     await fetch(`${API}/pcs/${pcId}`, { method: 'DELETE' })
     setPcs(prev => prev.filter(p => p.id !== pcId))
@@ -191,8 +172,6 @@ export default function App() {
       <Header
         stats={stats}
         wsStatus={wsStatus}
-        onRegister={() => setShowRegister(true)}
-        onScan={() => setShowScan(true)}
         apiUrl={API}
         darkMode={darkMode}
         onToggleDark={() => setDarkMode(d => !d)}
@@ -218,21 +197,7 @@ export default function App() {
         />
       )}
 
-      {showRegister && (
-        <RegisterModal
-          onClose={() => setShowRegister(false)}
-          onRegister={handleRegister}
-        />
-      )}
 
-      {showScan && (
-        <ScanModal
-          onClose={() => setShowScan(false)}
-          onRegister={handleRegister}
-          apiUrl={API}
-          existingIPs={pcs.map(p => p.ip)}
-        />
-      )}
 
       <ToastContainer />
     </div>

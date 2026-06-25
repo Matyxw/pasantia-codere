@@ -74,8 +74,11 @@ yarn-error.log*
 # ─────────────────────────────────────
 dist/
 build/dist/
+build/*
+!build/*.py
 *.spec
 release/
+Release_Nuitka/
 
 # ─────────────────────────────────────
 #  IDE & EDITORES

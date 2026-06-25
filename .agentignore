@@ -1,0 +1,31 @@
+﻿# [TOKEN-GOLF] Ignorar contexto pesado
+# Lockfiles
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+# Binarios y assets
+*.svg
+*.png
+*.jpg
+*.ico
+*.exe
+*.dll
+*.pyd
+*.so
+# Build artifacts
+dist/
+build/
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+*.spec
+# DB y datos
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.xlsx
+# Git, logs
+.git/
+*.log

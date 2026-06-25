@@ -5,7 +5,7 @@ import {
 } from './Icons'
 import ExportModal from './ExportModal'
 
-export default function Header({ stats, wsStatus, onRegister, onScan, apiUrl, darkMode, onToggleDark }) {
+export default function Header({ stats, wsStatus, apiUrl, darkMode, onToggleDark }) {
   const [time, setTime] = useState(new Date())
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
 
@@ -74,15 +74,7 @@ export default function Header({ stats, wsStatus, onRegister, onScan, apiUrl, da
             {darkMode ? <IconSun size={14} /> : <IconMoon size={14} />}
           </button>
 
-          <button className="btn" onClick={onScan} title="Escanear red local">
-            <IconSearch size={13} />
-            Escanear
-          </button>
 
-          <button className="btn btn-primary" onClick={onRegister}>
-            <IconPlus size={13} />
-            Registrar PC
-          </button>
 
           <button
             className="btn"

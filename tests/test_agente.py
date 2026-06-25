@@ -1,5 +1,5 @@
 """
-test_agente.py — Tests para los endpoints del Agente FastAPI
+test_agente.py — Tests para las funciones internas del Agente Push
 """
 
 import os
@@ -8,80 +8,42 @@ import sys
 # Agregar el directorio del agente al path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "agente"))
 
-import pytest
-from fastapi.testclient import TestClient
-
-from agente import app  # type: ignore[import]
+from agente import _get_local_ip, execute_command, get_metrics
 
 
-@pytest.fixture(scope="module")
-def agent_client() -> TestClient:
-    with TestClient(app) as c:
-        yield c
+class TestAgentFunctions:
+    def test_get_local_ip(self):
+        ip = _get_local_ip()
+        assert isinstance(ip, str)
+        assert len(ip.split(".")) == 4 or ":" in ip
 
+    def test_get_metrics(self):
+        metrics = get_metrics()
+        assert "cpu" in metrics
+        assert "memory" in metrics
+        assert "disk" in metrics
+        assert "network" in metrics
+        assert "processes" in metrics
 
-class TestAgentHealth:
-    def test_health_returns_online(self, agent_client: TestClient):
-        resp = agent_client.get("/health")
-        assert resp.status_code == 200
-        data = resp.json()
-        assert data["status"] == "online"
-        assert "hostname" in data
-        assert "timestamp" in data
-        assert data["agent_version"] == "2.0.0"
-
-
-class TestAgentInfo:
-    def test_info_has_required_fields(self, agent_client: TestClient):
-        resp = agent_client.get("/info")
-        assert resp.status_code == 200
-        data = resp.json()
-        required = ["hostname", "ip", "os", "architecture", "processor", "uptime_seconds"]
-        for field in required:
-            assert field in data, f"Falta el campo: {field}"
-
-    def test_uptime_is_positive(self, agent_client: TestClient):
-        resp = agent_client.get("/info")
-        assert resp.json()["uptime_seconds"] > 0
-
-
-class TestAgentMetrics:
-    def test_metrics_structure(self, agent_client: TestClient):
-        resp = agent_client.get("/metrics")
-        assert resp.status_code == 200
-        data = resp.json()
-        assert "cpu" in data
-        assert "memory" in data
-        assert "disk" in data
-        assert "network" in data
-        assert "processes" in data
-
-    def test_cpu_percent_valid_range(self, agent_client: TestClient):
-        resp = agent_client.get("/metrics")
-        cpu = resp.json()["cpu"]["percent"]
-        assert 0.0 <= cpu <= 100.0
-
-    def test_ram_percent_valid_range(self, agent_client: TestClient):
-        resp = agent_client.get("/metrics")
-        ram = resp.json()["memory"]["percent"]
-        assert 0.0 <= ram <= 100.0
+        # Verificar rangos válidos
+        assert 0.0 <= metrics["cpu"]["percent"] <= 100.0
+        assert 0.0 <= metrics["memory"]["percent"] <= 100.0
 
 
 class TestAgentExecute:
-    def test_execute_allowed_command(self, agent_client: TestClient):
-        resp = agent_client.post("/execute", json={"command": "whoami"})
-        assert resp.status_code == 200
-        data = resp.json()
-        assert "stdout" in data or "error" in data
+    def test_execute_allowed_command(self):
+        res = execute_command("whoami")
+        assert "error" not in res or res["error"] == ""
+        assert res["exit_code"] == 0 or res["exit_code"] == 1
+        assert "stdout" in res
+        assert res["command"] == "whoami"
 
-    def test_execute_blocked_command(self, agent_client: TestClient):
-        resp = agent_client.post("/execute", json={"command": "rm -rf /"})
-        assert resp.status_code == 200
-        data = resp.json()
-        assert "error" in data
-        assert "no permitido" in data["error"].lower()
+    def test_execute_blocked_command(self):
+        res = execute_command("rm -rf /")
+        assert "error" in res
+        assert "no permitido" in res["error"].lower()
 
-    def test_execute_empty_command(self, agent_client: TestClient):
-        resp = agent_client.post("/execute", json={"command": ""})
-        assert resp.status_code == 200
-        assert "error" in resp.json()
+    def test_execute_empty_command(self):
+        res = execute_command("")
+        assert "error" in res
+        assert "no permitido" in res["error"].lower()

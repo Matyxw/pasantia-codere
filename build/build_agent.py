@@ -29,25 +29,44 @@ def build() -> None:
     print()
 
     cmd = [
-        sys.executable, "-m", "PyInstaller",
-        "--onefile",                          # Un solo .exe
-        "--name", "PCMonitor-Agente",
-        "--distpath", str(DIST),
-        "--workpath", str(ROOT / "build" / "work"),
-        "--specpath", str(ROOT / "build"),
-        "--hidden-import", "psutil",
-        "--hidden-import", "fastapi",
-        "--hidden-import", "uvicorn",
-        "--hidden-import", "uvicorn.logging",
-        "--hidden-import", "uvicorn.loops",
-        "--hidden-import", "uvicorn.loops.auto",
-        "--hidden-import", "uvicorn.protocols",
-        "--hidden-import", "uvicorn.protocols.http",
-        "--hidden-import", "uvicorn.protocols.http.auto",
-        "--hidden-import", "uvicorn.protocols.websockets",
-        "--hidden-import", "uvicorn.protocols.websockets.auto",
-        "--hidden-import", "uvicorn.lifespan",
-        "--hidden-import", "uvicorn.lifespan.on",
+        sys.executable,
+        "-m",
+        "PyInstaller",
+        "--onefile",  # Un solo .exe
+        "--name",
+        "PCMonitor-Agente",
+        "--distpath",
+        str(DIST),
+        "--workpath",
+        str(ROOT / "build" / "work"),
+        "--specpath",
+        str(ROOT / "build"),
+        "--hidden-import",
+        "psutil",
+        "--hidden-import",
+        "fastapi",
+        "--hidden-import",
+        "uvicorn",
+        "--hidden-import",
+        "uvicorn.logging",
+        "--hidden-import",
+        "uvicorn.loops",
+        "--hidden-import",
+        "uvicorn.loops.auto",
+        "--hidden-import",
+        "uvicorn.protocols",
+        "--hidden-import",
+        "uvicorn.protocols.http",
+        "--hidden-import",
+        "uvicorn.protocols.http.auto",
+        "--hidden-import",
+        "uvicorn.protocols.websockets",
+        "--hidden-import",
+        "uvicorn.protocols.websockets.auto",
+        "--hidden-import",
+        "uvicorn.lifespan",
+        "--hidden-import",
+        "uvicorn.lifespan.on",
         "--clean",
         "--noconfirm",
         str(AGENTE),
@@ -57,13 +76,13 @@ def build() -> None:
 
     if result.returncode == 0:
         exe = DIST / "PCMonitor-Agente.exe"
-        size_mb = exe.stat().st_size / (1024 ** 2)
+        size_mb = exe.stat().st_size / (1024**2)
         print()
-        print("  ✅ Build exitoso!")
-        print(f"  📦 {exe}")
-        print(f"  📏 Tamaño: {size_mb:.1f} MB")
+        print("  [OK] Build exitoso!")
+        print(f"  [EXE] {exe}")
+        print(f"  [SIZE] Tamaño: {size_mb:.1f} MB")
     else:
-        print("  ❌ Build falló")
+        print("  [FAIL] Build falló")
         sys.exit(1)
 
 

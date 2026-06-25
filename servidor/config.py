@@ -11,7 +11,7 @@ from pathlib import Path
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     BASE_DIR = Path(sys.executable).parent
 else:
     BASE_DIR = Path(__file__).parent
@@ -50,7 +50,9 @@ class Settings(BaseSettings):
     database_path: str = Field(default="./monitor.db")
 
     # ── Heartbeat ─────────────────────────────────────────
-    heartbeat_interval: int = Field(default=15, ge=5, le=300, description="Segundos entre verificaciones")
+    heartbeat_interval: int = Field(
+        default=15, ge=5, le=300, description="Segundos entre verificaciones"
+    )
     agent_timeout: int = Field(default=5, ge=1, le=30)
 
     # ── Notificaciones ────────────────────────────────────

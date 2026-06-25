@@ -15,10 +15,14 @@ logger = logging.getLogger(__name__)
 # Configuración del fallback de Plyer
 try:
     from plyer import notification as plyer_notify
+
     _PLYER_OK = True
 except ImportError as e:
     _PLYER_OK = False
-    logger.warning("Librería plyer no encontrada. Las notificaciones nativas estarán desactivadas. Detalle: %s", e)
+    logger.warning(
+        "Librería plyer no encontrada. Las notificaciones nativas estarán desactivadas. Detalle: %s",
+        e,
+    )
 
 
 def _format_downtime(seconds: float | None) -> str:
@@ -48,7 +52,7 @@ def notify_offline(pc_name: str, ip: str) -> None:
 
     Se registra el evento por consola usando secuencias de escape ANSI para el color rojo,
     y se delega la tarea de renderizar un OS Toast Notification a plyer.
-    
+
     Args:
         pc_name (str): Nombre resoluble o lógico del equipo.
         ip (str): Dirección IP v4 local del equipo que perdió conexión.
@@ -59,6 +63,7 @@ def notify_offline(pc_name: str, ip: str) -> None:
     print(f"\033[91m[{ts}] OFFLINE: {pc_name} ({ip})\033[0m")
 
     from config import settings
+
     if not _PLYER_OK or not settings.desktop_notifications:
         return
 
@@ -75,7 +80,9 @@ def notify_offline(pc_name: str, ip: str) -> None:
         logger.error(
             "Fallo inesperado al enviar notificación de Windows (PC DESCONECTADA: %s). "
             "Excepción: %s",
-            pc_name, e, exc_info=True
+            pc_name,
+            e,
+            exc_info=True,
         )
 
 
@@ -98,6 +105,7 @@ def notify_online(pc_name: str, ip: str, downtime_seconds: float | None = None) 
     print(f"\033[92m[{ts}] ONLINE:  {pc_name} ({ip}){downtime_str}\033[0m")
 
     from config import settings
+
     if not _PLYER_OK or not settings.desktop_notifications:
         return
 
@@ -114,5 +122,7 @@ def notify_online(pc_name: str, ip: str, downtime_seconds: float | None = None) 
         logger.error(
             "Fallo inesperado al enviar notificación de Windows (PC RECONECTADA: %s). "
             "Excepción: %s",
-            pc_name, e, exc_info=True
+            pc_name,
+            e,
+            exc_info=True,
         )

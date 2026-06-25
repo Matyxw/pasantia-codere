@@ -3,16 +3,17 @@ import logging
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
-
 from sqlalchemy.orm import Session
+
 from database import PC, Event, Metric
 
 logger = logging.getLogger("ExcelLogic")
 
+
 def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
     """
     Construye y ensambla un Workbook de openpyxl estructurado para exportar la telemetría corporativa.
-    
+
     [POR QUÉ EXISTE ESTE MÓDULO]:
     En fases anteriores, tanto el CLI local como la API Web generaban los Excel con lógica duplicada y acoplada.
     Este módulo abstrae la generación para cumplir con el principio DRY (Don't Repeat Yourself), permitiendo que
@@ -20,14 +21,14 @@ def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
     fuente de verdad y estándares visuales (Codere Branding).
 
     [CONSIDERACIONES DE PERFORMANCE]:
-    Esta es una operación intensiva en CPU e I/O (miles de registros). Cuando es invocada desde FastAPI, 
-    el endpoint DEBE estar declarado como `def` síncrono (no `async def`) para ser delegado al ThreadPool 
+    Esta es una operación intensiva en CPU e I/O (miles de registros). Cuando es invocada desde FastAPI,
+    el endpoint DEBE estar declarado como `def` síncrono (no `async def`) para ser delegado al ThreadPool
     interno de uvicorn, evitando la asfixia (Starvation) del Event Loop ASGI principal (Regla #8 de AGENTS.md).
-    
+
     Args:
         db (Session): Sesión de base de datos activa SQLAlchemy.
         target_ip (str | None): IP de filtrado para generar un reporte aislado de un único nodo.
-    
+
     Returns:
         Workbook: Instancia en memoria del libro Excel con hojas renderizadas.
     """
@@ -38,11 +39,25 @@ def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
     ws.title = "Resumen de Flota"
 
     headers = [
-        "ID", "IP", "Nombre", "Hostname", "SO", "Estado",
-        "Arquitectura", "Procesador",
-        "CPU %", "RAM Total (GB)", "RAM Uso (GB)", "RAM %",
-        "Disco %", "Temp Máx (ºC)", "Batería %", "Conexiones", "Procesos",
-        "Último visto", "Registrado"
+        "ID",
+        "IP",
+        "Nombre",
+        "Hostname",
+        "SO",
+        "Estado",
+        "Arquitectura",
+        "Procesador",
+        "CPU %",
+        "RAM Total (GB)",
+        "RAM Uso (GB)",
+        "RAM %",
+        "Disco %",
+        "Temp Máx (ºC)",
+        "Batería %",
+        "Conexiones",
+        "Procesos",
+        "Último visto",
+        "Registrado",
     ]
     ws.append(headers)
 
@@ -59,52 +74,85 @@ def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
         query = query.filter(PC.ip == str(target_ip).strip())
 
     for pc in query.all():
-        arch, proc, cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, battery, conns, procs = ("", "", "", "", "", "", "", "", "", "", "")
+        arch, proc, cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, battery, conns, procs = (
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        )
         if pc.last_metrics:
             try:
                 m = json.loads(pc.last_metrics)
 
-                arch = m.get('system', {}).get('architecture', '')
-                proc = m.get('system', {}).get('processor', '')
+                arch = m.get("system", {}).get("architecture", "")
+                proc = m.get("system", {}).get("processor", "")
 
                 cpu = f"{m.get('cpu', {}).get('percent', '')}%"
-                ram_tot = m.get('memory', {}).get('total_gb', '')
-                ram_use = m.get('memory', {}).get('used_gb', '')
+                ram_tot = m.get("memory", {}).get("total_gb", "")
+                ram_use = m.get("memory", {}).get("used_gb", "")
                 ram_pct = f"{m.get('memory', {}).get('percent', '')}%"
 
-                disks = m.get('disk', {})
+                disks = m.get("disk", {})
                 if disks:
                     first_disk = list(disks.values())[0]
                     disk_pct = f"{first_disk.get('percent', '')}%"
 
                 max_temp = 0.0
-                temps_dict = m.get('temperatures', {})
+                temps_dict = m.get("temperatures", {})
                 if temps_dict:
                     for sensor_list in temps_dict.values():
                         for sensor in sensor_list:
-                            if sensor.get('current', 0) > max_temp:
-                                max_temp = sensor.get('current', 0)
+                            if sensor.get("current", 0) > max_temp:
+                                max_temp = sensor.get("current", 0)
                 if max_temp > 0:
                     temp = f"{round(max_temp, 1)} °C"
 
-                bat = m.get('battery')
+                bat = m.get("battery")
                 if bat:
                     battery = f"{bat.get('percent', '')}%"
 
-                conns = m.get('network', {}).get('connections', '')
-                procs = m.get('processes', {}).get('total', '')
+                conns = m.get("network", {}).get("connections", "")
+                procs = m.get("processes", {}).get("total", "")
             except json.JSONDecodeError as e:
                 logger.error("JSON corrupto en métricas para PC ID %s: %s", pc.id, e)
             except Exception as e:
-                logger.error("Fallo imprevisto parseando métricas para Excel (PC %s): %s", pc.id, e, exc_info=True)
+                logger.error(
+                    "Fallo imprevisto parseando métricas para Excel (PC %s): %s",
+                    pc.id,
+                    e,
+                    exc_info=True,
+                )
 
-        ws.append([
-            pc.id, pc.ip, pc.name, pc.hostname or "",
-            pc.os or "", pc.status,
-            arch, proc,
-            cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, battery, conns, procs,
-            pc.last_seen or "", pc.registered_at
-        ])
+        ws.append(
+            [
+                pc.id,
+                pc.ip,
+                pc.name,
+                pc.hostname or "",
+                pc.os or "",
+                pc.status,
+                arch,
+                proc,
+                cpu,
+                ram_tot,
+                ram_use,
+                ram_pct,
+                disk_pct,
+                temp,
+                battery,
+                conns,
+                procs,
+                pc.last_seen or "",
+                pc.registered_at,
+            ]
+        )
 
     for col in ws.columns:
         max_len = 0
@@ -148,8 +196,17 @@ def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
     query_metrics = query_metrics.order_by(Metric.timestamp.desc()).limit(10000)
 
     for m in query_metrics.all():
-        ws3.append([m.pc_id, m.timestamp, m.cpu_percent, m.ram_percent,
-                    m.disk_percent, m.processes_count, m.network_connections])
+        ws3.append(
+            [
+                m.pc_id,
+                m.timestamp,
+                m.cpu_percent,
+                m.ram_percent,
+                m.disk_percent,
+                m.processes_count,
+                m.network_connections,
+            ]
+        )
 
     for col in ws3.columns:
         ws3.column_dimensions[col[0].column_letter].width = 20

@@ -28,26 +28,46 @@ def build() -> None:
     print()
 
     cmd = [
-        sys.executable, "-m", "PyInstaller",
+        sys.executable,
+        "-m",
+        "PyInstaller",
         "--onefile",
-        "--name", "PCMonitor-Servidor",
-        "--distpath", str(DIST),
-        "--workpath", str(ROOT / "build" / "work"),
-        "--specpath", str(ROOT / "build"),
-        "--hidden-import", "fastapi",
-        "--hidden-import", "uvicorn",
-        "--hidden-import", "uvicorn.logging",
-        "--hidden-import", "uvicorn.loops.auto",
-        "--hidden-import", "uvicorn.protocols.http.auto",
-        "--hidden-import", "uvicorn.protocols.websockets.auto",
-        "--hidden-import", "uvicorn.lifespan.on",
-        "--hidden-import", "apscheduler",
-        "--hidden-import", "apscheduler.schedulers.background",
-        "--hidden-import", "apscheduler.executors.pool",
-        "--hidden-import", "sqlalchemy",
-        "--hidden-import", "sqlalchemy.dialects.sqlite",
-        "--hidden-import", "pydantic_settings",
-        "--collect-data", "uvicorn",
+        "--name",
+        "PCMonitor-Servidor",
+        "--distpath",
+        str(DIST),
+        "--workpath",
+        str(ROOT / "build" / "work"),
+        "--specpath",
+        str(ROOT / "build"),
+        "--hidden-import",
+        "fastapi",
+        "--hidden-import",
+        "uvicorn",
+        "--hidden-import",
+        "uvicorn.logging",
+        "--hidden-import",
+        "uvicorn.loops.auto",
+        "--hidden-import",
+        "uvicorn.protocols.http.auto",
+        "--hidden-import",
+        "uvicorn.protocols.websockets.auto",
+        "--hidden-import",
+        "uvicorn.lifespan.on",
+        "--hidden-import",
+        "apscheduler",
+        "--hidden-import",
+        "apscheduler.schedulers.background",
+        "--hidden-import",
+        "apscheduler.executors.pool",
+        "--hidden-import",
+        "sqlalchemy",
+        "--hidden-import",
+        "sqlalchemy.dialects.sqlite",
+        "--hidden-import",
+        "pydantic_settings",
+        "--collect-data",
+        "uvicorn",
         "--clean",
         "--noconfirm",
         str(SERVIDOR),
@@ -57,15 +77,15 @@ def build() -> None:
 
     if result.returncode == 0:
         exe = DIST / "PCMonitor-Servidor.exe"
-        size_mb = exe.stat().st_size / (1024 ** 2)
+        size_mb = exe.stat().st_size / (1024**2)
         print()
-        print("  ✅ Build exitoso!")
-        print(f"  📦 {exe}")
-        print(f"  📏 Tamaño: {size_mb:.1f} MB")
+        print("  [OK] Build exitoso!")
+        print(f"  [EXE] {exe}")
+        print(f"  [SIZE] Tamaño: {size_mb:.1f} MB")
         print()
-        print("  ⚠️  Recordá colocar el .env junto al .exe antes de ejecutar")
+        print("  [WARN]  Recordá colocar el .env junto al .exe antes de ejecutar")
     else:
-        print("  ❌ Build falló")
+        print("  [FAIL] Build falló")
         sys.exit(1)
 
 

@@ -4,8 +4,6 @@ Tablas: pcs, events, metrics
 WAL mode habilitado para acceso concurrente
 """
 
-import os
-import sys
 from datetime import datetime
 
 from sqlalchemy import Column, Float, Integer, String, Text, create_engine, event
@@ -20,9 +18,13 @@ engine = create_engine(
 )
 
 
+import sqlite3
+import typing
+from sqlalchemy.pool.base import _ConnectionRecord
+
 # Habilitar WAL mode y optimizaciones al crear la conexion
 @event.listens_for(engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
+def set_sqlite_pragma(dbapi_connection: sqlite3.Connection, connection_record: _ConnectionRecord) -> None:
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA journal_mode=WAL")
     cursor.execute("PRAGMA cache_size=10000")
@@ -39,7 +41,8 @@ class PC(Base):
     __tablename__ = "pcs"
 
     id = Column(Integer, primary_key=True, index=True)
-    ip = Column(String, unique=True, index=True, nullable=False)
+    agent_id = Column(String, unique=True, index=True, nullable=False)
+    ip = Column(String, nullable=False)
     name = Column(String, nullable=False)
     hostname = Column(String)
     os = Column(String)
@@ -82,7 +85,9 @@ class Metric(Base):
 Base.metadata.create_all(bind=engine)
 
 
-def get_db():
+from sqlalchemy.orm import Session
+
+def get_db() -> typing.Generator[Session, None, None]:
     """Dependency para FastAPI"""
     db = SessionLocal()
     try:
