@@ -4,6 +4,9 @@ test_api_pcs.py — Tests para el CRUD de PCs en el servidor central
 
 import pytest
 from fastapi.testclient import TestClient
+from servidor.config import settings
+
+AUTH_HEADERS = {"Authorization": f"Bearer {settings.secret_key}"}
 
 
 class TestRegisterPC:
@@ -106,6 +109,7 @@ class TestEvents:
 class TestAgentEndpoints:
     def test_agent_push_new_pc(self, client: TestClient):
         payload = {
+            "agent_id": "agent-test-123",
             "ip": "192.168.1.150",
             "name": "PC-Agent-01",
             "hostname": "agent-host",
@@ -119,20 +123,20 @@ class TestAgentEndpoints:
                 "uptime_seconds": 3600
             }
         }
-        resp = client.post("/api/agent/push", json=payload)
+        resp = client.post("/api/agent/push", json=payload, headers=AUTH_HEADERS)
         assert resp.status_code == 200
         data = resp.json()
         assert data["status"] == "ok"
 
     def test_agent_push_invalid_payload(self, client: TestClient):
-        resp = client.post("/api/agent/push", json={"ip": "192.168.1.150"})
+        resp = client.post("/api/agent/push", json={"ip": "192.168.1.150"}, headers=AUTH_HEADERS)
         assert resp.status_code == 400
 
     def test_agent_command_result(self, client: TestClient):
         resp = client.post("/api/agent/command_result", json={
             "command_id": "test-cmd-id",
             "result": {"stdout": "hello", "exit_code": 0}
-        })
+        }, headers=AUTH_HEADERS)
         assert resp.status_code == 200
         assert resp.json() == {"status": "ok"}
 
@@ -151,26 +155,27 @@ class TestPCMetricsAndEvents:
 
 class TestPCExecuteCommand:
     def test_execute_on_nonexistent_pc(self, client: TestClient):
-        resp = client.post("/api/pcs/9999/execute", json={"command": "dir"})
+        resp = client.post("/api/pcs/9999/execute", json={"command": "dir"}, headers=AUTH_HEADERS)
         assert resp.status_code == 404
 
     def test_execute_on_offline_pc(self, client: TestClient, sample_pc_data: dict):
         created = client.post("/api/pcs", json=sample_pc_data).json()
-        resp = client.post(f"/api/pcs/{created['id']}/execute", json={"command": "dir"})
+        resp = client.post(f"/api/pcs/{created['id']}/execute", json={"command": "dir"}, headers=AUTH_HEADERS)
         assert resp.status_code == 503
 
     def test_execute_empty_command(self, client: TestClient, sample_pc_data: dict):
         payload = {
+            "agent_id": "agent-test-456",
             "ip": sample_pc_data["ip"],
             "name": sample_pc_data["name"],
             "metrics": {"cpu": {"percent": 10.0}}
         }
-        client.post("/api/agent/push", json=payload)
+        client.post("/api/agent/push", json=payload, headers=AUTH_HEADERS)
 
         pcs = client.get("/api/pcs").json()
         pc_id = [p["id"] for p in pcs if p["ip"] == sample_pc_data["ip"]][0]
 
-        resp = client.post(f"/api/pcs/{pc_id}/execute", json={"command": ""})
+        resp = client.post(f"/api/pcs/{pc_id}/execute", json={"command": ""}, headers=AUTH_HEADERS)
         assert resp.status_code == 400
 
 

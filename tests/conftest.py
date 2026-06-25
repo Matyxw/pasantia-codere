@@ -34,7 +34,7 @@ TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=TEST_ENG
 db_module.engine = TEST_ENGINE
 db_module.SessionLocal = TestSessionLocal
 
-from servidor.main import app, get_db  # noqa: E402
+from servidor.main import app, get_db, verify_token  # noqa: E402
 
 
 @pytest.fixture(autouse=True)
@@ -51,7 +51,6 @@ def override_get_db():
         yield db
     finally:
         db.close()
-
 
 app.dependency_overrides[get_db] = override_get_db
 
