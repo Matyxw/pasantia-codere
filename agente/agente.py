@@ -185,8 +185,9 @@ def get_metrics() -> dict[str, Any]:
 
     temperatures = {}
     try:
-        if hasattr(psutil, "sensors_temperatures"):
-            temps = psutil.sensors_temperatures()
+        sensors_fn = getattr(psutil, "sensors_temperatures", None)
+        if sensors_fn:
+            temps = sensors_fn()
             if temps:
                 for name, entries in temps.items():
                     temperatures[name] = [
@@ -215,8 +216,9 @@ def get_metrics() -> dict[str, Any]:
 
     battery: dict[str, Any] | None = None
     try:
-        if hasattr(psutil, "sensors_battery"):
-            bat = psutil.sensors_battery()
+        bat_fn = getattr(psutil, "sensors_battery", None)
+        if bat_fn:
+            bat = bat_fn()
             if bat:
                 battery = {
                     "percent": round(bat.percent, 1),
