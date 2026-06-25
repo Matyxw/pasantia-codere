@@ -681,18 +681,37 @@ if __name__ == "__main__":
             except OSError:
                 time.sleep(0.1)
 
-    # Esperamos a que uvicorn esté listo antes de levantar EdgeChromium
-    # Esto evita picos de CPU simultáneos que "traban" la ventana en Windows.
-    wait_for_server(settings.server_port)
+    # 1. Creamos la ventana de inmediato con un "Splash Screen" ligero.
+    # Esto evita que EdgeChromium y Uvicorn peleen por el CPU al mismo tiempo.
+    splash_html = """
+    <html>
+      <body style="background-color:#0f172a; color:#cbd5e1; font-family:sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; margin:0;">
+        <div style="text-align:center;">
+          <h2 style="color:#5E9E13;">Codere PC Monitor</h2>
+          <p>Iniciando servidor local...</p>
+        </div>
+      </body>
+    </html>
+    """
 
     window = webview.create_window(
         "Codere PC Monitor",
-        f"http://127.0.0.1:{settings.server_port}",
+        html=splash_html,
         width=1200,
         height=800,
         js_api=api,
     )
     api.window = window
+    
+    # 2. Navegamos a la URL real solo cuando Uvicorn esté escuchando,
+    # usando un hilo en segundo plano para no trabar la UI de Windows.
+    def load_app():
+        wait_for_server(settings.server_port)
+        window.load_url(f"http://127.0.0.1:{settings.server_port}")
+
+    t_load = threading.Thread(target=load_app, daemon=True)
+    t_load.start()
+
     webview.start(private_mode=False)
 
     # Al cerrar la ventana, matamos forzadamente el proceso para que uvicorn se apague
