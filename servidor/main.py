@@ -657,6 +657,21 @@ if __name__ == "__main__":
     except ImportError:
         from servidor.config import settings
 
+    import time
+    import socket
+    def wait_for_server(port: int, host: str = "127.0.0.1", timeout: float = 5.0) -> None:
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            try:
+                with socket.create_connection((host, port), timeout=0.2):
+                    return
+            except OSError:
+                time.sleep(0.1)
+                
+    # Esperamos a que uvicorn esté listo antes de levantar EdgeChromium
+    # Esto evita picos de CPU simultáneos que "traban" la ventana en Windows.
+    wait_for_server(settings.server_port)
+
     window = webview.create_window(
         "Codere PC Monitor",
         f"http://127.0.0.1:{settings.server_port}",
