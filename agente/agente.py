@@ -84,7 +84,7 @@ def get_metrics() -> dict[str, Any]:
     try:
         cpu_per_core = psutil.cpu_percent(percpu=True, interval=0)
     except Exception as e:
-        logger.warning("No se pudo obtener el porcentaje de CPU por núcleo: %s", e)
+        logger.warning("No se pudo obtener el porcentaje de CPU por núcleo: %s", e, exc_info=True)
         cpu_per_core = []
 
     freq = psutil.cpu_freq()
@@ -106,9 +106,9 @@ def get_metrics() -> dict[str, Any]:
                 "percent": usage.percent,
             }
         except PermissionError:
-            logger.debug("Permiso denegado al leer la partición: %s", part.mountpoint)
+            pass
         except Exception as e:
-            logger.debug("Error leyendo disco %s: %s", part.device, e)
+            logger.debug("Error accediendo a particiones de disco (%s): %s", part.device, e, exc_info=True)
 
     try:
         net_io = psutil.net_io_counters()
@@ -124,7 +124,7 @@ def get_metrics() -> dict[str, Any]:
         logger.debug("Permiso denegado para leer contadores de red avanzados.")
         network = {"connections": 0}
     except Exception as e:
-        logger.error("Error al obtener red: %s", e)
+        logger.error("Error al obtener estadísticas de red: %s", e, exc_info=True)
         network = {"connections": 0}
 
     processes: list[dict[str, Any]] = []
@@ -141,7 +141,7 @@ def get_metrics() -> dict[str, Any]:
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass
         except Exception as e:
-            logger.debug("Excepción procesando PID: %s", e)
+            logger.debug("Excepción procesando PID: %s", e, exc_info=True)
 
     processes.sort(key=lambda x: float(x.get('cpu_percent', 0.0)), reverse=True)
 
@@ -156,7 +156,7 @@ def get_metrics() -> dict[str, Any]:
                         for e in entries
                     ]
     except Exception as e:
-        logger.debug("No se soportan sensores de temperatura en este hardware: %s", e)
+        logger.debug("No se soportan sensores de temperatura en este hardware: %s", e, exc_info=True)
 
     users: list[dict[str, Any]] = []
     try:
@@ -167,8 +167,10 @@ def get_metrics() -> dict[str, Any]:
                 "host": u.host or "",
                 "started": u.started
             })
+    except psutil.AccessDenied:
+        pass
     except Exception as e:
-        logger.debug("No se pudo obtener información de usuarios activos: %s", e)
+        logger.debug("Fallo al listar usuarios activos: %s", e, exc_info=True)
 
     battery: dict[str, Any] | None = None
     try:
@@ -181,7 +183,7 @@ def get_metrics() -> dict[str, Any]:
                     "power_plugged": bat.power_plugged
                 }
     except Exception as e:
-        logger.debug("Error leyendo estado de batería: %s", e)
+        logger.debug("Error leyendo estado de batería: %s", e, exc_info=True)
 
     uptime_secs = (datetime.now() - BOOT_TIME).total_seconds()
 
@@ -248,7 +250,7 @@ def discover_server() -> str:
         except json.JSONDecodeError as e:
             logger.error("agent_config.json corrupto. Ignorando override. Detalle: %s", e)
         except Exception as e:
-            logger.error("Error al leer agent_config.json: %s", e)
+            logger.error("Error desconocido procesando configuración: %s", e, exc_info=True)
 
     logger.info("Buscando servidor Codere en la red vía UDP Broadcast (puerto 8002)...")
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -266,7 +268,7 @@ def discover_server() -> str:
         except TimeoutError:
             logger.debug("Timeout de UDP Broadcast, reintentando...")
         except Exception as e:
-            logger.error("Error intermitente en socket UDP: %s", e)
+            logger.error("Error conectando al Servidor Central: %s", e, exc_info=True)
         time.sleep(2)
 
 
