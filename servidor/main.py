@@ -6,12 +6,21 @@ Puerto: 8000
 
 import asyncio
 import json
+import logging
 import os
 import socket
 import sys
 import threading
 import uuid
 from datetime import datetime
+
+# Configuración del logger para el servidor
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] SERVER - %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger("ServidorCentral")
 
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
@@ -70,7 +79,8 @@ class ConnectionManager:
         for ws in self.active:
             try:
                 await ws.send_json(message)
-            except Exception:
+            except Exception as e:
+                logger.error("Error transmitiendo a WebSocket. Cliente desconectado abruptamente: %s", e)
                 dead.append(ws)
         for ws in dead:
             self.disconnect(ws)
@@ -91,7 +101,7 @@ def udp_discovery_server():
             if b"CODERE_DISCOVERY_REQUEST" in data:
                 s.sendto(b"CODERE_SERVER", addr)
     except Exception as e:
-        print(f"[UDP] Error en discovery: {e}")
+        logger.error("[UDP] Error fatal en discovery server: %s", e, exc_info=True)
 
 @app.on_event("startup")
 async def on_startup():
@@ -137,7 +147,8 @@ async def websocket_endpoint(ws: WebSocket):
 
     except WebSocketDisconnect:
         manager.disconnect(ws)
-    except Exception:
+    except Exception as e:
+        logger.error("Error inesperado en WebSocket endpoint: %s", e, exc_info=True)
         manager.disconnect(ws)
 
 
@@ -149,8 +160,8 @@ def _pc_to_dict(pc: PC) -> dict:
     if pc.last_metrics:
         try:
             last_metrics = json.loads(pc.last_metrics)
-        except Exception:
-            pass
+        except json.JSONDecodeError as e:
+            logger.error("Corrupción de datos JSON detectada para PC ID %s. Detalle: %s", pc.id, e)
     return {
         "id": pc.id,
         "ip": pc.ip,
@@ -355,8 +366,8 @@ async def agent_push(body: dict, db: Session = Depends(get_db)):
                 try:
                     last_off = datetime.fromisoformat(pc.last_offline)
                     downtime_secs = (datetime.now() - last_off).total_seconds()
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.warning("Fallo al calcular downtime_secs para %s. Detalle: %s", pc.name, e)
 
         pc.status = "online"
         pc.last_seen = now
@@ -429,57 +440,9 @@ async def agent_command_result(body: dict):
 # REST API — Export Excel
 # ──────────────────────────────────────────
 @app.get("/api/export/excel")
-async def export_excel(db: Session = Depends(get_db)):
-    from openpyxl import Workbook
-    from openpyxl.styles import Alignment, Font, PatternFill
-
-    wb = Workbook()
-
-    # ── Hoja 1: PCs ──
-    ws = wb.active
-    ws.title = "PCs"
-
-    headers = ["ID", "IP", "Nombre", "Hostname", "SO", "Estado", "Último visto", "Registrado"]
-    ws.append(headers)
-
-    h_fill = PatternFill(start_color="0d1b2a", end_color="0d1b2a", fill_type="solid")
-    h_font = Font(bold=True, color="00ff87", size=11)
-    for cell in ws[1]:
-        cell.fill = h_fill
-        cell.font = h_font
-        cell.alignment = Alignment(horizontal="center")
-
-    for pc in db.query(PC).all():
-        ws.append([
-            pc.id, pc.ip, pc.name, pc.hostname or "",
-            pc.os or "", pc.status, pc.last_seen or "", pc.registered_at,
-        ])
-
-    for col in ws.columns:
-        ws.column_dimensions[col[0].column_letter].auto_size = True
-
-    # ── Hoja 2: Eventos ──
-    ws2 = wb.create_sheet("Historial Eventos")
-    ws2.append(["PC", "IP", "Evento", "Timestamp", "Downtime (seg)"])
-    for cell in ws2[1]:
-        cell.fill = h_fill
-        cell.font = h_font
-        cell.alignment = Alignment(horizontal="center")
-
-    for e in db.query(Event).order_by(Event.timestamp.desc()).limit(5000).all():
-        ws2.append([e.pc_name, e.pc_ip, e.type, e.timestamp, e.downtime_seconds or ""])
-
-    # ── Hoja 3: Métricas ──
-    ws3 = wb.create_sheet("Metricas")
-    ws3.append(["PC_ID", "Timestamp", "CPU %", "RAM %", "Disco %", "Procesos", "Conexiones"])
-    for cell in ws3[1]:
-        cell.fill = h_fill
-        cell.font = h_font
-        cell.alignment = Alignment(horizontal="center")
-
-    for m in db.query(Metric).order_by(Metric.timestamp.desc()).limit(10000).all():
-        ws3.append([m.pc_id, m.timestamp, m.cpu_percent, m.ram_percent,
-                    m.disk_percent, m.processes_count, m.network_connections])
+async def export_excel(ip: str | None = None, db: Session = Depends(get_db)):
+    from generar_excel_logic import build_excel_workbook
+    wb = build_excel_workbook(db, target_ip=ip)
 
     filename = f"monitor_export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
     filepath = os.path.join(os.path.dirname(__file__), filename)
@@ -556,10 +519,9 @@ if __name__ == "__main__":
             from datetime import datetime
 
             import webview
-            from openpyxl import Workbook
-            from openpyxl.styles import Alignment, Font, PatternFill
 
-            from database import PC, Event, Metric, SessionLocal
+            from database import SessionLocal
+            from generar_excel_logic import build_excel_workbook
 
             if not self.window:
                 return {"error": "Ventana no cargada"}
@@ -579,109 +541,13 @@ if __name__ == "__main__":
             filepath = result[0] if isinstance(result, tuple) else result
 
             try:
-                import json
                 db = SessionLocal()
-                wb = Workbook()
-
-                # ── Hoja 1: Resumen de Flota (PCs) ──
-                ws = wb.active
-                ws.title = "Resumen de Flota"
-
-                headers = [
-                    "ID", "IP", "Nombre", "Hostname", "SO", "Estado",
-                    "CPU %", "RAM Total (GB)", "RAM Uso (GB)", "RAM %",
-                    "Disco %", "Temp ºC", "Conexiones", "Procesos",
-                    "Último visto", "Registrado"
-                ]
-                ws.append(headers)
-
-                # Codere Branding Headers
-                h_fill = PatternFill(start_color="7EBB28", end_color="7EBB28", fill_type="solid")
-                h_font = Font(bold=True, color="FFFFFF", size=11)
-                for cell in ws[1]:
-                    cell.fill = h_fill
-                    cell.font = h_font
-                    cell.alignment = Alignment(horizontal="center", vertical="center")
-
-                query = db.query(PC)
-                if target_ip and str(target_ip).strip():
-                    query = query.filter(PC.ip == str(target_ip).strip())
-
-                for pc in query.all():
-                    # Parsear last_metrics si existe
-                    cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, conns, procs = ("", "", "", "", "", "", "", "")
-                    if pc.last_metrics:
-                        try:
-                            m = json.loads(pc.last_metrics)
-                            cpu = f"{m.get('cpu', {}).get('percent', '')}%"
-                            ram_tot = m.get('memory', {}).get('total_gb', '')
-                            ram_use = m.get('memory', {}).get('used_gb', '')
-                            ram_pct = f"{m.get('memory', {}).get('percent', '')}%"
-
-                            disks = m.get('disk', {})
-                            if disks:
-                                first_disk = list(disks.values())[0]
-                                disk_pct = f"{first_disk.get('percent', '')}%"
-
-                            max_temp = 0.0
-                            temps_dict = m.get('temperatures', {})
-                            for sensor_list in temps_dict.values():
-                                for sensor in sensor_list:
-                                    if sensor.get('current', 0) > max_temp:
-                                        max_temp = sensor.get('current', 0)
-                            if max_temp > 0:
-                                temp = f"{round(max_temp, 1)} °C"
-
-                            conns = m.get('network', {}).get('connections', '')
-                            procs = m.get('processes', {}).get('total', '')
-                        except Exception as e:
-                            print("Error parsing metrics for Excel:", e)
-                            pass
-
-                    ws.append([
-                        pc.id, pc.ip, pc.name, pc.hostname or "",
-                        pc.os or "", pc.status,
-                        cpu, ram_tot, ram_use, ram_pct, disk_pct, temp, conns, procs,
-                        pc.last_seen or "", pc.registered_at
-                    ])
-
-                for col in ws.columns:
-                    max_len = 0
-                    for cell in col:
-                        if cell.value:
-                            max_len = max(max_len, len(str(cell.value)))
-                    ws.column_dimensions[col[0].column_letter].width = min(max_len + 4, 40)
-
-                # ── Hoja 2: Eventos ──
-                ws2 = wb.create_sheet("Historial Eventos")
-                ws2.append(["PC", "IP", "Evento", "Timestamp", "Downtime (seg)"])
-                for cell in ws2[1]:
-                    cell.fill = h_fill
-                    cell.font = h_font
-                    cell.alignment = Alignment(horizontal="center")
-
-                for e in db.query(Event).order_by(Event.timestamp.desc()).limit(5000).all():
-                    ws2.append([e.pc_name, e.pc_ip, e.type, e.timestamp, e.downtime_seconds or ""])
-
-                for col in ws2.columns:
-                    ws2.column_dimensions[col[0].column_letter].width = 25
-
-                # ── Hoja 3: Métricas Crudas ──
-                ws3 = wb.create_sheet("Métricas Históricas")
-                ws3.append(["PC_ID", "Timestamp", "CPU %", "RAM %", "Disco %", "Procesos", "Conexiones"])
-                for cell in ws3[1]:
-                    cell.fill = h_fill
-                    cell.font = h_font
-                    cell.alignment = Alignment(horizontal="center")
-
-                for m in db.query(Metric).order_by(Metric.timestamp.desc()).limit(10000).all():
-                    ws3.append([m.pc_id, m.timestamp, m.cpu_percent, m.ram_percent,
-                                m.disk_percent, m.processes_count, m.network_connections])
-
+                wb = build_excel_workbook(db, target_ip=target_ip)
                 wb.save(filepath)
                 db.close()
                 return {"success": True, "filepath": filepath}
             except Exception as e:
+                logger.error("Fallo general durante exportación GUI Excel: %s", e, exc_info=True)
                 return {"error": str(e)}
 
     # Iniciar WebView en el hilo principal

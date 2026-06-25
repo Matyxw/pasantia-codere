@@ -45,7 +45,7 @@ def _heartbeat():
         for pc in pcs:
             _check_pc(db, pc)
     except Exception as e:
-        logger.error(f"Error en heartbeat: {e}")
+        logger.error("Error crítico en la transacción de heartbeat contra BD: %s", e, exc_info=True)
     finally:
         db.close()
 
@@ -57,7 +57,11 @@ def _check_pc(db, pc: PC):
     now = datetime.now()
     try:
         last_seen = datetime.fromisoformat(pc.last_seen) if pc.last_seen else None
-    except:
+    except ValueError as e:
+        logger.warning("Error de formato al parsear ISO date para PC %s: %s", pc.id, e)
+        last_seen = None
+    except Exception as e:
+        logger.error("Fallo inesperado extrayendo last_seen para PC %s: %s", pc.id, e)
         last_seen = None
 
     is_timeout = False
@@ -115,7 +119,7 @@ def start():
         max_instances=1,
     )
     _scheduler.start()
-    print(f"[Scheduler] Heartbeat activo — verificando cada {HEARTBEAT_INTERVAL}s")
+    logger.info("[Scheduler] Heartbeat activo — verificando estado de PCs cada %ss", HEARTBEAT_INTERVAL)
 
 
 def stop():
