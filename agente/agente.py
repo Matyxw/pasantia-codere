@@ -465,11 +465,13 @@ def main() -> None:
         # ── Fase 2: Push loop ──
         headers = {"Authorization": f"Bearer {SECRET_KEY}"}
         try:
+            current_ip = _get_local_ip()
+            current_hostname = socket.gethostname()
             payload = {
                 "agent_id": AGENT_ID,
-                "ip": local_ip,
-                "name": hostname,
-                "hostname": hostname,
+                "ip": current_ip,
+                "name": current_hostname,
+                "hostname": current_hostname,
                 "os": os_info,
                 "metrics": get_metrics(),
             }
