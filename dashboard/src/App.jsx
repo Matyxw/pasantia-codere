@@ -8,8 +8,9 @@ import ScanModal from './components/ScanModal'
 import { ToastContainer, toast } from './components/Toast'
 import './App.css'
 
-const API = 'http://localhost:8000/api'
-const WS_URL = 'ws://localhost:8000/ws'
+const API = import.meta.env.VITE_API_URL || (window.location.protocol + '//' + window.location.host + '/api')
+const WS_PROTOCOL = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+const WS_URL = import.meta.env.VITE_WS_URL || (WS_PROTOCOL + '//' + window.location.host + '/ws')
 
 function formatDowntime(secs) {
   if (!secs) return null

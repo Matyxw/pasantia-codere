@@ -18,7 +18,7 @@ export default function ExportModal({ isOpen, onClose }) {
   const handleExport = async () => {
     setIsExporting(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+      const apiUrl = import.meta.env.VITE_API_URL || (window.location.protocol + '//' + window.location.host + '/api');
       
       const url = exportMode === 'single' ? `${apiUrl}/export/excel?ip=${targetIp}` : `${apiUrl}/export/excel`;
       const res = await fetch(url);
