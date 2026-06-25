@@ -4,13 +4,33 @@ import logging
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 
+from sqlalchemy.orm import Session
+from database import PC, Event, Metric
+
 logger = logging.getLogger("ExcelLogic")
 
-def build_excel_workbook(db, target_ip: str | None = None) -> Workbook:
+def build_excel_workbook(db: Session, target_ip: str | None = None) -> Workbook:
     """
-    Construye un libro de Excel 'Lindo y Ordenado' extrayendo todas las métricas.
+    Construye y ensambla un Workbook de openpyxl estructurado para exportar la telemetría corporativa.
+    
+    [POR QUÉ EXISTE ESTE MÓDULO]:
+    En fases anteriores, tanto el CLI local como la API Web generaban los Excel con lógica duplicada y acoplada.
+    Este módulo abstrae la generación para cumplir con el principio DRY (Don't Repeat Yourself), permitiendo que
+    cualquier cliente (CLI, Tareas en segundo plano, o Requests HTTP) pueda exportar reportes bajo una misma
+    fuente de verdad y estándares visuales (Codere Branding).
+
+    [CONSIDERACIONES DE PERFORMANCE]:
+    Esta es una operación intensiva en CPU e I/O (miles de registros). Cuando es invocada desde FastAPI, 
+    el endpoint DEBE estar declarado como `def` síncrono (no `async def`) para ser delegado al ThreadPool 
+    interno de uvicorn, evitando la asfixia (Starvation) del Event Loop ASGI principal (Regla #8 de AGENTS.md).
+    
+    Args:
+        db (Session): Sesión de base de datos activa SQLAlchemy.
+        target_ip (str | None): IP de filtrado para generar un reporte aislado de un único nodo.
+    
+    Returns:
+        Workbook: Instancia en memoria del libro Excel con hojas renderizadas.
     """
-    from database import PC, Event, Metric
     wb = Workbook()
 
     # ── Hoja 1: Resumen de Flota (PCs) ──

@@ -206,7 +206,7 @@ def _metric_to_dict(m: Metric) -> dict:
 # REST API — PCs
 # ──────────────────────────────────────────
 @app.get("/api/pcs")
-async def get_pcs(db: Session = Depends(get_db)):
+def get_pcs(db: Session = Depends(get_db)):
     return [_pc_to_dict(pc) for pc in db.query(PC).all()]
 
 
@@ -233,7 +233,7 @@ async def register_pc(body: dict, db: Session = Depends(get_db)):
 
 
 @app.get("/api/pcs/{pc_id}")
-async def get_pc(pc_id: int, db: Session = Depends(get_db)):
+def get_pc(pc_id: int, db: Session = Depends(get_db)):
     pc = db.query(PC).filter(PC.id == pc_id).first()
     if not pc:
         raise HTTPException(404, "PC no encontrada")
@@ -255,7 +255,7 @@ async def delete_pc(pc_id: int, db: Session = Depends(get_db)):
 # REST API — Métricas e historial
 # ──────────────────────────────────────────
 @app.get("/api/pcs/{pc_id}/metrics")
-async def get_metrics(
+def get_metrics(
     pc_id: int, limit: int = 60, db: Session = Depends(get_db)
 ):
     """Últimas N métricas de una PC (por defecto 60 = 15 minutos)"""
@@ -270,7 +270,7 @@ async def get_metrics(
 
 
 @app.get("/api/pcs/{pc_id}/events")
-async def get_pc_events(
+def get_pc_events(
     pc_id: int, limit: int = 100, db: Session = Depends(get_db)
 ):
     rows = (
@@ -284,7 +284,7 @@ async def get_pc_events(
 
 
 @app.get("/api/events")
-async def get_all_events(limit: int = 100, db: Session = Depends(get_db)):
+def get_all_events(limit: int = 100, db: Session = Depends(get_db)):
     rows = (
         db.query(Event)
         .order_by(Event.timestamp.desc())
@@ -439,7 +439,7 @@ async def agent_command_result(body: dict):
 # REST API — Export Excel
 # ──────────────────────────────────────────
 @app.get("/api/export/excel")
-async def export_excel(ip: str | None = None, db: Session = Depends(get_db)):
+def export_excel(ip: str | None = None, db: Session = Depends(get_db)):
     from generar_excel_logic import build_excel_workbook
     wb = build_excel_workbook(db, target_ip=ip)
 
@@ -458,7 +458,7 @@ async def export_excel(ip: str | None = None, db: Session = Depends(get_db)):
 # Stats endpoint
 # ──────────────────────────────────────────
 @app.get("/api/stats")
-async def get_stats(db: Session = Depends(get_db)):
+def get_stats(db: Session = Depends(get_db)):
     pcs = db.query(PC).all()
     return {
         "total": len(pcs),
