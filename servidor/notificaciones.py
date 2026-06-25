@@ -58,7 +58,8 @@ def notify_offline(pc_name: str, ip: str) -> None:
     logger.info("Equipo Offline detectado: %s (%s)", pc_name, ip)
     print(f"\033[91m[{ts}] OFFLINE: {pc_name} ({ip})\033[0m")
 
-    if not _PLYER_OK:
+    from config import settings
+    if not _PLYER_OK or not settings.desktop_notifications:
         return
 
     try:
@@ -96,7 +97,8 @@ def notify_online(pc_name: str, ip: str, downtime_seconds: float | None = None) 
     logger.info("Equipo Online detectado: %s (%s) %s", pc_name, ip, downtime_str)
     print(f"\033[92m[{ts}] ONLINE:  {pc_name} ({ip}){downtime_str}\033[0m")
 
-    if not _PLYER_OK:
+    from config import settings
+    if not _PLYER_OK or not settings.desktop_notifications:
         return
 
     try:

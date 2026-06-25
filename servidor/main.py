@@ -50,9 +50,11 @@ app = FastAPI(
     description="Sistema de monitoreo de PCs en red — Servidor Central",
 )
 
+from config import settings
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -503,8 +505,9 @@ if __name__ == "__main__":
     print("=" * 55)
 
     def run_server():
+        from config import settings
         # log_config=None para que uvicorn no busque isatty en --noconsole
-        uvicorn.run(app, host="0.0.0.0", port=8000, log_config=None)
+        uvicorn.run(app, host=settings.server_host, port=settings.server_port, log_config=None)
 
     # Iniciar servidor FastAPI en segundo plano
     t = threading.Thread(target=run_server, daemon=True)
@@ -520,7 +523,8 @@ if __name__ == "__main__":
     # Iniciar WebView en el hilo principal
     # Apuntamos al localhost:8000 donde corre nuestro dashboard montado en FastAPI
     api = Api()
-    window = webview.create_window('Codere PC Monitor', 'http://127.0.0.1:8000', width=1200, height=800, js_api=api)
+    from config import settings
+    window = webview.create_window('Codere PC Monitor', f'http://127.0.0.1:{settings.server_port}', width=1200, height=800, js_api=api)
     api.window = window
     webview.start(private_mode=False)
 

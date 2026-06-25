@@ -11,15 +11,10 @@ from datetime import datetime
 from sqlalchemy import Column, Float, Integer, String, Text, create_engine, event
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-if getattr(sys, 'frozen', False):
-    DB_PATH = os.path.join(os.path.dirname(sys.executable), "monitor.db")
-else:
-    DB_PATH = os.path.join(os.path.dirname(__file__), "monitor.db")
-
-DATABASE_URL = f"sqlite:///{DB_PATH}"
+from config import settings
 
 engine = create_engine(
-    DATABASE_URL,
+    settings.database_url,
     connect_args={"check_same_thread": False},
     echo=False,
 )

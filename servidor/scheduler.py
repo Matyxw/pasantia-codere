@@ -20,8 +20,10 @@ _scheduler = BackgroundScheduler(timezone="UTC")
 _broadcast_callback: Callable | None = None
 _event_loop: asyncio.AbstractEventLoop | None = None
 
-HEARTBEAT_INTERVAL = 15  # segundos
-REQUEST_TIMEOUT = 5       # segundos por request al agente
+from config import settings
+
+HEARTBEAT_INTERVAL = settings.heartbeat_interval  # segundos
+REQUEST_TIMEOUT = settings.agent_timeout       # segundos por request al agente
 
 
 def init(loop: asyncio.AbstractEventLoop, broadcast_cb: Callable):
