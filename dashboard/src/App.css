@@ -26,10 +26,10 @@
   --tx-4: #A5ADBA;
 
   /* Accent — Codere Official Green */
-  --ac:          #7EBB28;
-  --ac-hover:    #679C1F;
-  --ac-subtle:   rgba(126, 187, 40, 0.15);
-  --ac-border:   rgba(126, 187, 40, 0.4);
+  --ac:          #5E9E13;
+  --ac-hover:    #7EBB28;
+  --ac-subtle:   rgba(94, 158, 19, 0.2);
+  --ac-border:   rgba(94, 158, 19, 0.3);
 
   /* Semantic */
   --ok:          #10B981;
@@ -82,7 +82,8 @@
   --tx-3: #94A3B8;
   --tx-4: #64748B;
 
-  --ac-subtle:   rgba(126, 187, 40, 0.15);
+  --ac-subtle:   rgba(94, 158, 19, 0.15);
+  --ac-border:   rgba(94, 158, 19, 0.3);
   --ok-subtle:   rgba(16, 185, 129, 0.12);
   --err-subtle:  rgba(239, 68, 68, 0.12);
   --warn-subtle: rgba(245, 158, 11, 0.12);
