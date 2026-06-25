@@ -80,6 +80,7 @@
   "terminal.integrated.scrollback": 10000,
 
   // ── Extensiones ─────────────────────────────────────────────────────
-  "workbench.colorTheme": "Default Dark Modern",
-  "workbench.iconTheme": "material-icon-theme"
+  "workbench.colorTheme": "Dark Modern",
+  "workbench.iconTheme": "material-icon-theme",
+  "snyk.advanced.autoSelectOrganization": true
 }

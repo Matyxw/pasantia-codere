@@ -2,16 +2,15 @@
 test_api_pcs.py — Tests para el CRUD de PCs en el servidor central
 """
 
-from unittest.mock import patch
 
+import pytest
 from fastapi.testclient import TestClient
 
 
 class TestRegisterPC:
     def test_register_pc_ok(self, client: TestClient, sample_pc_data: dict):
         """Registrar una PC válida debe retornar 201 con los datos correctos."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            resp = client.post("/api/pcs", json=sample_pc_data)
+        resp = client.post("/api/pcs", json=sample_pc_data)
 
         assert resp.status_code == 201
         data = resp.json()
@@ -22,9 +21,8 @@ class TestRegisterPC:
 
     def test_register_pc_duplicate_ip(self, client: TestClient, sample_pc_data: dict):
         """Registrar una IP ya existente debe retornar 409."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            client.post("/api/pcs", json=sample_pc_data)
-            resp = client.post("/api/pcs", json=sample_pc_data)
+        client.post("/api/pcs", json=sample_pc_data)
+        resp = client.post("/api/pcs", json=sample_pc_data)
 
         assert resp.status_code == 409
 
@@ -48,8 +46,7 @@ class TestGetPCs:
 
     def test_list_pcs_after_register(self, client: TestClient, sample_pc_data: dict):
         """Después de registrar, debe aparecer en la lista."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            client.post("/api/pcs", json=sample_pc_data)
+        client.post("/api/pcs", json=sample_pc_data)
 
         resp = client.get("/api/pcs")
         assert resp.status_code == 200
@@ -58,8 +55,7 @@ class TestGetPCs:
 
     def test_get_single_pc(self, client: TestClient, sample_pc_data: dict):
         """GET /api/pcs/{id} debe retornar la PC correcta."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            created = client.post("/api/pcs", json=sample_pc_data).json()
+        created = client.post("/api/pcs", json=sample_pc_data).json()
 
         resp = client.get(f"/api/pcs/{created['id']}")
         assert resp.status_code == 200
@@ -74,8 +70,7 @@ class TestGetPCs:
 class TestDeletePC:
     def test_delete_pc(self, client: TestClient, sample_pc_data: dict):
         """Eliminar una PC debe retornar 200 y quitarla de la lista."""
-        with patch("servidor.main.requests.get", side_effect=ConnectionError):
-            created = client.post("/api/pcs", json=sample_pc_data).json()
+        created = client.post("/api/pcs", json=sample_pc_data).json()
 
         resp = client.delete(f"/api/pcs/{created['id']}")
         assert resp.status_code == 200
@@ -107,3 +102,109 @@ class TestEvents:
         resp = client.get("/api/events")
         assert resp.status_code == 200
         assert resp.json() == []
+
+
+class TestAgentEndpoints:
+    def test_agent_push_new_pc(self, client: TestClient):
+        payload = {
+            "ip": "192.168.1.150",
+            "name": "PC-Agent-01",
+            "hostname": "agent-host",
+            "os": "Linux 6.1",
+            "metrics": {
+                "cpu": {"percent": 15.5},
+                "memory": {"percent": 45.0, "used_gb": 4.0, "total_gb": 8.0},
+                "disk": {"/": {"percent": 30.0}},
+                "processes": {"total": 120},
+                "network": {"connections": 15},
+                "uptime_seconds": 3600
+            }
+        }
+        resp = client.post("/api/agent/push", json=payload)
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["status"] == "ok"
+
+    def test_agent_push_invalid_payload(self, client: TestClient):
+        resp = client.post("/api/agent/push", json={"ip": "192.168.1.150"})
+        assert resp.status_code == 400
+
+    def test_agent_command_result(self, client: TestClient):
+        resp = client.post("/api/agent/command_result", json={
+            "command_id": "test-cmd-id",
+            "result": {"stdout": "hello", "exit_code": 0}
+        })
+        assert resp.status_code == 200
+        assert resp.json() == {"status": "ok"}
+
+
+class TestPCMetricsAndEvents:
+    def test_get_pc_metrics_empty(self, client: TestClient):
+        resp = client.get("/api/pcs/999/metrics")
+        assert resp.status_code == 200
+        assert resp.json() == []
+
+    def test_get_pc_events_empty(self, client: TestClient):
+        resp = client.get("/api/pcs/999/events")
+        assert resp.status_code == 200
+        assert resp.json() == []
+
+
+class TestPCExecuteCommand:
+    def test_execute_on_nonexistent_pc(self, client: TestClient):
+        resp = client.post("/api/pcs/9999/execute", json={"command": "dir"})
+        assert resp.status_code == 404
+
+    def test_execute_on_offline_pc(self, client: TestClient, sample_pc_data: dict):
+        created = client.post("/api/pcs", json=sample_pc_data).json()
+        resp = client.post(f"/api/pcs/{created['id']}/execute", json={"command": "dir"})
+        assert resp.status_code == 503
+
+    def test_execute_empty_command(self, client: TestClient, sample_pc_data: dict):
+        payload = {
+            "ip": sample_pc_data["ip"],
+            "name": sample_pc_data["name"],
+            "metrics": {"cpu": {"percent": 10.0}}
+        }
+        client.post("/api/agent/push", json=payload)
+        
+        pcs = client.get("/api/pcs").json()
+        pc_id = [p["id"] for p in pcs if p["ip"] == sample_pc_data["ip"]][0]
+        
+        resp = client.post(f"/api/pcs/{pc_id}/execute", json={"command": ""})
+        assert resp.status_code == 400
+
+
+class TestExportExcel:
+    def test_export_excel(self, client: TestClient):
+        resp = client.get("/api/export/excel")
+        assert resp.status_code == 200
+        # Verificar que es una respuesta de archivo (por ejemplo, headers de adjunto o content-type)
+        assert "content-disposition" in resp.headers
+        assert "filename" in resp.headers["content-disposition"]
+
+
+class TestConnectionManager:
+    @pytest.mark.anyio
+    async def test_connection_manager(self):
+        """Verifica que el ConnectionManager registre, elimine y transmita a WebSockets correctamente."""
+        from main import manager
+        from unittest.mock import AsyncMock, MagicMock
+        
+        ws = MagicMock()
+        ws.accept = AsyncMock()
+        ws.send_json = AsyncMock()
+        
+        # Test connect
+        await manager.connect(ws)
+        assert ws in manager.active
+        
+        # Test broadcast
+        await manager.broadcast({"type": "test_msg"})
+        ws.send_json.assert_called_with({"type": "test_msg"})
+        
+        # Test disconnect
+        manager.disconnect(ws)
+        assert ws not in manager.active
+
+

@@ -8,8 +8,9 @@ import ScanModal from './components/ScanModal'
 import { ToastContainer, toast } from './components/Toast'
 import './App.css'
 
-const API = 'http://localhost:8000/api'
-const WS_URL = 'ws://localhost:8000/ws'
+const API = '/api'
+const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+const WS_URL = `${wsProtocol}//${window.location.host}/ws`
 
 function formatDowntime(secs) {
   if (!secs) return null
@@ -138,8 +139,14 @@ export default function App() {
   useEffect(() => {
     connectWS()
     return () => {
-      wsRef.current?.close()
-      if (reconnectTimer.current) clearInterval(reconnectTimer.current)
+      if (wsRef.current) {
+        wsRef.current.onclose = null // Evitar loop de reconexión al desmontar
+        wsRef.current.close()
+      }
+      if (reconnectTimer.current) {
+        clearInterval(reconnectTimer.current)
+        reconnectTimer.current = null
+      }
     }
   }, [connectWS])
 

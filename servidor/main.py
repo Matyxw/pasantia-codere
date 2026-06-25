@@ -55,26 +55,28 @@ app.add_middleware(
 # ──────────────────────────────────────────
 class ConnectionManager:
     def __init__(self):
-        self.active: list[WebSocket] = []
+        # Usar un lock por cada WebSocket para evitar colisiones al enviar
+        self.active: dict[WebSocket, asyncio.Lock] = {}
 
     async def connect(self, ws: WebSocket):
         await ws.accept()
-        self.active.append(ws)
+        self.active[ws] = asyncio.Lock()
 
     def disconnect(self, ws: WebSocket):
         if ws in self.active:
-            self.active.remove(ws)
+            del self.active[ws]
 
     async def broadcast(self, message: dict):
         dead = []
-        for ws in self.active:
+        # Iterar sobre una copia para evitar RuntimeError si el dict cambia
+        for ws, lock in list(self.active.items()):
             try:
-                await ws.send_json(message)
+                async with lock:
+                    await ws.send_json(message)
             except Exception:
                 dead.append(ws)
         for ws in dead:
             self.disconnect(ws)
-
 
 manager = ConnectionManager()
 

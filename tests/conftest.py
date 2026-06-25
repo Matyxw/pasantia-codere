@@ -18,13 +18,16 @@ os.environ.setdefault("SECRET_KEY", "test-secret-key-not-real")
 os.environ.setdefault("ENVIRONMENT", "development")
 
 # Importar DESPUES de setear env
-from servidor.database import Base, get_db
-from servidor.main import app
+from database import Base, get_db
+from main import app
+
+from sqlalchemy.pool import StaticPool
 
 # ── Engine de test (SQLite en memoria) ────────────────────────────────────────
 TEST_ENGINE = create_engine(
     "sqlite:///:memory:",
     connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
 )
 TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=TEST_ENGINE)
 
